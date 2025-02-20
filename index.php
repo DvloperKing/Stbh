@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
-  <link rel="icon" type="image/png" href="../assets/img/icon_stbh.png">
+  <link rel="icon" type="image/png" href="./assets/img/icon_stbh.png">
   <title>
     STBH | Procóro García Hernández
   </title>
@@ -14,9 +14,9 @@
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Custom CSS -->
-  <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
-  <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
-  <link id="pagestyle" href="../assets/css/soft-ui-dashboard.css?v=1.0.8" rel="stylesheet" />
+  <link href="./assets/css/nucleo-icons.css" rel="stylesheet" />
+  <link href="./assets/css/nucleo-svg.css" rel="stylesheet" />
+  <link id="pagestyle" href="./assets/css/soft-ui-dashboard.css?v=1.0.8" rel="stylesheet" />
   <style>
     .move-up {
       margin-top: -50px;
@@ -58,9 +58,9 @@
 <body>
   <div class="logos-container">
     <div class="logos">
-      <img class="rounded" src="../assets/img/cnbm.png" alt="CNBM Logo">
-      <img class="rounded" src="../assets/img/CRBH.JPG" alt="CRBH Logo">
-      <img class="rounded" src="../assets/img/stbm.png" alt="STBM Logo">
+      <img class="rounded" src="./assets/img/cnbm.png" alt="CNBM Logo">
+      <img class="rounded" src="./assets/img/CRBH2.png" alt="CRBH Logo">
+      <img class="rounded" src="./assets/img/stbm.png" alt="STBM Logo">
     </div>
   </div>
 
@@ -78,16 +78,16 @@
                 <div class="card-body">
                   <form role="form">
                     <div class="d-grid gap-3">
-                      <button type="button" onclick="location.href='loginAdmin.php'" class="btn bg-gradient-info">Administración</button>
-                      <button type="button" onclick="location.href='loginDoc.php'" class="btn bg-gradient-info">Docente</button>
-                      <button type="button" onclick="location.href='loginAlum.php'" class="btn bg-gradient-info">Alumno</button>
+                      <button type="button" onclick="location.href='./pages/loginAdmin.php'" class="btn bg-gradient-info">Administración</button>
+                      <button type="button" onclick="location.href='./pages/loginDoc.php'" class="btn bg-gradient-info">Docente</button>
+                      <button type="button" onclick="location.href='./pages/loginAlum.php'" class="btn bg-gradient-info">Alumno</button>
                     </div>
                   </form>
                 </div>
               </div>
             </div>
             <div class="col-lg-6 d-flex justify-content-center">
-              <img class="oblique-image" src="../assets/img/curved-images/logo2.png" alt="Logo">
+              <img class="oblique-image" src="./assets/img/curved-images/logo2.png" alt="Logo">
             </div>
           </div>
         </div>
