@@ -19,7 +19,7 @@
   <link id="pagestyle" href="../assets/css/soft-ui-dashboard.css?v=1.0.8" rel="stylesheet" />
   <style>
     .move-up {
-      margin-top: -50px;
+      margin-top: 20px; /* Ajustado para mejor ubicación */
     }
     .image-container {
       display: flex;
@@ -49,7 +49,7 @@
         height: 60px;
       }
       .move-up {
-        margin-top: 0;
+        margin-top: 10px;
       }
     }
   </style>
@@ -73,14 +73,24 @@
               <div class="card card-plain">
                 <div class="card-header pb-0 text-center bg-transparent">
                   <h3 class="font-weight-bolder text-info text-gradient">Bienvenido!</h3>
-                  <p class="mb-0">Seleccione su Perfil</p>
+                  <p class="mb-0">Ingresa tu correo Institucional</p>
                 </div>
                 <div class="card-body">
                   <form role="form">
-                    <div class="d-grid gap-3">
-                      <button type="button" onclick="location.href='loginAdmin.php'" class="btn bg-gradient-info">Administración</button>
-                      <button type="button" onclick="location.href='loginDoc.php'" class="btn bg-gradient-info">Docente</button>
-                      <button type="button" onclick="location.href='loginAlum.php'" class="btn bg-gradient-info">Alumno</button>
+                    <label>Email</label>
+                    <div class="mb-3">
+                      <input type="email" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="email-addon" required>
+                    </div>
+                    <label>Password</label>
+                    <div class="mb-3">
+                      <input type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="password-addon" required>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="rememberMe" checked="">
+                      <label class="form-check-label" for="rememberMe">Remember me</label>
+                    </div>
+                    <div class="text-center">
+                      <button type="button" class="btn bg-gradient-info w-100 mt-4 mb-0" onclick="login_formulario();">Sign in</button>
                     </div>
                   </form>
                 </div>
