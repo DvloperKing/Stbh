@@ -98,36 +98,36 @@
                         Informacion Escolar
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">KARDEX</a></li>
-                        <li><a class="dropdown-item" href="#">Constancia</a></li>
+                        <!-- <li><a class="dropdown-item" href="#">KARDEX</a></li>
+                        <li><a class="dropdown-item" href="#">Constancia</a></li> -->
                         <li><a class="dropdown-item" href="#">Boleta de Calificaciones</a></li>
                         <li><a class="dropdown-item" href="#">Calificaciones Parciales</a></li>
                         <li><a class="dropdown-item" href="#">Horario</a></li>
                     </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Materias
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#"></a></li>
-                        <li><a class="dropdown-item" href="#"></a></li>
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Pagos
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Ficha de Inscripción</a></li>
-                        <li><a class="dropdown-item" href="#">Ficha Semestral</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Evaluacion Docente
-                    </a>
-                </li>
+                  <!-- </li>
+                  <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          Materias
+                      </a>
+                      <ul class="dropdown-menu">
+                          <li><a class="dropdown-item" href="#"></a></li>
+                          <li><a class="dropdown-item" href="#"></a></li>
+                      </ul>
+                  </li>
+                  <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          Pagos
+                      </a>
+                      <ul class="dropdown-menu">
+                          <li><a class="dropdown-item" href="#">Ficha de Inscripción</a></li>
+                          <li><a class="dropdown-item" href="#">Ficha Semestral</a></li>
+                      </ul>
+                  </li>
+                  <li class="nav-item dropdown">
+                      <a class="nav-link text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          Evaluacion Docente
+                      </a>
+                  </li> -->
             </ul>
         </div>
     </div>
