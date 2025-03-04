@@ -25,7 +25,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-    }
+    } 
     .oblique-image {
       max-width: 100%;
       height: auto;
