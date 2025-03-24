@@ -1,8 +1,8 @@
 <?php
 
-    include_once "../Constantes.php";
-    include_once "../estructura_bd.php";
-
+    include_once "../Core/Constantes.php";
+    include_once "../Core/estructura_bd.php";
+    var_dump($_POST);
     $MYSQLI = _DB_HDND();
 
     $email      = _clean($_POST['email'], $MYSQLI);
