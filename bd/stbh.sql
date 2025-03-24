@@ -177,3 +177,4 @@ select * from permissions;
 select * from permissionsxprofile;
 select * from users;
 
+SELECT u.*,p.name_perfil as perfil from users u inner join perfil p on u.id_perfil = p.id;
