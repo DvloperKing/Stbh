@@ -25,7 +25,7 @@
   <style>
     /*Prueba  */
    .move-up {
-      margin-top: -50px; /* Ajusta este valor según sea necesario */
+      margin-top: -50px; /* Ajusta e ste valor según sea necesario */
     }
 
     .image-container {
