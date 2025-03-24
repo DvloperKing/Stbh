@@ -8,7 +8,7 @@
     $email      = _clean($_POST['email'], $MYSQLI);
     $pass       = _clean($_POST['pass'], $MYSQLI);
     $tipo       = _clean($_POST['tipo'], $MYSQLI);
-
+    
     if($tipo==1){
         $SQL = "SELECT u.*,p.name_perfil as perfil from users u inner join perfil p on u.id_perfil = p.id;";
         $registros = false;
