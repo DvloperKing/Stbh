@@ -15,14 +15,14 @@
   <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
   <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
   <!-- Font Awesome Icons -->
-  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
   <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
   <!-- CSS Files -->
   <link id="pagestyle" href="../assets/css/soft-ui-dashboard.css?v=1.0.8" rel="stylesheet" />
   <!-- Nepcha Analytics (nepcha.com) -->
   <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
   <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
-  <style>
+  <link href="../assets/css/responsive.css" rel="stylesheet" />
+  <!-- <style>
     /*Prueba  */
    .move-up {
       margin-top: -50px; /* Ajusta e ste valor según sea necesario */
@@ -72,6 +72,14 @@
     .centered-image img {
       width: 50%; /* Ajusta este valor según sea necesario */
       opacity: 0.3; /* 70% de transparencia */
+    }
+  </style> -->
+  <style>.centered-image img {
+    opacity: 0.3;
+    max-width: 60%;
+    margin: 0 auto;
+    display: flex
+;
     }
   </style>
 </head>
@@ -186,7 +194,6 @@
   <!-- Github buttons -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
-  <script src="../assets/js/soft-ui-dashboard.min.js?v=1.0.7"></script>
 </body>
 
 </html>

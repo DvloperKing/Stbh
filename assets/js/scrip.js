@@ -5,9 +5,8 @@ function login_formulario() {
     var pass      =   document.getElementById("pass").value;
 
     console.log(email,pass);
-    const formData = new FormData(formulario__login);
-  
-    upload(formData);        
+    const formData = new FormData(formulario__login);    
+    upload(formData);   
  }
 
  async function upload(formData){
@@ -15,7 +14,9 @@ function login_formulario() {
         const response = await fetch("../Core/API/login.php", {
             method: 'POST',
             body: formData
+            
         });
+        console.log(response);
         const result = await response.json();
         if (result.code==1){
             window.location.href="../pages/admin.php";

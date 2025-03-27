@@ -17,42 +17,7 @@
   <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
   <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
   <link id="pagestyle" href="../assets/css/soft-ui-dashboard.css?v=1.0.8" rel="stylesheet" />
-  <style>
-    .move-up {
-      margin-top: 20px; /* Ajustado para mejor ubicación */
-    }
-    .image-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .oblique-image {
-      max-width: 100%;
-      height: auto;
-    }
-    .logos-container {
-      background-color: #fff;
-      padding: 12px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: center;
-      gap: 20px;
-    }
-    .logos img.rounded {
-      width: auto;
-      height: 80px;
-    }
-    @media (max-width: 768px) {
-      .logos img.rounded {
-        height: 60px;
-      }
-      .move-up {
-        margin-top: 10px;
-      }
-    }
-  </style>
+  <link href="../assets/css/responsive.css" rel="stylesheet">
 </head>
 
 <body>
