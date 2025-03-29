@@ -65,6 +65,7 @@ create table students (
     foreign key (id_user) references users(id),
     foreign key (id_modality) references modalities(id)
 );
+
 -- MATERIAS ASIGNADAS A ALUMNOS
 create table student_subjects (
     id int auto_increment primary key,
@@ -83,6 +84,8 @@ create table teacher_subjects (
 );
 
 insert into perfil (name_perfil) values ('administrador');
+insert into perfil (name_perfil) values ('docente');
+insert into perfil (name_perfil) values ('alumno');
 insert into permissions (id, name_permissions) values (1.0, 'ver usuarios');
 insert into permissions (id, name_permissions) values (1.1, 'añadir usuario');
 insert into permissions (id, name_permissions) values (1.2, 'modificar usuario');
@@ -171,10 +174,17 @@ insert into permissionsxprofile (id_perfil, id_permissions) values (1, 9.2);
 insert into permissionsxprofile (id_perfil, id_permissions) values (1, 9.3);
 
 insert into users (email, pass, id_perfil) values ('admin@stbh.com', 'admin123', 1);
+insert into users (email, pass, id_perfil) values ('alumno@stbh.com', '12345', 3);
+
+INSERT INTO education_levels (name_level) VALUES ('Licenciatura');
+INSERT INTO modalities (name_modality, id_level) VALUES ('Escolarizado', 1); 
+INSERT INTO students (control_number, id_user, id_modality, first_name, last_name, semester) VALUES (20250001, 2, 1, 'Juan', 'Pérez García', 2);
 
 select * from perfil;
 select * from permissions;
 select * from permissionsxprofile;
 select * from users;
+SELECT * FROM students;
 
+select u.*,s.* from users u inner join students s on u.id=s.id_user;
 SELECT u.*,p.name_perfil as perfil from users u inner join perfil p on u.id_perfil = p.id;
