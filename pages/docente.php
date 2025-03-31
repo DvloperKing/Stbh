@@ -1,3 +1,8 @@
+<?php 
+$mainblue = 0;
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,14 +11,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
   <link rel="icon" type="image/png" href="../assets/img/icon_stbh.png">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <title>
     STBH | Procóro García Hernández
   </title>
+  <link rel="stylesheet" href="../styles/global.css">
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
   <!-- Nucleo Icons -->
   <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
   <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
+
   <!-- Font Awesome Icons -->
   <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
   <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
@@ -22,6 +30,7 @@
   <!-- Nepcha Analytics (nepcha.com) -->
   <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
   <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
+
   <style>
     .move-up {
       margin-top: -50px; /* Ajusta este valor según sea necesario */
@@ -89,7 +98,8 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarScroll">
-            <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+  <!--Aqui iran los botones-->
+           <!-- <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Calificaciones
@@ -117,10 +127,147 @@
                         <li><a class="dropdown-item" href="#">Revisar Tarea</a></li>
                     </ul>
                 </li>
-            </ul>
+            </ul> -->
         </div>
     </div>
 </nav>
+
+    <section class="container-fluid pt-lg mt-md-2 flex-col d-flex px-0">
+      <div class="d-flex flex-column container-fluid my-4">
+    <h2>Materia.</h2>
+    <h3>Materia</h3>
+  <div class="row">
+  <!-- Card 1 -->
+  <div class="col-12 col-md-6 col-lg-3 mb-4">
+    <div class="card h-100 d-flex flex-column justify-content-between border-2" style="min-height: 250px;">
+      <div>
+        <h4 class="text-center mt-3">Grupo 1</h4>
+      </div>
+      <button class="btn-link text-white rounded-1 border-1 py-2" style="background-color: rgba(11, 1, 70, 1);">Ir <span class="bi bi-arrow-right-circle"></span></button>
+    </div>
+  </div>
+
+  <!-- Card 2 -->
+  <div class="col-12 col-md-6 col-lg-3 mb-4">
+    <div class="card h-100 d-flex flex-column justify-content-between border-2" style="min-height: 250px;">
+      <div>
+        <h4 class="text-center mt-3">Grupo 2</h4>
+      </div>
+      <button class="btn-link text-white rounded-1 border-1 py-2" style="background-color: rgba(11, 1, 70, 1);">Ir <span class="bi bi-arrow-right-circle"></span></button>
+    </div>
+  </div>
+
+  <!-- Card 3 -->
+  <div class="col-12 col-md-6 col-lg-3 mb-4">
+    <div class="card h-100 d-flex flex-column justify-content-between border-2" style="min-height: 250px;">
+      <div>
+        <h4 class="text-center mt-3">Grupo 3</h4>
+      </div>
+      <button class="btn-link text-white rounded-1 border-1 py-2" style="background-color: rgba(11, 1, 70, 1);">Ir <span class="bi bi-arrow-right-circle"></span></button>
+    </div>
+  </div>
+
+  <!-- Card 4 -->
+  <div class="col-12 col-md-6 col-lg-3 mb-4">
+    <div class="card h-100 d-flex flex-column justify-content-between border-2" style="min-height: 250px;">
+      <div>
+        <h4 class="text-center mt-3">Grupo 4</h4>
+      </div>
+      <button class="btn-link text-white rounded-1 border-1 py-2" style="background-color: rgba(11, 1, 70, 1);">Ir <span class="bi bi-arrow-right-circle"></span></button>
+    </div>
+  </div>
+
+  <!-- Card 5 -->
+  <div class="col-12 col-md-6 col-lg-3 mb-4">
+    <div class="card h-100 d-flex flex-column justify-content-between border-2" style="min-height: 250px;">
+      <div>
+        <h4 class="text-center mt-3">Grupo 5</h4>
+      </div>
+      <button class="btn-link text-white rounded-1 border-1 py-2" style="background-color: rgba(11, 1, 70, 1);">Ir <span class="bi bi-arrow-right-circle"></span></button>
+    </div>
+  </div>
+
+  <!-- Card 6 -->
+  <div class="col-12 col-md-6 col-lg-3 mb-4">
+    <div class="card h-100 d-flex flex-column justify-content-between border-2" style="min-height: 250px;">
+      <div>
+        <h4 class="text-center mt-3">Grupo 6</h4>
+      </div>
+      <button class="btn-link text-white rounded-1 border-1 py-2" style="background-color: rgba(11, 1, 70, 1);">Ir <span class="bi bi-arrow-right-circle"></span></button>
+    </div>
+  </div>
+</div>
+      </div>
+      
+    </section>
+      <section class="container-fluid flex-col d-flex px-0">
+      <div class="d-flex flex-column container-fluid">
+    <h3>Materia</h3>
+  <div class="row">
+  <!-- Card 1 -->
+  <div class="col-12 col-md-6 col-lg-3 mb-4">
+    <div class="card h-100 d-flex flex-column justify-content-between border-2" style="min-height: 250px;">
+      <div>
+        <h4 class="text-center mt-3">Grupo 1</h4>
+      </div>
+      <button class="btn-link text-white rounded-1 border-1 py-2" style="background-color: rgba(11, 1, 70, 1);">Ir <span class="bi bi-arrow-right-circle"></span></button>
+    </div>
+  </div>
+
+  <!-- Card 2 -->
+  <div class="col-12 col-md-6 col-lg-3 mb-4">
+    <div class="card h-100 d-flex flex-column justify-content-between border-2" style="min-height: 250px;">
+      <div>
+        <h4 class="text-center mt-3">Grupo 2</h4>
+      </div>
+      <button class="btn-link text-white rounded-1 border-1 py-2" style="background-color: rgba(11, 1, 70, 1);">Ir <span class="bi bi-arrow-right-circle"></span></button>
+    </div>
+  </div>
+
+  <!-- Card 3 -->
+  <div class="col-12 col-md-6 col-lg-3 mb-4">
+    <div class="card h-100 d-flex flex-column justify-content-between border-2" style="min-height: 250px;">
+      <div>
+        <h4 class="text-center mt-3">Grupo 3</h4>
+      </div>
+      <button class="btn-link text-white rounded-1 border-1 py-2" style="background-color: rgba(11, 1, 70, 1);">Ir <span class="bi bi-arrow-right-circle"></span></button>
+    </div>
+  </div>
+
+  <!-- Card 4 -->
+  <div class="col-12 col-md-6 col-lg-3 mb-4">
+    <div class="card h-100 d-flex flex-column justify-content-between border-2" style="min-height: 250px;">
+      <div>
+        <h4 class="text-center mt-3">Grupo 4</h4>
+      </div>
+      <button class="btn-link text-white rounded-1 border-1 py-2" style="background-color: rgba(11, 1, 70, 1);">Ir <span class="bi bi-arrow-right-circle"></span></button>
+    </div>
+  </div>
+
+  <!-- Card 5 -->
+  <div class="col-12 col-md-6 col-lg-3 mb-4">
+    <div class="card h-100 d-flex flex-column justify-content-between border-2" style="min-height: 250px;">
+      <div>
+        <h4 class="text-center mt-3">Grupo 5</h4>
+      </div>
+      <button class="btn-link text-white rounded-1 border-1 py-2" style="background-color: rgba(11, 1, 70, 1);">Ir <span class="bi bi-arrow-right-circle"></span></button>
+    </div>
+  </div>
+
+  <!-- Card 6 -->
+  <div class="col-12 col-md-6 col-lg-3 mb-4">
+    <div class="card h-100 d-flex flex-column justify-content-between border-2" style="min-height: 250px;">
+      <div>
+        <h4 class="text-center mt-3">Grupo 6</h4>
+      </div>
+      <button class="btn-link text-white rounded-1 border-1 py-2" style="background-color: rgba(11, 1, 70, 1);">Ir <span class="bi bi-arrow-right-circle"></span></button>
+    </div>
+  </div>
+</div>
+      </div>
+      
+    </section>
+</main>
 
 <style>
   .dropdown-menu {
@@ -137,9 +284,18 @@
   .dropdown-item:hover {
     background-color: rgba(11, 1, 70, 0.1); /* Fondo ligeramente oscuro al pasar el ratón */
   }
+
+  .main{
+    display: flex;
+    flex-direction: row;
+  }
+
+  .card{
+    flex-wrap: 1;
+  }
 </style>
 
-  
+  <!--
 <div class="centered-image">
     <img class="oblique-image" src="../assets/img/curved-images/logo2.png" alt="Logo">
   </div>
@@ -147,7 +303,7 @@
         </div>
       </div>
     </section>
-  </main>
+  </main> -->
   <!-- -------- START FOOTER 3 w/ COMPANY DESCRIPTION WITH LINKS & SOCIAL ICONS & COPYRIGHT ------- -->
   <footer class="footer py-5">
     <div class="container">        

@@ -1,0 +1,103 @@
+/* Estilos globales */
+body {
+    font-family: 'Open Sans', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.container-fluid {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Estilos para el contenedor de logos */
+.logos-container {
+    display: flex;
+    justify-content: center;
+    /* Centra horizontalmente */
+    align-items: center;
+    /* Centra verticalmente */
+    background-color: #fff;
+    /* Color de fondo */
+    padding: 12px;
+    /* Espacio interno */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* Sombra */
+}
+
+.logos {
+    display: flex;
+    justify-content: center;
+    /* Centra horizontalmente */
+    align-items: center;
+    /* Centra verticalmente */
+}
+
+.logos img.rounded {
+    width: 100px;
+    /* Tamaño de las imágenes */
+    margin-right: 20px;
+    /* Espacio entre las imágenes */
+}
+
+/* Estilos para la navbar */
+.navbar {
+    background-color: rgba(11, 1, 70, 1);
+}
+
+.navbar-brand {
+    color: white;
+}
+
+/* Estilos para las cards */
+.card {
+    border: 2px solid lightgray;
+    min-height: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card h4 {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.btn-link {
+    background-color: rgba(11, 1, 70, 1);
+    color: white;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+}
+
+.btn-link:hover {
+    background-color: rgba(11, 1, 70, 0.8);
+}
+
+/* Estilos para el footer */
+.footer {
+    background-color: #f8f9fa;
+    padding: 2rem 0;
+    text-align: center;
+}
+
+.footer p {
+    margin: 0;
+    color: #6c757d;
+}
