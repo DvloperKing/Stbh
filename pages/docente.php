@@ -1,6 +1,6 @@
 <?php 
 $mainblue = 0;
-
+$data = json_decode(file_get_contents('./modulo-docente/data.json'), true);
 ?>
 
 <!DOCTYPE html>
@@ -132,140 +132,29 @@ $mainblue = 0;
     </div>
 </nav>
 
-    <section class="container-fluid pt-lg mt-md-2 flex-col d-flex px-0">
-      <div class="d-flex flex-column container-fluid my-4">
-    <h2>Materia.</h2>
-    <h3>Materia</h3>
-  <div class="row">
-  <!-- Card 1 -->
-  <div class="col-12 col-md-6 col-lg-3 mb-4">
-    <div class="card h-100 d-flex flex-column justify-content-between border-2" style="min-height: 250px;">
-      <div>
-        <h4 class="text-center mt-3">Grupo 1</h4>
-      </div>
-      <button class="btn-link text-white rounded-1 border-1 py-2" style="background-color: rgba(11, 1, 70, 1);">Ir <span class="bi bi-arrow-right-circle"></span></button>
+    <section class="container-fluid pt-lg mt-md-2  flex-col px-0">
+    <?php foreach ($data['materias'] as $materia): ?>
+    <div class="d-flex flex-column container-fluid my-4">
+        <h2><?= $materia['nombre'] ?></h2>
+        <h3><?= $materia['nombre'] ?></h3>
+        <div class="row">
+            <?php foreach ($materia['grupos'] as $grupo): ?>
+            <div class="col-12 col-md-6 col-lg-3 mb-4">
+                <div class="card h-100 d-flex flex-column justify-content-between border-2" style="min-height: 250px;">
+                    <div>
+                        <h4 class="text-center mt-3"><?= $grupo['nombre'] ?></h4>
+                    </div>
+                    <a href="./modulo-docente/lista-alumnos.php" 
+                       class="btn-link text-white rounded-1 border-1 py-2 text-decoration-none justify-content-center" 
+                       style="background-color: rgba(11, 1, 70, 1);">
+                        Ir <span class="bi bi-arrow-right-circle"></span>
+                    </a>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
     </div>
-  </div>
-
-  <!-- Card 2 -->
-  <div class="col-12 col-md-6 col-lg-3 mb-4">
-    <div class="card h-100 d-flex flex-column justify-content-between border-2" style="min-height: 250px;">
-      <div>
-        <h4 class="text-center mt-3">Grupo 2</h4>
-      </div>
-      <button class="btn-link text-white rounded-1 border-1 py-2" style="background-color: rgba(11, 1, 70, 1);">Ir <span class="bi bi-arrow-right-circle"></span></button>
-    </div>
-  </div>
-
-  <!-- Card 3 -->
-  <div class="col-12 col-md-6 col-lg-3 mb-4">
-    <div class="card h-100 d-flex flex-column justify-content-between border-2" style="min-height: 250px;">
-      <div>
-        <h4 class="text-center mt-3">Grupo 3</h4>
-      </div>
-      <button class="btn-link text-white rounded-1 border-1 py-2" style="background-color: rgba(11, 1, 70, 1);">Ir <span class="bi bi-arrow-right-circle"></span></button>
-    </div>
-  </div>
-
-  <!-- Card 4 -->
-  <div class="col-12 col-md-6 col-lg-3 mb-4">
-    <div class="card h-100 d-flex flex-column justify-content-between border-2" style="min-height: 250px;">
-      <div>
-        <h4 class="text-center mt-3">Grupo 4</h4>
-      </div>
-      <button class="btn-link text-white rounded-1 border-1 py-2" style="background-color: rgba(11, 1, 70, 1);">Ir <span class="bi bi-arrow-right-circle"></span></button>
-    </div>
-  </div>
-
-  <!-- Card 5 -->
-  <div class="col-12 col-md-6 col-lg-3 mb-4">
-    <div class="card h-100 d-flex flex-column justify-content-between border-2" style="min-height: 250px;">
-      <div>
-        <h4 class="text-center mt-3">Grupo 5</h4>
-      </div>
-      <button class="btn-link text-white rounded-1 border-1 py-2" style="background-color: rgba(11, 1, 70, 1);">Ir <span class="bi bi-arrow-right-circle"></span></button>
-    </div>
-  </div>
-
-  <!-- Card 6 -->
-  <div class="col-12 col-md-6 col-lg-3 mb-4">
-    <div class="card h-100 d-flex flex-column justify-content-between border-2" style="min-height: 250px;">
-      <div>
-        <h4 class="text-center mt-3">Grupo 6</h4>
-      </div>
-      <button class="btn-link text-white rounded-1 border-1 py-2" style="background-color: rgba(11, 1, 70, 1);">Ir <span class="bi bi-arrow-right-circle"></span></button>
-    </div>
-  </div>
-</div>
-      </div>
-      
-    </section>
-      <section class="container-fluid flex-col d-flex px-0">
-      <div class="d-flex flex-column container-fluid">
-    <h3>Materia</h3>
-  <div class="row">
-  <!-- Card 1 -->
-  <div class="col-12 col-md-6 col-lg-3 mb-4">
-    <div class="card h-100 d-flex flex-column justify-content-between border-2" style="min-height: 250px;">
-      <div>
-        <h4 class="text-center mt-3">Grupo 1</h4>
-      </div>
-      <button class="btn-link text-white rounded-1 border-1 py-2" style="background-color: rgba(11, 1, 70, 1);">Ir <span class="bi bi-arrow-right-circle"></span></button>
-    </div>
-  </div>
-
-  <!-- Card 2 -->
-  <div class="col-12 col-md-6 col-lg-3 mb-4">
-    <div class="card h-100 d-flex flex-column justify-content-between border-2" style="min-height: 250px;">
-      <div>
-        <h4 class="text-center mt-3">Grupo 2</h4>
-      </div>
-      <button class="btn-link text-white rounded-1 border-1 py-2" style="background-color: rgba(11, 1, 70, 1);">Ir <span class="bi bi-arrow-right-circle"></span></button>
-    </div>
-  </div>
-
-  <!-- Card 3 -->
-  <div class="col-12 col-md-6 col-lg-3 mb-4">
-    <div class="card h-100 d-flex flex-column justify-content-between border-2" style="min-height: 250px;">
-      <div>
-        <h4 class="text-center mt-3">Grupo 3</h4>
-      </div>
-      <button class="btn-link text-white rounded-1 border-1 py-2" style="background-color: rgba(11, 1, 70, 1);">Ir <span class="bi bi-arrow-right-circle"></span></button>
-    </div>
-  </div>
-
-  <!-- Card 4 -->
-  <div class="col-12 col-md-6 col-lg-3 mb-4">
-    <div class="card h-100 d-flex flex-column justify-content-between border-2" style="min-height: 250px;">
-      <div>
-        <h4 class="text-center mt-3">Grupo 4</h4>
-      </div>
-      <button class="btn-link text-white rounded-1 border-1 py-2" style="background-color: rgba(11, 1, 70, 1);">Ir <span class="bi bi-arrow-right-circle"></span></button>
-    </div>
-  </div>
-
-  <!-- Card 5 -->
-  <div class="col-12 col-md-6 col-lg-3 mb-4">
-    <div class="card h-100 d-flex flex-column justify-content-between border-2" style="min-height: 250px;">
-      <div>
-        <h4 class="text-center mt-3">Grupo 5</h4>
-      </div>
-      <button class="btn-link text-white rounded-1 border-1 py-2" style="background-color: rgba(11, 1, 70, 1);">Ir <span class="bi bi-arrow-right-circle"></span></button>
-    </div>
-  </div>
-
-  <!-- Card 6 -->
-  <div class="col-12 col-md-6 col-lg-3 mb-4">
-    <div class="card h-100 d-flex flex-column justify-content-between border-2" style="min-height: 250px;">
-      <div>
-        <h4 class="text-center mt-3">Grupo 6</h4>
-      </div>
-      <button class="btn-link text-white rounded-1 border-1 py-2" style="background-color: rgba(11, 1, 70, 1);">Ir <span class="bi bi-arrow-right-circle"></span></button>
-    </div>
-  </div>
-</div>
-      </div>
-      
+    <?php endforeach; ?>
     </section>
 </main>
 

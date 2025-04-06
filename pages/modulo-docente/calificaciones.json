@@ -1,0 +1,58 @@
+{
+    "estudiantes": [
+        {
+            "id": 1,
+            "nombre": "Juan Pérez",
+            "unidad1": 85,
+            "unidad2": 90,
+            "unidad3": 78,
+            "unidad4": 55,
+            "unidad5": 90
+        },
+        {
+            "id": 2,
+            "nombre": "María González",
+            "unidad1": 92,
+            "unidad2": 100,
+            "unidad3": 75,
+            "unidad4": 55,
+            "unidad5": 62
+        },
+        {
+            "id": 3,
+            "nombre": "Luis Espinoza",
+            "unidad1": 92,
+            "unidad2": 100,
+            "unidad3": 90,
+            "unidad4": 76,
+            "unidad5": 88
+        },
+        {
+            "id": 4,
+            "nombre": "Carla Herrera",
+            "unidad1": 77,
+            "unidad2": 81,
+            "unidad3": 89,
+            "unidad4": 91,
+            "unidad5": 84
+        },
+        {
+            "id": 5,
+            "nombre": "Pedro López",
+            "unidad1": 60,
+            "unidad2": 73,
+            "unidad3": 68,
+            "unidad4": 70,
+            "unidad5": 66
+        },
+        {
+            "id": 6,
+            "nombre": "Ana Castillo",
+            "unidad1": 95,
+            "unidad2": 94,
+            "unidad3": 97,
+            "unidad4": 99,
+            "unidad5": 96
+        }
+    ]
+}
