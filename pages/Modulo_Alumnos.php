@@ -341,7 +341,7 @@ $directorioBase = "archivos/";
                 $('[href="' + ultimaPestañaActiva + '"]').tab('show');
             }
         });
-    </script>
+      </script>
 </body>
 
 </html>
