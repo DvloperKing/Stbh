@@ -3,241 +3,212 @@ session_start();
 include_once "../Core/constantes.php";
 include_once "../Core/estructura_bd.php";
 $MYSQLI = _DB_HDND();
-$SQL = "SELECT u.*,p.name_perfil as perfil FROM users U INNER JOIN perfil p ON u.id_perfil = p.id;";
-$registros = false;
-$RESULT = _Q($SQL, $MYSQLI, 2);
 
-$SQLPerfiles = "SELECT * FROM perfil;";
-$PerfilesData = _Q($SQLPerfiles, $MYSQLI, 2);
+// Insertar nuevo usuario
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'], $_POST['pass'], $_POST['perfil'], $_POST['first_name'], $_POST['last_name'])) {
+  $email       = _clean($_POST['email'], $MYSQLI);
+  $pass        = _clean($_POST['pass'], $MYSQLI);
+  $perfil      = _clean($_POST['perfil'], $MYSQLI);
+  $first_name  = _clean($_POST['first_name'], $MYSQLI);
+  $last_name   = _clean($_POST['last_name'], $MYSQLI);
 
-$email       = isset($_POST['email']) ? _clean($_POST['email'], $MYSQLI) : '';
-$permissions = isset($_POST['name_permissions']) ? $_POST['name_permissions'] : [];
-$perfil      = isset($_POST['perfil']) ? _clean($_POST['perfil'], $MYSQLI) : '';
-$id_perfil   = isset($_POST['id_perfil']) ? _clean($_POST['id_perfil'], $MYSQLI) : '';
-
-$permissionsxprofile = [];
-
-foreach ($permissions as $key => $value) {
-    // Si $value es un array, usa esto:
-    if (is_array($value) && isset($value['id_permissions'])) {
-        $permissionsxprofile[] = $value['id_permissions'];
-    }
-    // Si $value es un ID directamente:
-    elseif (!is_array($value)) {
-        $permissionsxprofile[] = $value;
-    }
+  if (!empty($email) && !empty($pass) && !empty($perfil) && !empty($first_name) && !empty($last_name)) {
+      $SQLInsert = "INSERT INTO users (email, pass, first_name, last_name, id_perfil) 
+                    VALUES ('$email', '$pass', '$first_name', '$last_name', '$perfil')";
+      _Q($SQLInsert, $MYSQLI, 1);
+      header("Location: usuarios.php?success=1");
+      exit;
+  }
 }
 
+// Actualizar contraseña
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nueva_pass'], $_POST['id_usuario'])) {
+    $newPass = _clean($_POST['nueva_pass'], $MYSQLI);
+    $userId = (int) $_POST['id_usuario'];
+    $SQLUpdatePass = "UPDATE users SET pass = '$newPass' WHERE id = $userId";
+    _Q($SQLUpdatePass, $MYSQLI, 1);
+    header("Location: usuarios.php?pass_updated=1");
+    exit;
+}
+
+// Consultas
+$SQL = "SELECT u.*,p.name_perfil as perfil FROM users U INNER JOIN perfil p ON u.id_perfil = p.id;";
+$RESULT = _Q($SQL, $MYSQLI, 2);
+$SQLPerfiles = "SELECT * FROM perfil;";
+$PerfilesData = _Q($SQLPerfiles, $MYSQLI, 2);
 ?>
+
+<!DOCTYPE html>
+<html lang="es">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>STBH | Usuarios</title>
   <link rel="icon" type="image/png" href="../assets/img/icon_stbh.png">
-  <title>
-    STBH | Usuarios
-  </title>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
   <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
   <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
-  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
-  <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
-  <link href="../css/forms.css" rel="stylesheet" />
-  <link id="pagestyle" href="../assets/css/soft-ui-dashboard.css?v=1.0.8" rel="stylesheet" />
-  <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
-  <style>
-    .move-up {
-      margin-top: -50px; /* Ajusta este valor según sea necesario */
-    }
-
-    .image-container {
-      position: absolute;
-      top: 125px;
-      right: 0;
-      bottom: 0;
-      display: flex;
-      align-items: center;
-    }
-    .oblique-image {
-    width: 100%;
-    height: 370px;
-    }
-    .logos-container {
-      display: flex;
-      justify-content: center; /* Centra horizontalmente */
-      align-items: center; /* Centra verticalmente */
-      background-color: #fff; /* Color de fondo */
-      padding: 12px; /* Espacio interno */
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra */
-    }
-    .logos {
-      display: flex;
-      justify-content: center; /* Centra horizontalmente */
-      align-items: center; /* Centra verticalmente */
-    }
-
-    .logos img.rounded {
-      width: 100px; /* Tamaño de las imágenes */
-      margin-right: 20px; /* Espacio entre las imágenes */
-    }
-    #fondo {
-    display: none;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    z-index: 1;
-}
-  </style>
+  <link href="../assets/css/soft-ui-dashboard.css?v=1.0.8" rel="stylesheet" />
+  <link href="../assets/css/usuarios.css" rel="stylesheet" />
 </head>
-    
-<body class="">
+
+<body>
+
+<!-- LOGOS -->
 <div class="logos-container">
-    <!-- Imágenes de la clase .logos -->
-    <div class="logos">
-      <img class="rounded" src="../assets/img/cnbm.png"  alt="CNBM Logo"  style="width: 300px;">
-      <img class="rounded" src="../assets/img/CRBH.JPG"  alt="CRBH Logo"  style="width: 100px;">
-      <img class="rounded" src="../assets/img/stbm.png"  alt="STBM Logo"  style="width: 300px;">
+  <div class="logos">
+    <img src="../assets/img/cnbm.png" alt="CNBM" class="logo-img">
+    <img src="../assets/img/CRBH.JPG" alt="CRBH" class="logo-img">
+    <img src="../assets/img/stbm.png" alt="STBM" class="logo-img">
+    <img src="../assets/img/logo2.png" alt="Marca" class="logo-img">
+  </div>
+</div>
+
+<!-- CARD DE MENÚ -->
+<section class="card-hero">
+  <div class="hero-box">
+    <h2>Sección Usuarios</h2>
+    <div class="btn-group">
+      <a href="admin.php" class="btn-stbh btn-lg">Regresar al Menú Principal</a>
+      <button class="btn-stbh btn-lg btn_Alta">Nuevo Usuario</button>
     </div>
   </div>
+</section>
 
-    <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: rgba(11, 1, 70, 1);">
-        <div class="container-fluid">
-            <a class="navbar-brand text-white" href="#"></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarScroll">
-                      <?php
-                          include_once "botones.php";
-                      ?>
-                <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
-                    <li class="nav-item">
-                    <a class="nav-link active text-white" aria-current="page" href="../pages/usuarios.php">Usuarios</a>
-                    </li>
-                    <li class="nav-item">
-                    <a class="nav-link active text-white" aria-current="page" href="../pages/perfiles.php">Permisos</a>
-                    </li>
-                    <li calss="nav-item">
-                    <a class="nav-link active text-white" href="../logout.php">Cerrar Sesión</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-          <section class="users">
-              <div class="users_table">
-                  <div class="users_table_caja">
-                      <?php
-                      if (in_array(1.1, $permissionsxprofile)) {
-                          echo "<button type='button' class='btn_Usuarios btn_Alta mb-3'>Nuevo Usuario</button>";
-                      }
-                      ?>
-                      <table class="table">
-                          <thead>
-                              <th>email</th>
-                              <th>Password</th>
-                              <th>Perfil</th>
-                              <th>Accion</th>
-                          </thead>
-                          <tbody>
-                              <?php
-                              $tabla  =   "";
-                              foreach ($RESULT as $key => $value) {
-                                  $tabla  .=  "<tr class='usuario". $value['id'] ."'>";
-                                  $tabla  .=  "<td>" . $value['email'] . "</td>";
-                                  $tabla  .=  "<td>" . $value['pass'] . "</td>";
-                                  $tabla  .=  "<td>" . $value['perfil'] . "</td>";
-                                  if (in_array(1.2, $permissionsxprofile)) {
-                                      $tabla  .=  "<td><button type='button' data-id='" . $value['id'] . "' class='btn btn-danger btn_Baja_Usuarios'>Baja</button></td>";
-                                  } else {
-                                      $tabla  .=  "<td></td>";
-                                  }
-                                  $tabla  .=  "</tr>";
-                              }
-                              echo $tabla;
-                              ?>
-                          </tbody>
-                      </table>
-                  </div>
-            </div>
-        </section>
-        <section id="fondo">
-            <div id="form_alta">
-                <span class="cerrar">×</span>
-                <form class="usuarioAlta">
-                    <h2>USUARIO NUEVO</h2>
-                    <div class="row">
-                    <div class="mb-3 col-6">
-                        <label for="email">Email</label>
-                            <input class="form-control" type="text" required id="email" name="email" placeholder="email">
-                    </div>
-                    <div class="mb-3 col-6">
-                        <label for="pass">Password</label>
-                        <input class="form-control" type="pass" required id="pass" name="pass" placeholder="Password">
-                    </div>
-                    <div class="mb-3 col-6">
-                        <label for="perfil">Perfil</label>
-                        <select class="form-control" name="perfil" id="perfil" required>
-                            <option value="" disabled selected>Selecciona un perfil</option>
-                           <?php
-                            foreach ($PerfilesData as $key => $value) {
-                                echo '<option value="'.$value["id"].'" >'.$value["name_perfil"].'</option>';
-                            }
-                           ?>
-                        </select>
-                    </div>
-                    <div>
-                        <button type="submit" class="btn_Guardar">Guardar</button>
-                    </div>
+<!-- ALERTAS -->
+<div class="container mt-4">
+  <?php if (isset($_GET['success'])): ?>
+    <div class="alert alert-success alert-auto-close text-center">Usuario agregado correctamente.</div>
+  <?php endif; ?>
+  <?php if (isset($_GET['pass_updated'])): ?>
+    <div class="alert alert-info alert-auto-close text-center">Contraseña actualizada correctamente.</div>
+  <?php endif; ?>
+</div>
 
-                    </form>
-                </div>
-            </div>
-
-        </section>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-  <!-- -------- START FOOTER 3 w/ COMPANY DESCRIPTION WITH LINKS & SOCIAL ICONS & COPYRIGHT ------- -->
-  <footer class="footer py-5">
-    <div class="container">        
-      <div class="row">
-        <div class="col-8 mx-auto text-center mt-1">
-          <p class="mb-0 text-secondary">
-          STBH © <script>
-              document.write(new Date().getFullYear())
-            </script>  | Todos los derechos Reservados
-          </p>
-        </div>
-      </div>
+<!-- TABLA DE USUARIOS -->
+<section class="users p-4">
+  <div class="container">
+    <div class="table-responsive">
+      <table class="table table-bordered text-center table-stbh">
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Nombre completo</th>
+            <th>Perfil</th>
+            <th>Contraseña</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($RESULT as $value): ?>
+          <tr>
+            <td><?= $value['email'] ?></td>
+            <td><?= $value['first_name'] . ' ' . $value['last_name'] ?></td>
+            <td><?= $value['perfil'] ?></td>
+            <td>
+              <button class="btn-stbh btn-sm btn_CambiarPass" data-id="<?= $value['id'] ?>">
+                Cambiar contraseña
+              </button>
+            </td>
+          </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
     </div>
-  </footer>
-  <!-- -------- END FOOTER 3 w/ COMPANY DESCRIPTION WITH LINKS & SOCIAL ICONS & COPYRIGHT ------- -->
-  <!--   Core JS Files   -->
-  <script src="../assets/js/core/popper.min.js"></script>
-  <script src="../assets/js/core/bootstrap.min.js"></script>
-  <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
-  <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
-  <script>
-    var win = navigator.platform.indexOf('Win') > -1;
-    if (win && document.querySelector('#sidenav-scrollbar')) {
-      var options = {
-        damping: '0.5'
-      }
-      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
-    }
-  </script>
-  <!-- Github buttons -->
-  <script async defer src="https://buttons.github.io/buttons.js"></script>
-  <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
-  <script src="../assets/js/soft-ui-dashboard.min.js?v=1.0.7"></script>
+  </div>
+</section>
+
+<!-- FORM NUEVO USUARIO -->
+<section id="fondo">
+  <div id="form_alta">
+    <span class="cerrar">&times;</span>
+    <form class="usuarioAlta" method="POST" action="usuarios.php">
+      <h2>USUARIO NUEVO</h2>
+      <div class="mb-3">
+        <label>Nombre(s)</label>
+        <input class="form-control" type="text" name="first_name" required>
+      </div>
+      <div class="mb-3">
+        <label>Apellidos</label>
+        <input class="form-control" type="text" name="last_name" required>
+      </div>
+      <div class="mb-3">
+        <label>Email</label>
+        <input class="form-control" type="text" name="email" required>
+      </div>
+      <div class="mb-3">
+        <label>Contraseña</label>
+        <input class="form-control" type="text" name="pass" required>
+      </div>
+      <div class="mb-3">
+        <label>Perfil</label>
+        <select class="form-control" name="perfil" required>
+          <option value="" disabled selected>Selecciona un perfil</option>
+          <?php foreach ($PerfilesData as $value): ?>
+            <option value="<?= $value['id'] ?>"><?= $value['name_perfil'] ?></option>
+          <?php endforeach; ?>
+        </select>
+      </div>
+      <button type="submit" class="btn-stbh">Guardar</button>
+    </form>
+  </div>
+</section>
+
+<!-- FORM CAMBIAR CONTRASEÑA -->
+<section id="fondo_cambiar">
+  <div id="form_cambiar_pass">
+    <span class="cerrar_cambiar">&times;</span>
+    <form method="POST" action="usuarios.php">
+      <h2>CAMBIAR CONTRASEÑA</h2>
+      <input type="hidden" name="id_usuario" id="id_usuario_cambiar">
+      <div class="mb-3">
+        <label>Nueva contraseña</label>
+        <input class="form-control" type="text" name="nueva_pass" id="nueva_pass" required>
+      </div>
+      <button type="submit" class="btn-stbh">Actualizar</button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer py-4 text-center text-secondary">
+  STBH © <script>document.write(new Date().getFullYear())</script> | Todos los derechos reservados
+</footer>
+
+<!-- JS -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const fondo = document.getElementById('fondo');
+  const fondo_cambiar = document.getElementById('fondo_cambiar');
+  const cerrar = document.querySelector('.cerrar');
+  const cerrar_cambiar = document.querySelector('.cerrar_cambiar');
+  const btnAlta = document.querySelector('.btn_Alta');
+  const idInput = document.getElementById('id_usuario_cambiar');
+
+  if (btnAlta) {
+    btnAlta.addEventListener('click', () => fondo.style.display = 'block');
+  }
+  if (cerrar) {
+    cerrar.addEventListener('click', () => fondo.style.display = 'none');
+  }
+  if (cerrar_cambiar) {
+    cerrar_cambiar.addEventListener('click', () => fondo_cambiar.style.display = 'none');
+  }
+
+  document.querySelectorAll('.btn_CambiarPass').forEach(btn => {
+    btn.addEventListener('click', () => {
+      idInput.value = btn.getAttribute('data-id');
+      fondo_cambiar.style.display = 'block';
+    });
+  });
+
+  const alerta = document.querySelector('.alert-auto-close');
+  if (alerta) {
+    setTimeout(() => {
+      alerta.style.display = 'none';
+    }, 5000);
+  }
+});
+</script>
+
 </body>
 </html>

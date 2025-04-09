@@ -1,186 +1,145 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="es">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>STBH | Docentes</title>
   <link rel="icon" type="image/png" href="../assets/img/icon_stbh.png">
-  <title>
-    STBH | Procóro García Hernández
-  </title>
-  <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
-  <!-- Nucleo Icons -->
   <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
   <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
-  <!-- Font Awesome Icons -->
-  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
-  <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
-  <!-- CSS Files -->
-  <link id="pagestyle" href="../assets/css/soft-ui-dashboard.css?v=1.0.8" rel="stylesheet" />
-  <!-- Nepcha Analytics (nepcha.com) -->
-  <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
-  <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
-  <style>
-    .move-up {
-      margin-top: -50px; /* Ajusta este valor según sea necesario */
-    }
-
-    .image-container {
-      position: absolute;
-      top: 125px;
-      right: 0;
-      bottom: 0;
-      display: flex;
-      align-items: center;
-    }
-
-    .oblique-image {
-    width: 100%;
-    height: 370px;
-    }
-    .logos-container {
-      display: flex;
-      justify-content: center; /* Centra horizontalmente */
-      align-items: center; /* Centra verticalmente */
-      background-color: #fff; /* Color de fondo */
-      padding: 12px; /* Espacio interno */
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra */
-    }
-    .logos {
-      display: flex;
-      justify-content: center; /* Centra horizontalmente */
-      align-items: center; /* Centra verticalmente */
-    }
-
-    .logos img.rounded {
-      width: 100px; /* Tamaño de las imágenes */
-      margin-right: 20px; /* Espacio entre las imágenes */
-    }
-    .centered-image {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 60vh;
-    }
-
-    .centered-image img {
-      width: 50%; /* Ajusta este valor según sea necesario */
-      opacity: 0.3; /* 70% de transparencia */
-    }
-  </style>
+  <link href="../assets/css/soft-ui-dashboard.css?v=1.0.8" rel="stylesheet" />
+  <link href="../assets/css/docentes.css" rel="stylesheet" />
 </head>
-    
-<body class="">
+
+<body>
+
+<!-- LOGOS -->
 <div class="logos-container">
-    <!-- Imágenes de la clase .logos -->
-    <div class="logos">
-      <img class="rounded" src="../assets/img/cnbm.png"  alt="CNBM Logo"  style="width: 300px;">
-      <img class="rounded" src="../assets/img/CRBH2.png"  alt="CRBH Logo"  style="width: 100px;">
-      <img class="rounded" src="../assets/img/stbm.png"  alt="STBM Logo"  style="width: 300px;">
+  <div class="logos">
+    <img src="../assets/img/cnbm.png" alt="CNBM" class="logo-img">
+    <img src="../assets/img/CRBH.JPG" alt="CRBH" class="logo-img">
+    <img src="../assets/img/stbm.png" alt="STBM" class="logo-img">
+    <img src="../assets/img/logo2.png" alt="Marca" class="logo-img">
+  </div>
+</div>
+
+<!-- CARD DE MENÚ -->
+<section class="card-hero">
+  <div class="hero-box">
+    <h2>Sección Docentes</h2>
+    <div class="btn-group">
+      <a href="admin.php" class="btn-stbh btn-lg">Regresar al Menú Principal</a>
+      <button class="btn-stbh btn-lg btn_Alta">Nuevo Docente</button>
     </div>
   </div>
+</section>
 
-  <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: rgba(11, 1, 70, 1);">
-    <div class="container-fluid">
-        <a class="navbar-brand text-white" href="#"></a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarScroll">
-            <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
-                <li class="nav-item dropdown">
-                    <!-- <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Calificaciones
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Subir Calificaciones</a></li>
-                        <li><a class="dropdown-item" href="#">Consultar Calificaciones</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Manuales
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Subir Manual</a></li>
-                        <li><a class="dropdown-item" href="#">Gestionar Manuales</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Tareas
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Asignar Tarea</a></li>
-                        <li><a class="dropdown-item" href="#">Revisar Tarea</a></li>
-                    </ul>
-                </li>
-            </ul> -->
-        </div>
+<!-- ALERTAS -->
+<div class="container mt-4">
+  <div class="alert alert-success alert-auto-close text-center">Docente agregado correctamente.</div>
+  <div class="alert alert-info alert-auto-close text-center">Datos del docente actualizados correctamente.</div>
+</div>
+
+<!-- TABLA DE DOCENTES -->
+<section class="docentes p-4">
+  <div class="container">
+    <div class="table-responsive">
+      <table class="table table-bordered text-center table-stbh">
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Perfil</th>
+            <th>Grado máximo de estudios</th>
+            <th>Teléfono</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>docente@stbh.com</td>
+            <td>Docente</td>
+            <td>Licenciatura</td>
+            <td>(555) 123-4567</td>
+            <td>
+              <button class="btn-stbh btn-sm btn_CambiarDocente" data-id="1" data-degree="Licenciatura" data-phone="(555) 123-4567">
+                Cambiar datos
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td>docente2@stbh.com</td>
+            <td>Docente</td>
+            <td>Maestría</td>
+            <td>(555) 234-5678</td>
+            <td>
+              <button class="btn-stbh btn-sm btn_CambiarDocente" data-id="2" data-degree="Maestría" data-phone="(555) 234-5678">
+                Cambiar datos
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-</nav>
+  </div>
+</section>
 
-<style>
-  .dropdown-menu {
-    background-color: #ffffff; /* Fondo blanco para mejor contraste */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
-  }
+<!-- FORMULARIO PARA EDITAR DATOS DE DOCENTE -->
+<section id="fondo_cambiar">
+  <div id="form_cambiar_pass">
+    <span class="cerrar_cambiar">&times;</span>
+    <form method="POST" action="docentes.php">
+      <h2>ACTUALIZAR DATOS DE DOCENTE</h2>
+      <input type="hidden" name="id_docente" id="id_docente">
+      <div class="mb-3">
+        <label>Grado máximo de estudios</label>
+        <input class="form-control" type="text" name="max_degree" id="max_degree" required>
+      </div>
+      <div class="mb-3">
+        <label>Número de teléfono</label>
+        <input class="form-control" type="text" name="phone_number" id="phone_number" required>
+      </div>
+      <button type="submit" class="btn-stbh">Actualizar</button>
+    </form>
+  </div>
+</section>
 
-  .dropdown-item {
-    color: #333333; /* Texto oscuro para mejor legibilidad */
-    font-size: 16px; /* Aumentar tamaño de la fuente */
-    font-weight: 500; /* Aumentar el peso de la fuente */
-  }
+<!-- FOOTER -->
+<footer class="footer py-4 text-center text-secondary">
+  STBH © <script>document.write(new Date().getFullYear())</script> | Todos los derechos reservados
+</footer>
 
-  .dropdown-item:hover {
-    background-color: rgba(11, 1, 70, 0.1); /* Fondo ligeramente oscuro al pasar el ratón */
-  }
-</style>
-
+<!-- JS -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const fondo_cambiar = document.getElementById('fondo_cambiar');
+  const cerrar_cambiar = document.querySelector('.cerrar_cambiar');
   
-<div class="centered-image">
-    <img class="oblique-image" src="../assets/img/curved-images/logo2.png" alt="Logo">
-  </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-  <!-- -------- START FOOTER 3 w/ COMPANY DESCRIPTION WITH LINKS & SOCIAL ICONS & COPYRIGHT ------- -->
-  <footer class="footer py-5">
-    <div class="container">        
-      <div class="row">
-        <div class="col-8 mx-auto text-center mt-1">
-          <p class="mb-0 text-secondary">
-          STBH © <script>
-              document.write(new Date().getFullYear())
-            </script>  | Todos los derechos Reservados
-          </p>
-        </div>
-      </div>
-    </div>
-  </footer>
-  <!-- -------- END FOOTER 3 w/ COMPANY DESCRIPTION WITH LINKS & SOCIAL ICONS & COPYRIGHT ------- -->
-  <!--   Core JS Files   -->
-  <script src="../assets/js/core/popper.min.js"></script>
-  <script src="../assets/js/core/bootstrap.min.js"></script>
-  <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
-  <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
-  <script>
-    var win = navigator.platform.indexOf('Win') > -1;
-    if (win && document.querySelector('#sidenav-scrollbar')) {
-      var options = {
-        damping: '0.5'
-      }
-      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
-    }
-  </script>
-  <!-- Github buttons -->
-  <script async defer src="https://buttons.github.io/buttons.js"></script>
-  <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
-  <script src="../assets/js/soft-ui-dashboard.min.js?v=1.0.7"></script>
-</body>
+  // Evento para mostrar el formulario de edición
+  document.querySelectorAll('.btn_CambiarDocente').forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Llenar los campos con los valores actuales
+      document.getElementById('id_docente').value = btn.getAttribute('data-id');
+      document.getElementById('max_degree').value = btn.getAttribute('data-degree');
+      document.getElementById('phone_number').value = btn.getAttribute('data-phone');
+      
+      fondo_cambiar.style.display = 'block'; // Mostrar el formulario
+    });
+  });
 
+  // Evento para cerrar el formulario
+  if (cerrar_cambiar) {
+    cerrar_cambiar.addEventListener('click', () => fondo_cambiar.style.display = 'none');
+  }
+
+  const alerta = document.querySelector('.alert-auto-close');
+  if (alerta) {
+    setTimeout(() => {
+      alerta.style.display = 'none';
+    }, 5000);
+  }
+});
+</script>
+
+</body>
 </html>

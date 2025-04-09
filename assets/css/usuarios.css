@@ -1,0 +1,209 @@
+/* ===== GENERAL ===== */
+body {
+  background-color: white;
+}
+
+/* ===== COLORES ===== */
+.bg-stbh {
+  background-color: #0b0146 !important;
+}
+
+.table-stbh thead {
+  background-color: #0b0146;
+  color: white;
+}
+
+/* ===== BOTONES ===== */
+.btn-stbh {
+  background-color: #0b0146;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  font-weight: 500;
+  text-shadow: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+a.btn-stbh {
+  color: white !important;
+  text-decoration: none !important;
+}
+
+a.btn-stbh:visited {
+  color: white !important;
+}
+
+.btn-stbh:hover {
+  background-color: #12025a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.btn-stbh:active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.btn-lg {
+  padding: 10px 20px;
+  font-size: 1.1rem;
+}
+
+.btn-sm {
+  padding: 5px 12px;
+  font-size: 0.9rem;
+}
+
+/* ===== LOGOS RESPONSIVOS ===== */
+.logos-container {
+  background-color: #fff;
+  padding: 12px 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.logos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
+
+.logo-img {
+  height: 90px;
+  width: auto;
+  object-fit: contain;
+}
+
+@media (max-width: 768px) {
+  .logo-img {
+    height: 70px;
+  }
+}
+
+/* ===== CARD SECCIÓN USUARIOS ===== */
+.card-hero {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 30px 15px 0;
+}
+
+.hero-box {
+  background: #ffffff;
+  padding: 25px 35px;
+  border-radius: 15px;
+  border: 1px solid #eee;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.07);
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+}
+
+.hero-box h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #0b0146;
+  margin-bottom: 20px;
+}
+
+.hero-box .btn-group {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.hero-box .btn-group .btn-stbh {
+  margin: 0;
+  min-width: 180px;
+}
+
+/* ===== MODALES (Usuario Nuevo / Cambiar Pass) ===== */
+#fondo,
+#fondo_cambiar {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 10;
+}
+
+/* ✅ MODALES centrados vertical y horizontal con scroll interno */
+#form_alta,
+#form_cambiar_pass {
+  background: #fff;
+  padding: 30px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 10px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 20;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+#form_alta h2,
+#form_cambiar_pass h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: 700;
+  color: #0b0146;
+}
+
+.cerrar,
+.cerrar_cambiar {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 25px;
+  cursor: pointer;
+}
+
+/* ===== ALERTA AUTO-CLOSE ===== */
+.alert-auto-close {
+  animation: fadeOut 1s ease-in-out 4s forwards;
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    visibility: hidden;
+    height: 0;
+    padding: 0;
+    margin: 0;
+  }
+}
+
+/* ===== PERMISOS (en forma de cuadrícula si aplica) ===== */
+.permissions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px 20px;
+  margin-top: 20px;
+  justify-items: start;
+}
+
+.perm-item {
+  background-color: #f9f9f9;
+  padding: 8px 12px;
+  border-radius: 6px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+}

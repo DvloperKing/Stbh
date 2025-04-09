@@ -3,35 +3,40 @@ session_start();
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json; charset=utf-8");
 
-    include_once "../constantes.php";
-    include_once "../estructura_bd.php";
-    
-    //var_dump($_POST);
-    $MYSQLI = _DB_HDND();
-    
-    $id    =   _clean($_POST['id'],$MYSQLI);
+include_once "../constantes.php";
+include_once "../estructura_bd.php";
 
-    $SQL="DELETE FROM permissionsxprofile WHERE id_perfil = ".$id.";";
-    $registros = false;
-    $RESULT = _Q($SQL, $MYSQLI, 0);
+$MYSQLI = _DB_HDND();
 
-
-$SQLInsert = 'INSERT INTO permissionsxprofile (id_perfil,id_permissions) VALUES ';
-foreach ($_POST["permissions"] as $key => $value) {
-    if(end($_POST["permissions"])==$value){
-        $SQLInsert .= "(".$id.",".$value.");";
-    }else{
-        $SQLInsert .= "(".$id.",".$value."),";
-    }
-    
+// Validar que existan datos necesarios
+if (!isset($_POST['perfilId']) || !isset($_POST['permissions'])) {
+    echo json_encode(["code" => 0, "message" => "Faltan datos para guardar"]);
+    exit;
 }
-    $RESULT = _Q($SQLInsert, $MYSQLI, 0);
-    
-    if($RESULT){
-        $response =["code"=>1,"permissions"=>$RESULT];
-    }else{
-        $response =["code"=>0,"respuesta"=>$RESULT];
-    }
-    echo json_encode($response,JSON_UNESCAPED_UNICODE);
-    
+
+$id = _clean($_POST['perfilId'], $MYSQLI);
+$permissions = $_POST["permissions"];
+
+// Eliminar permisos actuales del perfil
+$SQLDelete = "DELETE FROM permissionsxprofile WHERE id_perfil = $id;";
+_Q($SQLDelete, $MYSQLI, 0);
+
+// Insertar nuevos permisos
+$SQLInsert = "INSERT INTO permissionsxprofile (id_perfil, id_permissions) VALUES ";
+$values = [];
+
+foreach ($permissions as $perm) {
+    $permClean = _clean($perm, $MYSQLI);
+    $values[] = "($id, $permClean)";
+}
+
+$SQLInsert .= implode(",", $values) . ";";
+$result = _Q($SQLInsert, $MYSQLI, 0);
+
+if ($result) {
+    echo json_encode(["code" => 1, "message" => "Permisos guardados correctamente"]);
+} else {
+    echo json_encode(["code" => 0, "message" => "Error al guardar permisos"]);
+}

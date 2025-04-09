@@ -85,7 +85,7 @@
           </a>
         </div>
         <div class="col-6 col-md-4 col-lg-3">
-          <a href="../pages/perfiles.php" class="btn menu-btn text-white w-100"
+          <a href="../pages/docente.php" class="btn menu-btn text-white w-100"
             style="background-color: rgba(11, 1, 70, 1);">
             <i class="bi bi-person-workspace me-2"></i>Docentes
           </a>
