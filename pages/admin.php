@@ -6,120 +6,132 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
   <link rel="icon" type="image/png" href="../assets/img/icon_stbh.png">
-  <title>
-    STBH | Procóro García Hernández
-  </title>
-  <!--     Fonts and icons     -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <title>STBH | Procóro García Hernández</title>
+
+  <link rel="stylesheet" href="../styles/global.css">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
-  <!-- Nucleo Icons -->
   <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
   <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
-  <!-- Font Awesome Icons -->
   <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
-  <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
-  <!-- CSS Files -->
   <link id="pagestyle" href="../assets/css/soft-ui-dashboard.css?v=1.0.8" rel="stylesheet" />
-  <!-- Nepcha Analytics (nepcha.com) -->
-  <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
-  <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
+
   <style>
-    .move-up {
-      margin-top: -50px; /* Ajusta este valor según sea necesario */
+    body {
+      background-color: #f8f9fa;
     }
 
-    .image-container {
-      position: absolute;
-      top: 125px;
-      right: 0;
-      bottom: 0;
-      display: flex;
-      align-items: center;
-    }
-
-    .oblique-image {
-    width: 100%;
-    height: 370px;
-    }
     .logos-container {
       display: flex;
-      justify-content: center; /* Centra horizontalmente */
-      align-items: center; /* Centra verticalmente */
-      background-color: #fff; /* Color de fondo */
-      padding: 12px; /* Espacio interno */
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra */
-    }
-    .logos {
-      display: flex;
-      justify-content: center; /* Centra horizontalmente */
-      align-items: center; /* Centra verticalmente */
+      justify-content: center;
+      align-items: center;
+      background-color: #fff;
+      padding: 12px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .logos img.rounded {
-      width: 100px; /* Tamaño de las imágenes */
-      margin-right: 20px; /* Espacio entre las imágenes */
+      margin-right: 20px;
+    }
+
+    .menu-card {
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+    }
+
+    .menu-btn {
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 15px 10px;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .menu-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    footer p {
+      font-size: 0.9rem;
     }
   </style>
 </head>
-    
-<body class="">
-<div class="logos-container">
-    <!-- Imágenes de la clase .logos -->
-    <div class="logos">
-      <img class="rounded" src="../assets/img/cnbm.png"  alt="CNBM Logo"  style="width: 300px;">
-      <img class="rounded" src="../assets/img/CRBH.JPG"  alt="CRBH Logo"  style="width: 100px;">
-      <img class="rounded" src="../assets/img/stbm.png"  alt="STBM Logo"  style="width: 300px;">
-    </div>
+
+<body>
+  <!-- LOGOS -->
+  <div class="logos-container">
+    <img class="rounded" src="../assets/img/cnbm.png" alt="CNBM Logo" style="width: 300px;">
+    <img class="rounded" src="../assets/img/CRBH2.png" alt="CRBH Logo" style="width: 100px;">
+    <img class="rounded" src="../assets/img/stbm.png" alt="STBM Logo" style="width: 300px;">
   </div>
 
-  <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: rgba(11, 1, 70, 1);">
-  <div class="container-fluid">
-    <a class="navbar-brand text-white" href="#"></a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarScroll">
-      <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
-        <li class="nav-item">
-          <a class="nav-link active text-white" aria-current="page" href="../pages/usuarios.php">Usuarios</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active text-white" aria-current="page" href="../pages/perfiles.php">Perfiles</a>
-        </li>
-        <li calss="nav-item">
-          <a class="nav-link active text-white" href="../logout.php">Cerrar Sesión</a>
-        </li>
-
-      </ul>
-
-    </div>
-  </div>
-</nav>
-  
-            <div class="col-md-6">
-
-                <img class="oblique-image" src="../assets/img/curved-images/logo2.png" alt="Logo">
-              </div>
-          </div>
+  <!-- BOTONES EN TARJETA -->
+  <div class="container my-5">
+    <div class="menu-card mx-auto" style="max-width: 1000px;">
+      <h3 class="text-center mb-4 text-dark">MENU ADMINISTRATIVO</h3>
+      <div class="row g-3 text-center">
+        <div class="col-6 col-md-4 col-lg-3">
+          <a href="../pages/usuarios.php" class="btn menu-btn text-white w-100"
+            style="background-color: rgba(11, 1, 70, 1);">
+            <i class="bi bi-people-fill me-2"></i>Usuarios
+          </a>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3">
+          <a href="../pages/perfiles.php" class="btn menu-btn text-white w-100"
+            style="background-color: rgba(11, 1, 70, 1);">
+            <i class="bi bi-shield-lock-fill me-2"></i>Perfiles
+          </a>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3">
+          <a href="../pages/perfiles.php" class="btn menu-btn text-white w-100"
+            style="background-color: rgba(11, 1, 70, 1);">
+            <i class="bi bi-person-workspace me-2"></i>Docentes
+          </a>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3">
+          <a href="../pages/perfiles.php" class="btn menu-btn text-white w-100"
+            style="background-color: rgba(11, 1, 70, 1);">
+            <i class="bi bi-person-lines-fill me-2"></i>Alumnos
+          </a>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3">
+          <a href="../pages/perfiles.php" class="btn menu-btn text-white w-100"
+            style="background-color: rgba(11, 1, 70, 1);">
+            <i class="bi bi-book-fill me-2"></i>Materias
+          </a>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3">
+          <a href="../pages/perfiles.php" class="btn menu-btn text-white w-100"
+            style="background-color: rgba(11, 1, 70, 1);">
+            <i class="bi bi-journal-check me-2"></i>Inscripciones
+          </a>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3">
+          <a href="../logout.php" class="btn menu-btn text-white w-100"
+            style="background-color: #8b0000;">
+            <i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesión
+          </a>
         </div>
       </div>
-    </section>
-  </main>
-  <!-- -------- START FOOTER 3 w/ COMPANY DESCRIPTION WITH LINKS & SOCIAL ICONS & COPYRIGHT ------- -->
-  <footer class="footer py-5">
-    <div class="container">        
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer py-4">
+    <div class="container">
       <div class="row">
-        <div class="col-8 mx-auto text-center mt-1">
+        <div class="col-10 mx-auto text-center">
           <p class="mb-0 text-secondary">
-          STBH © <script>
-              document.write(new Date().getFullYear())
-            </script>  | Todos los derechos Reservados
+            STBH © <script>document.write(new Date().getFullYear())</script> | Todos los derechos Reservados
           </p>
         </div>
       </div>
     </div>
   </footer>
-  <!-- -------- END FOOTER 3 w/ COMPANY DESCRIPTION WITH LINKS & SOCIAL ICONS & COPYRIGHT ------- -->
-  <!--   Core JS Files   -->
+
+  <!-- JS -->
   <script src="../assets/js/core/popper.min.js"></script>
   <script src="../assets/js/core/bootstrap.min.js"></script>
   <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
@@ -127,15 +139,10 @@
   <script>
     var win = navigator.platform.indexOf('Win') > -1;
     if (win && document.querySelector('#sidenav-scrollbar')) {
-      var options = {
-        damping: '0.5'
-      }
-      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), { damping: '0.5' });
     }
   </script>
-  <!-- Github buttons -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>
-  <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="../assets/js/soft-ui-dashboard.min.js?v=1.0.7"></script>
 </body>
 
