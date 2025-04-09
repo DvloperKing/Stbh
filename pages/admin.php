@@ -80,10 +80,13 @@
     <div class="collapse navbar-collapse" id="navbarScroll">
       <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
         <li class="nav-item">
-          <a class="nav-link active text-white" aria-current="page" href="#">Usuarios</a>
+          <a class="nav-link active text-white" aria-current="page" href="../pages/usuarios.php">Usuarios</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active text-white" aria-current="page" href="#">Permisos</a>
+          <a class="nav-link active text-white" aria-current="page" href="../pages/perfiles.php">Perfiles</a>
+        </li>
+        <li calss="nav-item">
+          <a class="nav-link active text-white" href="../logout.php">Cerrar Sesión</a>
         </li>
 
       </ul>
