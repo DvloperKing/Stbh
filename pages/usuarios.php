@@ -84,7 +84,22 @@ $PerfilesData = _Q($SQLPerfiles, $MYSQLI, 2);
     <div class="alert alert-info alert-auto-close text-center">Contraseña actualizada correctamente.</div>
   <?php endif; ?>
 </div>
-
+<!-- FILTROS -->
+<div class="container mb-3 text-center">
+  <div class="row justify-content-center g-3 align-items-center">
+    <div class="col-md-4">
+      <label>Filtrar por correo:</label>
+      <input type="text" id="filtroCorreo" class="form-control" placeholder="Correo">
+    </div>
+    <div class="col-md-4">
+      <label>Filtrar por perfil:</label>
+      <select id="filtroPerfil" class="form-select">
+        <option value="">Todos</option>
+        <?php foreach ($PerfilesData as $value) echo "<option value='{$value['name_perfil']}'>{$value['name_perfil']}</option>"; ?>
+      </select>
+    </div>
+  </div>
+</div>
 <!-- TABLA DE USUARIOS -->
 <section class="users p-4">
   <div class="container">

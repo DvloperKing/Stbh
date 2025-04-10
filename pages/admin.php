@@ -73,15 +73,33 @@
       <h3 class="text-center mb-4 text-dark">MENU ADMINISTRATIVO</h3>
       <div class="row g-3 text-center">
         <div class="col-6 col-md-4 col-lg-3">
-          <a href="../pages/usuarios.php" class="btn menu-btn text-white w-100"
+          <a href="../pages/inscripciones.php" class="btn menu-btn text-white w-100"
             style="background-color: rgba(11, 1, 70, 1);">
-            <i class="bi bi-people-fill me-2"></i>Usuarios
+            <i class="bi bi-journal-check me-2"></i>Inscripciones
           </a>
         </div>
         <div class="col-6 col-md-4 col-lg-3">
-          <a href="../pages/perfiles.php" class="btn menu-btn text-white w-100"
+          <a href="../pages/materias.php" class="btn menu-btn text-white w-100"
             style="background-color: rgba(11, 1, 70, 1);">
-            <i class="bi bi-shield-lock-fill me-2"></i>Perfiles
+            <i class="bi bi-book-fill me-2"></i>Materias
+          </a>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3">
+          <a href="../pages/grupos.php" class="btn menu-btn text-white w-100"
+            style="background-color: rgba(11, 1, 70, 1);">
+            <i class="bi bi-diagram-3-fill me-2"></i>Grupos
+            </a>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3">
+          <a href="../pages/asignar_materias.php" class="btn menu-btn text-white w-100"
+            style="background-color: rgba(11, 1, 70, 1);">
+          <i class="bi bi-link-45deg me-2"></i>Asignar Materias
+          </a>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3">
+          <a href="../pages/usuarios.php" class="btn menu-btn text-white w-100"
+            style="background-color: rgba(11, 1, 70, 1);">
+            <i class="bi bi-people-fill me-2"></i>Usuarios
           </a>
         </div>
         <div class="col-6 col-md-4 col-lg-3">
@@ -91,21 +109,9 @@
           </a>
         </div>
         <div class="col-6 col-md-4 col-lg-3">
-          <a href="../pages/perfiles.php" class="btn menu-btn text-white w-100"
+          <a href="../pages/alumno.php" class="btn menu-btn text-white w-100"
             style="background-color: rgba(11, 1, 70, 1);">
             <i class="bi bi-person-lines-fill me-2"></i>Alumnos
-          </a>
-        </div>
-        <div class="col-6 col-md-4 col-lg-3">
-          <a href="../pages/perfiles.php" class="btn menu-btn text-white w-100"
-            style="background-color: rgba(11, 1, 70, 1);">
-            <i class="bi bi-book-fill me-2"></i>Materias
-          </a>
-        </div>
-        <div class="col-6 col-md-4 col-lg-3">
-          <a href="../pages/perfiles.php" class="btn menu-btn text-white w-100"
-            style="background-color: rgba(11, 1, 70, 1);">
-            <i class="bi bi-journal-check me-2"></i>Inscripciones
           </a>
         </div>
         <div class="col-12 col-md-6 col-lg-3">

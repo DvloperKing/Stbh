@@ -22,6 +22,21 @@ $RESULT = _Q($SQL, $MYSQLI, 2);
   <link href="../assets/css/usuarios.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    .card {
+      background-color: #ffffff;
+      border-radius: 12px;
+      border: 1px solid #e0e0e0;
+      transition: all 0.3s ease;
+    }
+    .card:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+    .form-check-input:checked {
+      background-color: #2c2c54;
+      border-color: #2c2c54;
+    }
+  </style>
 </head>
 
 <body>
@@ -84,21 +99,23 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(data => {
       if (data.code === 1) {
         let html = `<form class='perfilesForm'><input type='hidden' name='perfilId' value='${id}'>`;
-        html += `<table class="table table-bordered mt-3"><thead><tr><th colspan="2">Permisos Asignados</th></tr></thead><tbody>`;
+        html += `<h5 class="text-center mb-3">Permisos Asignados</h5>`;
+        html += `<div class="row justify-content-center g-3">`;
 
         data.permissions.forEach(perm => {
           const checked = data.permisosAsignados.includes(perm.id) ? 'checked' : '';
           html += `
-            <tr>
-              <td>
-                <label>
-                  <input type="checkbox" name="permissions[]" value="${perm.id}" ${checked}> ${perm.name_permissions}
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+              <div class="card p-2 shadow-sm">
+                <label class="form-check-label">
+                  <input type="checkbox" class="form-check-input me-2" name="permissions[]" value="${perm.id}" ${checked}>
+                  ${perm.name_permissions}
                 </label>
-              </td>
-            </tr>`;
+              </div>
+            </div>`;
         });
 
-        html += `</tbody></table><button type="submit" class="btn-stbh btn-sm mt-2">Guardar</button></form>`;
+        html += `</div><div class="text-center mt-3"><button type="submit" class="btn-stbh btn-sm">Guardar</button></div></form>`;
         container.innerHTML = html;
         bindSaveEvent();
       } else {
