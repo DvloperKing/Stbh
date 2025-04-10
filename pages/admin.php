@@ -8,7 +8,7 @@
   <link rel="icon" type="image/png" href="../assets/img/icon_stbh.png">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <title>STBH | Procóro García Hernández</title>
-
+  <link rel="stylesheet" href="../assets/css/usuarios.css">
   <link rel="stylesheet" href="../styles/global.css">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
   <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
@@ -62,10 +62,13 @@
 <body>
   <!-- LOGOS -->
   <div class="logos-container">
-    <img class="rounded" src="../assets/img/cnbm.png" alt="CNBM Logo" style="width: 300px;">
-    <img class="rounded" src="../assets/img/CRBH2.png" alt="CRBH Logo" style="width: 100px;">
-    <img class="rounded" src="../assets/img/stbm.png" alt="STBM Logo" style="width: 300px;">
+  <div class="logos">
+    <img src="../assets/img/cnbm.png" alt="CNBM" class="logo-img">
+    <img src="../assets/img/CRBH2.png" alt="CRBH" class="logo-img">
+    <img src="../assets/img/stbm.png" alt="STBM" class="logo-img">
+    <img src="../assets/img/logo2.png" alt="Marca" class="logo-img">
   </div>
+</div>
 
   <!-- BOTONES EN TARJETA -->
   <div class="container my-5">

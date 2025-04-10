@@ -66,7 +66,7 @@ $LEVELS = _Q("select distinct name_level from education_levels order by name_lev
 <div class="logos-container">
   <div class="logos">
     <img src="../assets/img/cnbm.png" alt="CNBM" class="logo-img">
-    <img src="../assets/img/CRBH.JPG" alt="CRBH" class="logo-img">
+    <img src="../assets/img/CRBH2.png" alt="CRBH" class="logo-img">
     <img src="../assets/img/stbm.png" alt="STBM" class="logo-img">
     <img src="../assets/img/logo2.png" alt="Marca" class="logo-img">
   </div>
