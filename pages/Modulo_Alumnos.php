@@ -38,6 +38,10 @@ $calificaciones_alumno = _Q($sql_calificaciones, $MYSQLI, 2);
 
 // Directorio base para material didáctico
 $directorioBase = "archivos/";
+
+// Verificar que el semestre esté disponible en la sesión
+$semestre = isset($_SESSION['alumnos']['semester']) ? $_SESSION['alumnos']['semester'] : 'Semestre no disponible';
+
 ?>
 
 <!DOCTYPE html>
@@ -132,7 +136,7 @@ $directorioBase = "archivos/";
             <div class="row">
                 <div class="col-md-8">
                     <h2><i class="fas fa-user-graduate me-2"></i> Bienvenido, <?= $_SESSION['alumnos']['first_name'] ?> <?= $_SESSION['alumnos']['last_name'] ?></h2>
-                    <p class="mb-0">Número de control: <?= $_SESSION['alumnos']['control_number'] ?> | Semestre: <?= $_SESSION['alumnos']['semester'] ?></p>
+                    <p class="mb-0">Número de control: <?= $_SESSION['alumnos']['control_number'] ?> | Semestre: <?= $semestre ?></p>
                 </div>
                 <div class="col-md-4 text-end">
                     <div class="d-inline-block bg-white p-2 rounded">
@@ -208,7 +212,17 @@ $directorioBase = "archivos/";
                     // Agrupar por semestre
                     $calificaciones_por_semestre = [];
                     foreach ($calificaciones_alumno as $calificacion) {
-                        $semestre = $calificacion['semester'];
+                        $semestre = 'Semestre no disponible'; // Default value
+                        if (isset($_SESSION['alumnos']) && is_array($_SESSION['alumnos'])) {
+                            if (isset($_SESSION['alumnos']['semester'])) {
+                                $semestre = $_SESSION['alumnos']['semester'];
+                            } else {
+                                // Log for debugging
+                                error_log("Warning: 'semester' key missing in \$_SESSION['alumnos']: " . print_r($_SESSION['alumnos'], true));
+                            }
+                        } else {
+                            error_log("Warning: \$_SESSION['alumnos'] is not set or not an array");
+                        }
                         $calificaciones_por_semestre[$semestre][] = $calificacion;
                     }
                     ?>
@@ -275,31 +289,24 @@ $directorioBase = "archivos/";
                                         <?php
                                         $rutaMateria = $directorioBase . $materia['code'] . "/";
 
-                                        if (is_dir($rutaMateria)) {
-                                            $archivos = array_diff(scandir($rutaMateria), array('..', '.'));
-
-                                            if (!empty($archivos)) {
-                                                echo '<ul class="list-group">';
-                                                foreach ($archivos as $archivo) {
-                                                    echo '<li class="list-group-item d-flex justify-content-between align-items-center">';
-                                                    echo '<span><i class="fas fa-file me-2"></i>' . $archivo . '</span>';
-                                                    echo '<div>';
-                                                    echo '<a href="' . $rutaMateria . $archivo . '" class="btn btn-download btn-sm me-1" download><i class="fas fa-download"></i></a>';
-
-                                                    if (preg_match('/\.(jpg|png|pdf)$/i', $archivo)) {
-                                                        echo '<a href="' . $rutaMateria . $archivo . '" class="btn btn-view btn-sm" target="_blank"><i class="fas fa-eye"></i></a>';
-                                                    }
-                                                    echo '</div>';
-                                                    echo '</li>';
-                                                }
-                                                echo '</ul>';
-                                            } else {
-                                                echo '<div class="alert alert-info mb-0">No hay material disponible para esta materia.</div>';
-                                            }
-                                        } else {
-                                            echo '<div class="alert alert-info mb-0">No hay material disponible para esta materia.</div>';
-                                        }
+                                        if (is_dir($rutaMateria)):
+                                            $archivos = scandir($rutaMateria);
                                         ?>
+                                            <ul class="list-group">
+                                                <?php foreach ($archivos as $archivo): ?>
+                                                    <?php if ($archivo != '.' && $archivo != '..'): ?>
+                                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                            <?= $archivo ?>
+                                                            <a href="<?= $rutaMateria . $archivo ?>" class="btn btn-sm btn-download">
+                                                                Descargar
+                                                            </a>
+                                                        </li>
+                                                    <?php endif; ?>
+                                                <?php endforeach; ?>
+                                            </ul>
+                                        <?php else: ?>
+                                            <div class="alert alert-warning">No hay material disponible para esta materia.</div>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
@@ -307,44 +314,18 @@ $directorioBase = "archivos/";
                     </div>
                 <?php else: ?>
                     <div class="alert alert-info">
-                        No tienes materias asignadas todavía.
+                        No tienes materias asignadas.
                     </div>
                 <?php endif; ?>
             </div>
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="footer py-4 bg-light mt-5">
-        <div class="container text-center">
-            <p class="mb-0">STBH © <script>
-                    document.write(new Date().getFullYear())
-                </script> | Todos los derechos reservados.</p>
-        </div>
-    </footer>
-
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            // Activar tooltips
-            $('[data-bs-toggle="tooltip"]').tooltip();
-
-            // Guardar la pestaña activa en localStorage
-            $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function(e) {
-                localStorage.setItem('ultimaPestañaActiva', $(e.target).attr('href'));
-            });
-
-            // Recuperar la última pestaña activa
-            var ultimaPestañaActiva = localStorage.getItem('ultimaPestañaActiva');
-            if (ultimaPestañaActiva) {
-                $('[href="' + ultimaPestañaActiva + '"]').tab('show');
-            }
-        });
-      </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
+
 
 <?php
 // Funciones auxiliares
@@ -363,8 +344,27 @@ function obtenerDiaSemana($numeroDia)
 
 function obtenerNombreDocente($id_teacher, $MYSQLI)
 {
-    $sql = "SELECT first_name, last_name FROM teaching WHERE id = $id_teacher";
-    $docente = _Q($sql, $MYSQLI, 1);
+    // Validate $id_teacher
+    if (!is_numeric($id_teacher) || $id_teacher <= 0) {
+        return 'Por asignar';
+    }
+
+    // Use prepared statement to prevent SQL injection
+    $sql = "SELECT first_name, last_name FROM teaching WHERE id = ?";
+    $stmt = mysqli_prepare($MYSQLI, $sql);
+    if (!$stmt) {
+        return 'Por asignar';
+    }
+
+    mysqli_stmt_bind_param($stmt, 'i', $id_teacher);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    // Fetch the row
+    $docente = mysqli_fetch_assoc($result);
+    mysqli_stmt_close($stmt);
+
+    // Return the name or default
     return $docente ? $docente['first_name'] . ' ' . $docente['last_name'] : 'Por asignar';
 }
 

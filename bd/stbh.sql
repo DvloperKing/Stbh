@@ -188,3 +188,29 @@ SELECT * FROM students;
 
 select u.*,s.* from users u inner join students s on u.id=s.id_user;
 SELECT u.*,p.name_perfil as perfil from users u inner join perfil p on u.id_perfil = p.id;
+
+-- Modificacion de la bd para el modulo alumnos
+create table student_horarios (
+    id int auto_increment primary key,
+    id_user int,
+    id_subject int,
+    id_teacher int,
+    dia_semana int, -- 1 = Lunes, ..., 6 = Sábado
+    hora_inicio time,
+    hora_fin time,
+    aula varchar(20),
+    foreign key (id_user) references users(id),
+    foreign key (id_subject) references subjects(id),
+    foreign key (id_teacher) references teaching(id)
+);
+
+create table student_calificaciones (
+    id int auto_increment primary key,
+    id_user int,
+    id_subject int,
+    parcial1 decimal(4,2),
+    parcial2 decimal(4,2),
+    parcial3 decimal(4,2),
+    foreign key (id_user) references users(id),
+    foreign key (id_subject) references subjects(id)
+);
