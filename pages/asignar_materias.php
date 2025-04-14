@@ -67,6 +67,17 @@ $asignaciones = $MYSQLI->query("
   <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
   <link href="../assets/css/soft-ui-dashboard.css?v=1.0.8" rel="stylesheet" />
   <link href="../assets/css/usuarios.css" rel="stylesheet" />
+  <style>
+    .btn-primary {
+      background-color: #0b0146 !important;
+    }
+    .btn-success {
+      background-color: #f4a701 !important;
+    }
+    .table-dark {
+      --bs-table-bg: #0b0146;
+    }
+  </style>
 </head>
 <body class="bg-light">
 <div class="logos-container">
@@ -77,28 +88,28 @@ $asignaciones = $MYSQLI->query("
     <img src="../assets/img/logo2.png" alt="Marca" class="logo-img">
   </div>
 </div>
+
 <section class="card-hero">
-  <div class="hero-box">
-  <h3 class="text-center mb-4">Asignación de Materias a Docentes</h3>
-    <div class="btn-group">
+  <div class="hero-box text-center">
+    <h3 class="text-center mb-4">Asignación de Materias a Docentes</h3>
+    <div class="mb-3">
       <a href="admin.php" class="btn-stbh btn-lg">Regresar al Menú Principal</a>
+    </div>
+    <div>
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAsignar">
+        <i class="bi bi-plus-circle me-1"></i> Asignar Materia
+      </button>
     </div>
   </div>
 </section>
-<div class="container mt-5">
 
+<div class="container mt-5">
   <?php if (isset($_GET['success'])): ?>
     <div class="alert alert-success alert-auto-close text-center">Materias asignadas correctamente.</div>
   <?php endif; ?>
   <?php if (isset($_GET['deleted'])): ?>
     <div class="alert alert-warning alert-auto-close text-center">Asignación eliminada correctamente.</div>
   <?php endif; ?>
-
-  <div class="text-end mb-3">
-    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAsignar">
-      <i class="bi bi-plus-circle me-1"></i> Asignar Materia
-    </button>
-  </div>
 
   <div class="table-responsive">
     <table class="table table-bordered text-center bg-white">

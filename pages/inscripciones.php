@@ -51,6 +51,17 @@ ORDER BY u.first_name, s.name_subject");
   <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
   <link href="../assets/css/soft-ui-dashboard.css?v=1.0.8" rel="stylesheet" />
   <link href="../assets/css/usuarios.css" rel="stylesheet" />
+  <style>
+    .btn-primary {
+      background-color: #0b0146 !important;
+    }
+    .btn-success {
+      background-color: #f4a701 !important;
+    }
+    .table-dark {
+      --bs-table-bg: #0b0146;
+    }
+  </style>
 </head>
 <body class="bg-light">
 <div class="logos-container">
