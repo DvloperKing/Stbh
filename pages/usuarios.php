@@ -224,6 +224,36 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 </script>
+<script>
+// Filtro de correo y perfil en la tabla
+document.addEventListener('DOMContentLoaded', () => {
+  const inputCorreo = document.getElementById('filtroCorreo');
+  const selectPerfil = document.getElementById('filtroPerfil');
+  const filas = document.querySelectorAll('table tbody tr');
+
+  function aplicarFiltros() {
+    const filtroCorreo = inputCorreo.value.toLowerCase();
+    const filtroPerfil = selectPerfil.value;
+
+    filas.forEach(fila => {
+      const correo = fila.children[0].textContent.toLowerCase();
+      const perfil = fila.children[2].textContent;
+
+      const coincideCorreo = correo.includes(filtroCorreo);
+      const coincidePerfil = !filtroPerfil || perfil === filtroPerfil;
+
+      if (coincideCorreo && coincidePerfil) {
+        fila.style.display = '';
+      } else {
+        fila.style.display = 'none';
+      }
+    });
+  }
+
+  inputCorreo.addEventListener('input', aplicarFiltros);
+  selectPerfil.addEventListener('change', aplicarFiltros);
+});
+</script>
 
 </body>
 </html>
