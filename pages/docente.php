@@ -65,7 +65,7 @@ $RESULT = $MYSQLI->query($SQL);
     </div>
   </div>
 </section>
-
+<!-- purba -->
 <?php if (isset($_GET['success'])): ?>
   <div class="alert alert-success text-center alert-auto-close">Información del docente guardada correctamente.</div>
 <?php endif; ?>
