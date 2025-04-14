@@ -35,7 +35,7 @@ $SQL = "
   ORDER BY u.first_name, u.last_name
 ";
 $RESULT = $MYSQLI->query($SQL);
-
+// Modificacion
 // para formulario de modalidad
 $MODALIDADES = $MYSQLI->query("SELECT * FROM modalities ORDER BY name_modality");
 ?>
