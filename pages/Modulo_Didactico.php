@@ -61,6 +61,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["eliminar"], $_POST["m
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Módulo Didáctico | STBH</title>
     <link rel="stylesheet" href="../assets/css/soft-ui-dashboard.css?v=1.0.8">
+    <link href="../assets/css/usuarios.css" rel="stylesheet" />
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -93,7 +95,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["eliminar"], $_POST["m
     </style>
 </head>
 <body>
-
+<div class="logos-container">
+  <div class="logos">
+    <img src="../assets/img/cnbm.png" alt="CNBM" class="logo-img">
+    <img src="../assets/img/CRBH2.png" alt="CRBH" class="logo-img">
+    <img src="../assets/img/stbm.png" alt="STBM" class="logo-img">
+    <img src="../assets/img/logo2.png" alt="Marca" class="logo-img">
+  </div>
+</div>
     <!-- Barra de navegación -->
     <nav class="navbar navbar-expand-lg" style="background-color: rgba(11, 1, 70, 1);">
         <div class="container-fluid">
