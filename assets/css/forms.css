@@ -1,0 +1,26 @@
+#fondo {
+    display: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1;
+}
+
+#form_alta {
+    width: 60%;
+    border-radius: 3px;
+    padding: 20px;
+    position: fixed;
+    z-index: 5;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    top: 8%;
+    height: auto;
+}

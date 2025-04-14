@@ -1,190 +1,194 @@
+-- eliminar y crear la base de datos
+
 drop database if exists stbh;
 create database stbh;
 use stbh;
--- TABLA PERFILES
+
+-- tablas principales
+
 create table perfil (
-	id int auto_increment primary key,
-	name_perfil varchar(20)
-);
--- TABLA USUARIOS
-create table users (
-	id int auto_increment primary key,
-	email varchar(45),
-	pass varchar(45),
-	id_perfil int,
-	foreign key (id_perfil) references perfil(id)
-);
--- TABLA PERMISOS
-create table permissions (
-	id decimal(3,1) primary key,
-	name_permissions varchar(50)
-);
--- RELACION DE PERMISOS POR PERFIL
-create table permissionsxprofile (
-	id_perfil int,
-	id_permissions decimal(3,1),
-	foreign key (id_perfil) references perfil(id),
-	foreign key (id_permissions) references permissions(id)
-);
--- TABLA NIVELES DE EDUCACION
-create table education_levels (
-	id int auto_increment primary key,
-    name_level varchar(30) unique
-);
--- TABLA MODALIDADES
-create table modalities (
-	id int auto_increment primary key,
-    name_modality varchar(20) unique,
-    id_level int,
-    foreign key (id_level) references education_levels(id)
-);
--- TABLA MATERIAS
-create table subjects (
-	id int auto_increment primary key,
-    name_subject varchar(20),
-    code varchar(20) unique,
-    semester int not null
-);
--- TABLA DOCENTES
-create table teaching (
-	id int auto_increment primary key,
-    id_user int,
-    first_name varchar(35),
-    last_name varchar(60),
-    foreign key (id_user) references users(id)
-);
--- TABLA ALUMNOS
-create table students (
-	id int auto_increment primary key,
-    control_number int unique,
-    id_user int,
-    id_modality int,
-    first_name varchar(35),
-    last_name varchar(60),
-    semester int,
-    foreign key (id_user) references users(id),
-    foreign key (id_modality) references modalities(id)
+  id int auto_increment primary key,
+  name_perfil varchar(20)
 );
 
--- MATERIAS ASIGNADAS A ALUMNOS
+create table users (
+  id int auto_increment primary key,
+  email varchar(45),
+  pass varchar(45),
+  first_name varchar(35),
+  last_name varchar(60),
+  id_perfil int,
+  foreign key (id_perfil) references perfil(id)
+);
+
+create table permissions (
+  id decimal(3,1) primary key,
+  name_permissions varchar(50)
+);
+
+create table permissionsxprofile (
+  id_perfil int,
+  id_permissions decimal(3,1),
+  foreign key (id_perfil) references perfil(id),
+  foreign key (id_permissions) references permissions(id)
+);
+
+create table education_levels (
+  id int auto_increment primary key,
+  name_level varchar(30) unique
+);
+
+create table modalities (
+  id int auto_increment primary key,
+  name_modality varchar(20) unique
+);
+
+create table modality_level (
+  id int auto_increment primary key,
+  id_modality int,
+  id_level int,
+  foreign key (id_modality) references modalities(id),
+  foreign key (id_level) references education_levels(id)
+);
+
+create table subjects (
+  id int auto_increment primary key,
+  name_subject varchar(20),
+  code varchar(20) unique,
+  semester int
+);
+
+-- nueva tabla corregida para registrar la relación nivel + modalidad + materia
+create table subject_modality_level (
+  id int auto_increment primary key,
+  id_subject int,
+  id_modality int,
+  id_level int,
+  foreign key (id_subject) references subjects(id),
+  foreign key (id_modality) references modalities(id),
+  foreign key (id_level) references education_levels(id)
+);
+
+create table teaching (
+  id int auto_increment primary key,
+  id_user int,
+  highest_degree varchar(50),
+  phone_number varchar(20),
+  foreign key (id_user) references users(id)
+);
+
+create table students (
+  id int auto_increment primary key,
+  control_number int unique,
+  id_user int,
+  id_modality int,
+  semester int,
+  foreign key (id_user) references users(id),
+  foreign key (id_modality) references modalities(id)
+);
+
 create table student_subjects (
-    id int auto_increment primary key,
-    id_user int,
-    id_subject int,
-    foreign key (id_user) references users(id),
-    foreign key (id_subject) references subjects(id)
+  id int auto_increment primary key,
+  id_user int,
+  id_subject int,
+  foreign key (id_user) references users(id),
+  foreign key (id_subject) references subjects(id)
 );
--- MATERIAS ASIGNADAS A DOCENTES
+
 create table teacher_subjects (
-    id int auto_increment primary key,
-    id_user int,
-    id_subject int,
-    foreign key (id_user) references users(id),
-    foreign key (id_subject) references subjects(id)
+  id int auto_increment primary key,
+  id_user int,
+  id_subject int,
+  foreign key (id_user) references users(id),
+  foreign key (id_subject) references subjects(id)
 );
+
+-- inserts de catálogos
 
 insert into perfil (name_perfil) values ('administrador');
 insert into perfil (name_perfil) values ('docente');
 insert into perfil (name_perfil) values ('alumno');
+
 insert into permissions (id, name_permissions) values (1.0, 'ver usuarios');
-insert into permissions (id, name_permissions) values (1.1, 'añadir usuario');
-insert into permissions (id, name_permissions) values (1.2, 'modificar usuario');
-insert into permissions (id, name_permissions) values (1.3, 'eliminar usuario');
-
-insert into permissions (id, name_permissions) values (2.0, 'ver perfiles');
-insert into permissions (id, name_permissions) values (2.1, 'asignar permisos a perfiles');
-
-insert into permissions (id, name_permissions) values (3.0, 'ver docentes');
-insert into permissions (id, name_permissions) values (3.1, 'añadir docente');
-insert into permissions (id, name_permissions) values (3.2, 'modificar docente');
-insert into permissions (id, name_permissions) values (3.3, 'eliminar docente');
-
-insert into permissions (id, name_permissions) values (4.0, 'ver alumnos');
-insert into permissions (id, name_permissions) values (4.1, 'añadir alumno');
-insert into permissions (id, name_permissions) values (4.2, 'modificar alumno');
-insert into permissions (id, name_permissions) values (4.3, 'eliminar alumno');
-
 insert into permissions (id, name_permissions) values (5.0, 'ver materias');
 insert into permissions (id, name_permissions) values (5.1, 'añadir materia');
-insert into permissions (id, name_permissions) values (5.2, 'modificar materia');
-insert into permissions (id, name_permissions) values (5.3, 'eliminar materia');
 
-insert into permissions (id, name_permissions) values (6.0, 'ver horarios');
-insert into permissions (id, name_permissions) values (6.1, 'añadir horario');
-insert into permissions (id, name_permissions) values (6.2, 'modificar horario');
-insert into permissions (id, name_permissions) values (6.3, 'eliminar horario');
+insert into permissionsxprofile (id_perfil, id_permissions) select 1, id from permissions;
 
-insert into permissions (id, name_permissions) values (7.0, 'ver calificaciones');
-insert into permissions (id, name_permissions) values (7.1, 'registrar calificación');
-insert into permissions (id, name_permissions) values (7.2, 'modificar calificación');
-insert into permissions (id, name_permissions) values (7.3, 'eliminar calificación');
+insert into users (email, pass, first_name, last_name, id_perfil) values
+('admin@stbh.com', 'admin123', 'admin', 'sistema', 1),
+('alumno@stbh.com', '12345', 'juan', 'pérez garcía', 3),
+('docente@stbh.com', 'clave', 'maría', 'lópez', 2);
 
-insert into permissions (id, name_permissions) values (8.0, 'ver modalidades y niveles');
-insert into permissions (id, name_permissions) values (8.1, 'añadir modalidad/nivel');
-insert into permissions (id, name_permissions) values (8.2, 'modificar modalidad/nivel');
-insert into permissions (id, name_permissions) values (8.3, 'eliminar modalidad/nivel');
+insert into education_levels (name_level) values ('bachillerato');
+insert into education_levels (name_level) values ('básico');
 
-insert into permissions (id, name_permissions) values (9.0, 'ver materias asignadas a alumnos');
-insert into permissions (id, name_permissions) values (9.1, 'ver materias asignadas a docentes');
-insert into permissions (id, name_permissions) values (9.2, 'asignar materias a alumnos');
-insert into permissions (id, name_permissions) values (9.3, 'asignar materias a docentes');
+insert into modalities (name_modality) values ('sabatino');
+insert into modalities (name_modality) values ('internado');
+insert into modalities (name_modality) values ('online');
 
--- asignar todos los permisos al perfil administrador (id_perfil = 1)
-insert into permissionsxprofile (id_perfil, id_permissions) values (1, 1.0);
-insert into permissionsxprofile (id_perfil, id_permissions) values (1, 1.1);
-insert into permissionsxprofile (id_perfil, id_permissions) values (1, 1.2);
-insert into permissionsxprofile (id_perfil, id_permissions) values (1, 1.3);
+insert into modality_level (id_modality, id_level) values (1, 2); -- sabatino → básico
+insert into modality_level (id_modality, id_level) values (2, 1); -- internado → bachillerato
+insert into modality_level (id_modality, id_level) values (2, 2); -- internado → básico
+insert into modality_level (id_modality, id_level) values (3, 2); -- online → básico
 
-insert into permissionsxprofile (id_perfil, id_permissions) values (1, 2.0);
-insert into permissionsxprofile (id_perfil, id_permissions) values (1, 2.1);
+-- materias
+insert into subjects (name_subject, code, semester) values
+('matemáticas i', 'mat101', 1),
+('programación i', 'pro101', 1),
+('química', 'qui101', 1),
+('álgebra', 'alg101', 1),
+('doctrina cristiana i', 'dc01', 1);
 
-insert into permissionsxprofile (id_perfil, id_permissions) values (1, 3.0);
-insert into permissionsxprofile (id_perfil, id_permissions) values (1, 3.1);
-insert into permissionsxprofile (id_perfil, id_permissions) values (1, 3.2);
-insert into permissionsxprofile (id_perfil, id_permissions) values (1, 3.3);
+-- relación exacta materia - modalidad - nivel
+insert into subject_modality_level (id_subject, id_modality, id_level) values
+(1, 1, 2), -- matemáticas i → sabatino, básico
+(1, 2, 2), -- matemáticas i → internado, básico
+(1, 3, 2), -- matemáticas i → online, básico
+(2, 1, 2), -- programación i → sabatino, básico
+(2, 2, 2),
+(2, 3, 2),
+(3, 2, 2), -- química → internado, básico
+(4, 2, 1), -- álgebra → internado, bachillerato
+(5, 2, 2); -- doctrina cristiana i → internado, básico
 
-insert into permissionsxprofile (id_perfil, id_permissions) values (1, 4.0);
-insert into permissionsxprofile (id_perfil, id_permissions) values (1, 4.1);
-insert into permissionsxprofile (id_perfil, id_permissions) values (1, 4.2);
-insert into permissionsxprofile (id_perfil, id_permissions) values (1, 4.3);
+insert into teaching (id_user, highest_degree, phone_number)
+values (3, 'maestría en educación', '8341234567');
 
-insert into permissionsxprofile (id_perfil, id_permissions) values (1, 5.0);
-insert into permissionsxprofile (id_perfil, id_permissions) values (1, 5.1);
-insert into permissionsxprofile (id_perfil, id_permissions) values (1, 5.2);
-insert into permissionsxprofile (id_perfil, id_permissions) values (1, 5.3);
+insert into students (control_number, id_user, id_modality, semester)
+values (20250001, 2, 1, 2);
 
-insert into permissionsxprofile (id_perfil, id_permissions) values (1, 6.0);
-insert into permissionsxprofile (id_perfil, id_permissions) values (1, 6.1);
-insert into permissionsxprofile (id_perfil, id_permissions) values (1, 6.2);
-insert into permissionsxprofile (id_perfil, id_permissions) values (1, 6.3);
+select * from students;
 
-insert into permissionsxprofile (id_perfil, id_permissions) values (1, 7.0);
-insert into permissionsxprofile (id_perfil, id_permissions) values (1, 7.1);
-insert into permissionsxprofile (id_perfil, id_permissions) values (1, 7.2);
-insert into permissionsxprofile (id_perfil, id_permissions) values (1, 7.3);
+-- consulta materias completas
+select 
+  s.name_subject, 
+  s.code, 
+  s.semester, 
+  m.name_modality, 
+  el.name_level
+from subject_modality_level sml
+join subjects s on s.id = sml.id_subject
+join modalities m on m.id = sml.id_modality
+join education_levels el on el.id = sml.id_level
+order by el.name_level, m.name_modality, s.semester, s.name_subject;
 
-insert into permissionsxprofile (id_perfil, id_permissions) values (1, 8.0);
-insert into permissionsxprofile (id_perfil, id_permissions) values (1, 8.1);
-insert into permissionsxprofile (id_perfil, id_permissions) values (1, 8.2);
-insert into permissionsxprofile (id_perfil, id_permissions) values (1, 8.3);
-
-insert into permissionsxprofile (id_perfil, id_permissions) values (1, 9.0);
-insert into permissionsxprofile (id_perfil, id_permissions) values (1, 9.1);
-insert into permissionsxprofile (id_perfil, id_permissions) values (1, 9.2);
-insert into permissionsxprofile (id_perfil, id_permissions) values (1, 9.3);
-
-insert into users (email, pass, id_perfil) values ('admin@stbh.com', 'admin123', 1);
-insert into users (email, pass, id_perfil) values ('alumno@stbh.com', '12345', 3);
-
-INSERT INTO education_levels (name_level) VALUES ('Licenciatura');
-INSERT INTO modalities (name_modality, id_level) VALUES ('Escolarizado', 1); 
-INSERT INTO students (control_number, id_user, id_modality, first_name, last_name, semester) VALUES (20250001, 2, 1, 'Juan', 'Pérez García', 2);
-
-select * from perfil;
-select * from permissions;
-select * from permissionsxprofile;
-select * from users;
-SELECT * FROM students;
-
-select u.*,s.* from users u inner join students s on u.id=s.id_user;
-SELECT u.*,p.name_perfil as perfil from users u inner join perfil p on u.id_perfil = p.id;
+SELECT ts.id, u.first_name, u.last_name, s.name_subject
+  FROM teacher_subjects ts
+  JOIN users u ON ts.id_user = u.id
+  JOIN subjects s ON ts.id_subject = s.id
+  ORDER BY u.first_name, s.name_subject;
+  
+SELECT  m.name_modality,
+  sml.id_level,
+  sub.semester,
+  sub.name_subject,
+  sub.code,
+  CONCAT(u.first_name, ' ', u.last_name) AS docente
+FROM teacher_subjects ts
+JOIN users u ON u.id = ts.id_user
+JOIN subjects sub ON sub.id = ts.id_subject
+JOIN subject_modality_level sml ON sml.id_subject = sub.id
+JOIN modalities m ON m.id = sml.id_modality
+WHERE u.id_perfil = 2
+ORDER BY m.name_modality, sub.semester, sub.name_subject;
