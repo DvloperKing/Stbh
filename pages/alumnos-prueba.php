@@ -91,7 +91,8 @@ $semestre = $_SESSION['alumnos']['semester'];
     <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#horarios">Horarios</button></li>
     <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#calificaciones">Calificaciones</button></li>
     <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#material">Material Didáctico</button></li>
-  </ul>
+    <a href="../logout.php"><li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#cerrarsesion">Cerrar Sesión</button></li></a>
+</ul>
 
   <div class="tab-content border border-top-0 rounded-bottom p-3 mt-2">
     <!-- Horarios -->

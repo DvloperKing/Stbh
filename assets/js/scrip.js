@@ -21,7 +21,7 @@ function login_formulario() {
         if (result.code==1){
             window.location.href="../pages/admin.php";
         }else if(result.code==2){
-            window.location.href="../pages/alumno.php";
+            window.location.href="../pages/alumnos-prueba.php";
         }
         else {
             alert("Su correo institucional o contraseña son incorrectos");
