@@ -2,7 +2,7 @@
     "estudiantes": [
         {
             "id": 1,
-            "nombre": "Juan Pérez",
+            "nombre": "Juan P\u00e9rez",
             "unidad1": 85,
             "unidad2": 90,
             "unidad3": 78,
@@ -11,7 +11,7 @@
         },
         {
             "id": 2,
-            "nombre": "María González",
+            "nombre": "Mar\u00eda Gonz\u00e1lez",
             "unidad1": 92,
             "unidad2": 100,
             "unidad3": 75,
@@ -38,7 +38,7 @@
         },
         {
             "id": 5,
-            "nombre": "Pedro López",
+            "nombre": "Pedro L\u00f3pez",
             "unidad1": 60,
             "unidad2": 73,
             "unidad3": 68,
