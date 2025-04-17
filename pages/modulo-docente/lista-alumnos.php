@@ -1,6 +1,6 @@
 <?php
 session_start(); // Iniciar sesión antes de cualquier salida
-
+require_once 'conexion.php';
 // Obtener la pestaña activa desde la URL
 $tab_activa = isset($_GET['tab']) ? $_GET['tab'] : 'calificaciones';
 ?>
