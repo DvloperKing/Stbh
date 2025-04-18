@@ -1,6 +1,50 @@
 <?php 
-$mainblue = 0;
-$data = json_decode(file_get_contents('./modulo-docente/data.json'), true);
+require './modulo-docente/conexion.php';
+
+
+try {
+    $sql = "
+        SELECT 
+            s.id AS subject_id,
+            s.name_subject,
+            g.id_grupo,
+            m.name_modality,
+            e.name_level,
+            g.horario
+        FROM subject_group g
+        JOIN subjects s ON g.id_subjects = s.id
+        JOIN modality_level ml ON g.id_modality_level = ml.id
+        JOIN modalities m ON ml.id_modality = m.id
+        JOIN education_levels e ON ml.id_level = e.id
+        ORDER BY s.id, g.id_grupo
+    ";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $data = [];
+
+    foreach ($resultados as $fila) {
+        $idMateria = $fila['subject_id'];
+        $nombreMateria = $fila['name_subject'];
+
+        if (!isset($data[$idMateria])) {
+            $data[$idMateria] = [
+                'nombre' => $nombreMateria,
+                'grupos' => []
+            ];
+        }
+
+        $data[$idMateria]['grupos'][] = [
+            'id_grupo' => $fila['id_grupo'],
+            'modalidad' => $fila['name_modality'],
+            'nivel' => $fila['name_level'],
+            'horario' => $fila['horario']
+        ];
+    }
+} catch (PDOException $e) {
+    echo "Error al obtener grupos: " . $e->getMessage();
+}
 ?>
 
 <!DOCTYPE html>
@@ -78,31 +122,34 @@ $data = json_decode(file_get_contents('./modulo-docente/data.json'), true);
 
 <!-- LOGOS -->
 <div class="logos-container">
-<img src="../assets/img/cnbm.png" alt="CNBM" class="logo-img">
-    <img src="../assets/img/CRBH2.png" alt="CRBH" class="logo-img">
-    <img src="../assets/img/stbm.png" alt="STBM" class="logo-img">
-    <img src="../assets/img/logo2.png" alt="Marca" class="logo-img">
+  <img src="../assets/img/cnbm.png" alt="CNBM" class="logo-img">
+  <img src="../assets/img/CRBH2.png" alt="CRBH" class="logo-img">
+  <img src="../assets/img/stbm.png" alt="STBM" class="logo-img">
+  <img src="../assets/img/logo2.png" alt="Marca" class="logo-img">
 </div>
 
 <!-- CARD DE BIENVENIDA -->
 <section class="card-hero">
   <div class="hero-box">
-    <h2>Panel de Materias</h2>
-    <p>Seleccione una materia para gestionar sus grupos</p>
+    <h2>Panel de Grupos</h2>
+    <p>Seleccione un grupo para gestionar sus alumnos</p>
   </div>
 </section>
 
 <!-- MATERIAS Y GRUPOS -->
 <section class="container my-4">
-  <?php foreach ($data['materias'] as $materia): ?>
+  <?php foreach ($data as $materia): ?>
   <div class="mb-5">
-    <h4 class="text-primary"><?= $materia['nombre'] ?></h4>
+    <h2 class="text-primary"><?= htmlspecialchars($materia['nombre']) ?></h2>
     <div class="row">
       <?php foreach ($materia['grupos'] as $grupo): ?>
       <div class="col-12 col-md-6 col-lg-3 mb-4">
         <div class="card h-100 p-3 shadow-sm border-0 d-flex flex-column justify-content-between">
           <div class="mb-3 text-center">
-            <h4><?= $grupo['nombre'] ?></h4>
+            <h5><?= htmlspecialchars($grupo['id_grupo']) ?></h5>
+            <p class="text-muted mb-1"><?= htmlspecialchars($grupo['modalidad']) ?></p>
+            <p class="text-muted mb-1"><?= htmlspecialchars($grupo['nivel']) ?></p>
+            <p class="text-muted"><?= htmlspecialchars($grupo['horario']) ?></p>
           </div>
           <a href="./modulo-docente/lista-alumnos.php" class="btn-stbh text-center">
             Ir <i class="bi bi-arrow-right-circle ms-2"></i>
@@ -114,6 +161,8 @@ $data = json_decode(file_get_contents('./modulo-docente/data.json'), true);
   </div>
   <?php endforeach; ?>
 </section>
+
+
 
 <!-- FOOTER -->
 <footer class="footer py-4 text-center text-secondary">
