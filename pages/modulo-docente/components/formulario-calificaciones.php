@@ -1,4 +1,11 @@
 <?php
+if (!isset($_GET['grupo'])) {
+    echo "<p class='text-danger'>No se especificó un grupo.</p>";
+    return;
+}
+
+$grupoId = $_GET['grupo'];
+
 // Obtener unidades de la materia 'Matemáticas de prueba'
 $sqlUnidades = "SELECT s.id AS subject_id, su.total_units
                 FROM subjects s
@@ -14,13 +21,13 @@ if (!$unidadMat) {
 $subjectId = $unidadMat['subject_id'];
 $totalUnits = (int)$unidadMat['total_units'];
 
-// Obtener estudiantes asignados a esta materia
+// Obtener estudiantes asignados a esta materia Y pertenecientes al grupo actual
 $sqlAsignaciones = "SELECT ss.id AS student_subject_id, ss.id_user, st.first_name, st.last_name
                     FROM student_subjects ss
                     JOIN students st ON ss.id_user = st.id_user
-                    WHERE ss.id_subject = ?";
+                    WHERE ss.id_subject = ? AND st.id_grupo = ?";
 $stmt = $pdo->prepare($sqlAsignaciones);
-$stmt->execute([$subjectId]);
+$stmt->execute([$subjectId, $grupoId]);
 $asignaciones = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Eliminar duplicados por id_user
@@ -55,6 +62,9 @@ $modo_edicion = isset($_SESSION['modo_edicion']);
 ?>
 
 <form method="POST" action="">
+       <?php if (isset($_GET['grupo'])): ?>
+        <input type="hidden" name="grupo" value="<?= htmlspecialchars($_GET['grupo']) ?>">
+    <?php endif; ?>
     <div class="table-responsive">
         <table class="table table-bordered table-hover align-middle">
             <thead class="table-dark">
