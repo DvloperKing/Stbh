@@ -69,7 +69,7 @@ $semestre = $_SESSION['alumnos']['semester'];
 <div class="logos-container">
   <div class="logos">
     <img src="../assets/img/cnbm.png" alt="CNBM" class="logo-img">
-    <img src="../assets/img/CRBH2.png" alt="CRBH" class="logo-img">
+    <img src="../assets/img/CRBH3.png" alt="CRBH" class="logo-img">
     <img src="../assets/img/stbm.png" alt="STBM" class="logo-img">
     <img src="../assets/img/logo2.png" alt="Marca" class="logo-img">
   </div>

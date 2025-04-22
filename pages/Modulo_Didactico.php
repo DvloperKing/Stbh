@@ -1,23 +1,22 @@
 <?php
 session_start();
 
-// Definir el rol y materias asignadas (esto debe venir de la BD en producción)
-$_SESSION['rol'] = 'profesor'; // Cambiar a 'alumno' para pruebas
-$_SESSION['materias'] = ['matematicas', 'historia']; // Materias asignadas al usuario
-
+// Simular rol y materias asignadas (esto vendría de la BD)
+$_SESSION['rol'] = $_SESSION['rol'] ?? 'profesor';
+$_SESSION['materias'] = $_SESSION['materias'] ?? ['matematicas', 'historia'];
 $directorioBase = "archivos/";
 
-// Crear carpetas por materia si no existen
+// Crear carpetas si no existen
 foreach ($_SESSION['materias'] as $materia) {
     if (!is_dir($directorioBase . $materia)) {
         mkdir($directorioBase . $materia, 0777, true);
     }
 }
 
-// Subir archivo según la materia
+// Procesar subida de archivo
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_FILES["archivo"], $_POST["materia"])) {
     $materia = $_POST["materia"];
-    
+
     if (!in_array($materia, $_SESSION['materias'])) {
         echo json_encode(["mensaje" => "No tienes permisos para subir archivos a esta materia", "tipo" => "error"]);
         exit;
@@ -34,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_FILES["archivo"], $_POST["m
     exit;
 }
 
-// Eliminar archivo con validación de materia
+// Procesar eliminación de archivo
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["eliminar"], $_POST["materia"])) {
     $materia = $_POST["materia"];
     $archivoEliminar = $directorioBase . $materia . "/" . $_POST["eliminar"];
@@ -59,24 +58,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["eliminar"], $_POST["m
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Módulo Didáctico | STBH</title>
-    <link rel="stylesheet" href="../assets/css/soft-ui-dashboard.css?v=1.0.8">
-    <link href="../assets/css/usuarios.css" rel="stylesheet" />
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+    <title>STBH | Módulo Didáctico</title>
+    <link rel="icon" type="image/png" href="../assets/img/icon_stbh.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <style>
-        .card-modulo {
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            padding: 15px;
+        .logos-container {
+            background-color: white;
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+            text-align: center;
         }
-        .card-title {
-            font-weight: bold;
-            color: #0b0146;
+        .logo-img {
+            max-height: 60px;
+            margin: 0 10px;
         }
         .btn-primary {
             background-color: #0b0146;
@@ -84,6 +79,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["eliminar"], $_POST["m
         }
         .btn-primary:hover {
             background-color: #1a237e;
+            border-color: #1a237e;
+        }
+        .card-title {
+            font-weight: bold;
+            color: #0b0146;
         }
         .header-title {
             font-size: 24px;
@@ -95,29 +95,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["eliminar"], $_POST["m
     </style>
 </head>
 <body>
+
+<!-- Logos -->
 <div class="logos-container">
-  <div class="logos">
     <img src="../assets/img/cnbm.png" alt="CNBM" class="logo-img">
-    <img src="../assets/img/CRBH2.png" alt="CRBH" class="logo-img">
+    <img src="../assets/img/CRBH3.png" alt="CRBH" class="logo-img">
     <img src="../assets/img/stbm.png" alt="STBM" class="logo-img">
     <img src="../assets/img/logo2.png" alt="Marca" class="logo-img">
-  </div>
 </div>
-    <!-- Barra de navegación -->
-    <nav class="navbar navbar-expand-lg" style="background-color: rgba(11, 1, 70, 1);">
-        <div class="container-fluid">
-            <a class="navbar-brand text-white" href="#">STBH | Módulo Didáctico</a>
-        </div>
-    </nav>
 
-    <!-- Contenido Principal -->
-    <div class="container mt-4">
-        <h2 class="header-title">Módulo Didáctico</h2>
+<!-- Contenido -->
+<div class="container d-flex justify-content-center mt-4">
+    <div class="card p-4 w-100" style="max-width: 900px; box-shadow: 0 0 20px rgba(0,0,0,0.1); border-radius: 15px;">
+        <h2 class="text-center mb-4">MÓDULO DIDÁCTICO</h2>
 
-        <!-- FORMULARIO PARA SUBIR ARCHIVOS (SOLO PROFESORES) -->
         <?php if ($_SESSION['rol'] === 'profesor'): ?>
             <form id="uploadForm" enctype="multipart/form-data">
-                <div class="row mb-3">
+                <div class="row g-2 mb-3">
                     <div class="col-md-4">
                         <select name="materia" class="form-control" required>
                             <?php foreach ($_SESSION['materias'] as $materia): ?>
@@ -126,91 +120,89 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["eliminar"], $_POST["m
                         </select>
                     </div>
                     <div class="col-md-4">
-                        <input type="file" name="archivo" class="form-control" accept=".pdf,.docx,.pptx,.mp4,.jpg,.png" required>
+                        <input type="file" name="archivo" class="form-control" required>
                     </div>
                     <div class="col-md-4">
-                        <button type="submit" class="btn btn-primary">📤 Subir Archivo</button>
+                        <button type="submit" class="btn btn-primary w-100">📤 SUBIR ARCHIVO</button>
                     </div>
                 </div>
             </form>
-            <div id="status"></div>
         <?php endif; ?>
 
-        <!-- LISTADO DE ARCHIVOS DISPONIBLES -->
-        <h3 class="mt-4">📂 Material Disponible</h3>
+        <!-- Material disponible -->
+        <h4 class="mt-4" style="color: #0b0146;"><i class="bi bi-folder-fill text-warning"></i> Material Disponible</h4>
         <?php
         foreach ($_SESSION['materias'] as $materia) {
-            echo "<h4>$materia</h4>";
-            echo '<div class="row">';
-            $rutaMateria = $directorioBase . $materia . "/";
-
-            if (is_dir($rutaMateria)) {
-                $archivos = array_diff(scandir($rutaMateria), array('..', '.'));
-
+            echo "<strong>" . ucfirst($materia) . "</strong><br>";
+            $ruta = $directorioBase . $materia . "/";
+            if (is_dir($ruta)) {
+                $archivos = array_diff(scandir($ruta), ['.', '..']);
+                echo "<ul>";
                 foreach ($archivos as $archivo) {
-                    echo '<div class="col-md-4">
-                            <div class="card card-modulo">
-                                <div class="card-body">
-                                    <h5 class="card-title">📄 ' . $archivo . '</h5>
-                                    <a href="' . $rutaMateria . $archivo . '" class="btn btn-success btn-sm" download>⬇️ Descargar</a>';
-
-                    if (preg_match('/\.(jpg|png|pdf)$/i', $archivo)) {
-                        echo '<a href="' . $rutaMateria . $archivo . '" class="btn btn-info btn-sm" target="_blank">👁️ Ver</a>';
-                    }
-
+                    echo "<li>📄 $archivo 
+                        <a href='$ruta$archivo' class='btn btn-sm btn-success' download>Descargar</a>";
                     if ($_SESSION['rol'] === 'profesor') {
-                        echo '<button onclick="eliminarArchivo(\'' . $materia . '\', \'' . $archivo . '\')" class="btn btn-danger btn-sm">🗑️ Eliminar</button>';
+                        echo " <button class='btn btn-sm btn-danger' onclick=\"eliminarArchivo('$materia', '$archivo')\">Eliminar</button>";
                     }
-
-                    echo '</div>
-                            </div>
-                        </div>';
+                    echo "</li>";
                 }
+                echo "</ul>";
             }
-            echo '</div>';
         }
         ?>
     </div>
+</div>
 
-    <!-- Footer -->
-    <footer class="footer py-4 bg-light mt-5">
-        <div class="container text-center">
-            <p class="mb-0">STBH © <script>document.write(new Date().getFullYear())</script> | Todos los derechos reservados.</p>
-        </div>
-    </footer>
+<!-- Footer -->
+<footer class="footer py-4 bg-white mt-5 border-top">
+    <div class="container text-center">
+        <p class="mb-0 text-muted">STBH © <?= date('Y'); ?> | Todos los derechos Reservados</p>
+    </div>
+</footer>
 
-    <!-- Scripts -->
-    <script>
-        $(document).ready(function () {
-            $("#uploadForm").on("submit", function (e) {
-                e.preventDefault();
-                let formData = new FormData(this);
-                
-                $.ajax({
-                    url: "Modulo_Didactico.php",
-                    type: "POST",
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function (response) {
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#uploadForm").on("submit", function (e) {
+            e.preventDefault();
+            let formData = new FormData(this);
+
+            $.ajax({
+                url: "Modulo_Didactico.php",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    try {
                         let res = JSON.parse(response);
                         alert(res.mensaje);
                         location.reload();
+                    } catch {
+                        alert("Error inesperado.");
                     }
-                });
+                },
+                error: function () {
+                    alert("Error al enviar los datos.");
+                }
             });
         });
+    });
 
-        function eliminarArchivo(materia, nombreArchivo) {
-            if (confirm("¿Seguro que quieres eliminar este archivo?")) {
-                $.post("Modulo_Didactico.php", { eliminar: nombreArchivo, materia: materia }, function(response) {
+    function eliminarArchivo(materia, archivo) {
+        if (confirm("¿Seguro que quieres eliminar este archivo?")) {
+            $.post("Modulo_Didactico.php", { materia: materia, eliminar: archivo }, function (response) {
+                try {
                     let res = JSON.parse(response);
                     alert(res.mensaje);
                     location.reload();
-                });
-            }
+                } catch {
+                    alert("Error inesperado al eliminar.");
+                }
+            });
         }
-    </script>
-
+    }
+</script>
 </body>
 </html>

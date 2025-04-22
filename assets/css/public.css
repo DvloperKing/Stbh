@@ -1,0 +1,71 @@
+/* Fuente general y colores institucionales */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #212529;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Navegación */
+  .navbar {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+  }
+  
+  .navbar-nav .nav-link {
+    font-weight: 500;
+    margin-left: 10px;
+  }
+  
+  .navbar-nav .btn {
+    font-weight: 600;
+  }
+  
+  /* Sección de portada (hero) */
+  #inicio {
+    background-image: url('assets/fondo-seminario.jpg'); /* puedes cambiar esta ruta */
+    background-size: cover;
+    background-position: center;
+    padding: 100px 20px;
+    color: white;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+  }
+  
+  /* Títulos de sección */
+  section h2 {
+    color: #0b0146;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+  
+  /* Tarjetas para modalidades */
+  #oferta .col-md-4 {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease;
+    margin-bottom: 20px;
+  }
+  
+  #oferta .col-md-4:hover {
+    transform: translateY(-5px);
+  }
+  
+  /* Lista de pasos */
+  #admisiones ol li {
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+  }
+  
+  /* Footer */
+  footer {
+    font-size: 0.9rem;
+  }
+  
