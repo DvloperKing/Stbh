@@ -1,9 +1,12 @@
 <?php
 session_start();
+if (!isset($_SESSION['users']) || $_SESSION['users']['id_perfil'] != 1) {
+  header("Location: ../pages/loginPersonal.php");
+  exit;
+}
 include_once "../Core/constantes.php";
 include_once "../Core/estructura_bd.php";
 $MYSQLI = _DB_HDND();
-
 // insertar datos de alumno
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_user'], $_POST['control_number'], $_POST['modality'], $_POST['semester'])) {
   $id_user = (int) $_POST['id_user'];

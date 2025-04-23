@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
+<?php
+session_start();
+if (!isset($_SESSION['users']) || $_SESSION['users']['id_perfil'] != 1) {
+  header("Location: ../pages/loginPersonal.php");
+  exit;
+}
+?>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
