@@ -1,6 +1,10 @@
 <?php 
+session_start();
 require './modulo-docente/conexion.php';
-
+if (!isset($_SESSION['users']) || $_SESSION['users']['id_perfil'] != 2) {
+  header("Location: ../pages/loginPersonal.php");
+  exit;
+} 
 
 try {
     $sql = "
