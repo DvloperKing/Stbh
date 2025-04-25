@@ -49,7 +49,7 @@
                     <label>Password</label>
                     <div class="mb-3">
                       <input type="password" id="pass" name="pass" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="password-addon" required>
-                      <input type="hidden" name="tipo" value="2">
+                      <input type="hidden" name="tipo" value="3">
                     </div>
                     <div class="form-check form-switch">
                       <input class="form-check-input" type="checkbox" id="rememberMe" checked="">

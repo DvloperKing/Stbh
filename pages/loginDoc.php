@@ -17,14 +17,14 @@
   <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
   <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
   <link id="pagestyle" href="../assets/css/soft-ui-dashboard.css?v=1.0.8" rel="stylesheet" />
-  <link href="../assets/css/responsive.css" rel="stylesheet">
+  <link href="../assets/css/responsive.css" rel="stylesheet" />
 </head>
 
 <body>
   <div class="logos-container">
     <div class="logos">
       <img class="rounded" src="../assets/img/cnbm.png" alt="CNBM Logo">
-      <img class="rounded" src="../assets/img/CRBH2.png" alt="CRBH Logo">
+      <img class="rounded" src="../assets/img/CRBH3.png" alt="CRBH Logo">
       <img class="rounded" src="../assets/img/stbm.png" alt="STBM Logo">
     </div>
   </div>
@@ -41,14 +41,15 @@
                   <p class="mb-0">Ingresa tu correo Institucional</p>
                 </div>
                 <div class="card-body">
-                  <form role="form">
+                  <form action= "" class="formulario__login" onsubmit="return false;"   role="form">
                     <label>Email</label>
                     <div class="mb-3">
-                      <input type="email" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="email-addon" required>
+                      <input type="email" id="email" name="email" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="email-addon" required>
                     </div>
                     <label>Password</label>
                     <div class="mb-3">
-                      <input type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="password-addon" required>
+                      <input type="password" id="pass" name="pass" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="password-addon" required>
+                      <input type="hidden" name="tipo" value="2">
                     </div>
                     <div class="form-check form-switch">
                       <input class="form-check-input" type="checkbox" id="rememberMe" checked="">
@@ -77,6 +78,7 @@
     </div>
   </footer>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/js/scrip.js"></script>
 </body>
 
 </html>
