@@ -45,6 +45,16 @@ try {
 } catch (PDOException $e) {
     echo "Error al obtener grupos: " . $e->getMessage();
 }
+
+$grupo = $_GET['grupo'] ?? null;
+
+if ($grupo) {
+    // Ejemplo: obtener alumnos de ese grupo
+    $stmt = $pdo->prepare("SELECT * FROM students WHERE id_grupo = ?");
+    $stmt->execute([$grupo]);
+    $alumnos = $stmt->fetchAll();
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -144,16 +154,17 @@ try {
     <div class="row">
       <?php foreach ($materia['grupos'] as $grupo): ?>
       <div class="col-12 col-md-6 col-lg-3 mb-4">
-        <div class="card h-100 p-3 shadow-sm border-0 d-flex flex-column justify-content-between">
+        <div class="card h-100 p-3 shadow-sm border-2 d-flex flex-column justify-content-between">
           <div class="mb-3 text-center">
             <h5><?= htmlspecialchars($grupo['id_grupo']) ?></h5>
             <p class="text-muted mb-1"><?= htmlspecialchars($grupo['modalidad']) ?></p>
             <p class="text-muted mb-1"><?= htmlspecialchars($grupo['nivel']) ?></p>
             <p class="text-muted"><?= htmlspecialchars($grupo['horario']) ?></p>
           </div>
-          <a href="./modulo-docente/lista-alumnos.php" class="btn-stbh text-center">
+          <a href="./modulo-docente/lista-alumnos.php?grupo=<?= $grupo['id_grupo'] ?>" class="btn-stbh text-center">
             Ir <i class="bi bi-arrow-right-circle ms-2"></i>
-          </a>
+            </a>
+
         </div>
       </div>
       <?php endforeach; ?>

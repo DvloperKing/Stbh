@@ -102,6 +102,24 @@ create table teacher_subjects (
   foreign key (id_subject) references subjects(id)
 );
 
+-- tabla de asistencia
+CREATE TABLE attendance (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_student_subject INT NOT NULL,
+    date DATE NOT NULL,
+    present BOOLEAN NOT NULL DEFAULT 0,
+    UNIQUE (id_student_subject, date),
+    FOREIGN KEY (id_student_subject) REFERENCES student_subjects(id)
+);
+
+-- tabla de calendario escolar
+CREATE TABLE school_calendar (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    date DATE NOT NULL UNIQUE,
+    is_school_day BOOLEAN NOT NULL DEFAULT 1, -- 1 = día de clase, 0 = festivo o fin de semana
+    description VARCHAR(255) DEFAULT NULL
+);
+
 -- inserts de catálogos
 
 insert into perfil (name_perfil) values ('administrador');
