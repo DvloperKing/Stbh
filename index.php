@@ -79,7 +79,7 @@
                   <form role="form">
                     <div class="d-grid gap-3">
                       <button type="button" onclick="location.href='./pages/loginPersonal.php'" class="btn bg-gradient-info">Administración</button>
-                      <button type="button" onclick="location.href='./pages/loginPersonal.php'" class="btn bg-gradient-info">Docente</button>
+                      <button type="button" onclick="location.href='./pages/loginDoc.php'" class="btn bg-gradient-info">Docente</button>
                       <button type="button" onclick="location.href='./pages/loginAlum.php'" class="btn bg-gradient-info">Alumno</button>
                     </div>
                   </form>

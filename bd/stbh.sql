@@ -116,6 +116,34 @@ create table teacher_subjects (
   foreign key (id_modality) references modalities(id),
   foreign key (id_level) references education_levels(id)
 );
+-- Tabla de horarios alumnos
+create table student_horarios (
+    id int auto_increment primary key,
+    id_user int,
+    id_subject int,
+    id_teacher int,
+    dia_semana int, -- 1 = Lunes, ..., 6 = Sábado
+    hora_inicio time,
+    hora_fin time,
+    aula varchar(20),
+    foreign key (id_user) references users(id),
+    foreign key (id_subject) references subjects(id),
+    foreign key (id_teacher) references teaching(id)
+);
+-- tabla calificaiciones
+create table student_calificaciones (
+    id int auto_increment primary key,
+    id_user int,
+    id_subject int,
+    parcial1 decimal(4,2),
+    parcial2 decimal(4,2),
+    parcial3 decimal(4,2),
+    parcial4 decimal(4,2),
+    parcial5 decimal(4,2),
+    parcial6 decimal(4,2),
+    foreign key (id_user) references users(id),
+    foreign key (id_subject) references subjects(id)
+);
 -- insert perfiles
 insert into perfil (name_perfil) values ('administrador');
 insert into perfil (name_perfil) values ('docente');
