@@ -116,34 +116,37 @@ create table teacher_subjects (
   foreign key (id_modality) references modalities(id),
   foreign key (id_level) references education_levels(id)
 );
--- Tabla de horarios alumnos
-create table student_horarios (
-    id int auto_increment primary key,
-    id_user int,
-    id_subject int,
-    id_teacher int,
-    dia_semana int, -- 1 = Lunes, ..., 6 = Sábado
-    hora_inicio time,
-    hora_fin time,
-    aula varchar(20),
-    foreign key (id_user) references users(id),
-    foreign key (id_subject) references subjects(id),
-    foreign key (id_teacher) references teaching(id)
+
+-- Tabla de asistencia 
+create table attendance(
+id int auto_increment primary key,
+id_student_subject int,
+dates date,
+present tinyint(1) not null default 0,
+foreign key (id_student_subject) references student_subjects(id)
 );
--- tabla calificaiciones
-create table student_calificaciones (
-    id int auto_increment primary key,
-    id_user int,
-    id_subject int,
-    parcial1 decimal(4,2),
-    parcial2 decimal(4,2),
-    parcial3 decimal(4,2),
-    parcial4 decimal(4,2),
-    parcial5 decimal(4,2),
-    parcial6 decimal(4,2),
-    foreign key (id_user) references users(id),
-    foreign key (id_subject) references subjects(id)
+-- calificaciones
+create table grades(
+id int auto_increment primary key,
+id_student_subject int,
+unit_number int,
+grade decimal(5,2),
+foreign key (id_student_subject) references student_subjects(id)
 );
+-- tabla de unidades 
+create table subject_units(
+id_subject int,
+total_units int,
+foreign key (id_subject) references subjects(id)
+);
+-- calendario escolar
+create table school_calendar(
+id int auto_increment primary key,
+dates date,
+is_school_day tinyint(1) default 1,
+description varchar(255)
+);
+
 -- insert perfiles
 insert into perfil (name_perfil) values ('administrador');
 insert into perfil (name_perfil) values ('docente');
@@ -200,7 +203,46 @@ insert into subject_modality_level (id_subject, id_modality, id_level) values (1
 insert into subject_modality_level (id_subject, id_modality, id_level) values (12, 1, 2), (12, 2, 2), (12, 3, 2);
 insert into subject_modality_level (id_subject, id_modality, id_level) values (13, 1, 2), (13, 2, 2), (13, 3, 2);
 insert into subject_modality_level (id_subject, id_modality, id_level) values (14, 1, 2), (14, 2, 2), (14, 3, 2);
-select * from users;
+
+-- Insert de materias a estudiantes
+insert into student_subjects (id_user, id_subject) values (1, 1);
+insert into student_subjects (id_user, id_subject) values (1, 2);
+insert into student_subjects (id_user, id_subject) values (1, 3);
+insert into student_subjects (id_user, id_subject) values (1, 4);
+insert into student_subjects (id_user, id_subject) values (1, 5);
+-- Insertar asistencias
+insert into attendance (id_student_subject, dates, present) values (1, '2025-04-07', 1);
+insert into attendance (id_student_subject, dates, present) values (1, '2025-04-21', 1);
+insert into attendance (id_student_subject, dates, present) values (1, '2025-04-22', 1);
+insert into attendance (id_student_subject, dates, present) values (1, '2025-04-01', 1);
+insert into attendance (id_student_subject, dates, present) values (1, '2025-04-02', 1);
+insert into attendance (id_student_subject, dates, present) values (1, '2025-04-30', 1);
+insert into attendance (id_student_subject, dates, present) values (2, '2025-04-01', 1);
+insert into attendance (id_student_subject, dates, present) values (2, '2025-05-06', 1);
+insert into attendance (id_student_subject, dates, present) values (2, '2025-05-07', 1);
+insert into attendance (id_student_subject, dates, present) values (1, '2025-05-05', 1);
+insert into attendance (id_student_subject, dates, present) values (1, '2025-05-06', 1);
+insert into attendance (id_student_subject, dates, present) values (1, '2025-05-07', 1);
+insert into attendance (id_student_subject, dates, present) values (1, '2025-05-08', 1);
+insert into attendance (id_student_subject, dates, present) values (1, '2025-05-09', 1);
+
+-- Insertar calificaciones para id_student_subject 1
+insert into grades (id_student_subject, unit_number, grade) values (1, 1, 85.00);
+insert into grades (id_student_subject, unit_number, grade) values (1, 2, 90.00);
+insert into grades (id_student_subject, unit_number, grade) values (1, 3, 88.50);
+insert into grades (id_student_subject, unit_number, grade) values (1, 4, 92.00);
+insert into grades (id_student_subject, unit_number, grade) values (1, 5, 87.00);
+insert into grades (id_student_subject, unit_number, grade) values (1, 6, 91.00);
+
+-- Insertar cantidad de unidades para la materia 1
+insert into subject_units (id_subject, total_units) values (1, 6);
+
+-- Insertar días escolares
+insert into school_calendar (dates, is_school_day, description) values ('2025-04-01', 1, 'Inicio de clases');
+insert into school_calendar (dates, is_school_day, description) values ('2025-04-07', 1, 'Clase regular');
+insert into school_calendar (dates, is_school_day, description) values ('2025-04-21', 1, 'Clase regular');
+insert into school_calendar (dates, is_school_day, description) values ('2025-05-01', 0, 'Día del Trabajo (no hay clases)');
+insert into school_calendar (dates, is_school_day, description) values ('2025-05-05', 1, 'Clase regular');
 
 -- CONSULTA PARA MODULO ALUMNO
 
