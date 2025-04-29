@@ -21,13 +21,13 @@
 </head>
 
 <body>
- <!-- <div class="logos-container">
+  <div class="logos-container">
     <div class="logos">
       <img class="rounded" src="../assets/img/cnbm.png" alt="CNBM Logo">
-      <img class="rounded" src="../assets/img/CRBH2.png" alt="CRBH Logo">
+      <img class="rounded" src="../assets/img/CRBH3.png" alt="CRBH Logo">
       <img class="rounded" src="../assets/img/stbm.png" alt="STBM Logo">
     </div>
-  </div> -->
+  </div>
 
   <main class="main-content mt-0">
     <section>

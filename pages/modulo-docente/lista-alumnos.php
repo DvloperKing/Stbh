@@ -14,20 +14,28 @@ if ($grupo) {
     $checkGrupo->execute([$grupo]);
     $existeGrupo = $checkGrupo->fetchColumn();
 
-    if ($existeGrupo) {
-        // Obtener alumnos del grupo
-        $stmt = $pdo->prepare("
-            SELECT s.control_number, s.first_name, s.last_name 
-            FROM students s 
-            WHERE s.id_grupo = ?
-        ");
-        $stmt->execute([$grupo]);
-        $alumnos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    } else {
-        $mensajeError = "El grupo especificado no existe.";
-    }
+if ($existeGrupo) {
+    // Obtener nombre de la materia y grupo
+    $stmtGrupo = $pdo->prepare("
+        SELECT g.id_grupo, m.name_subject
+        FROM subject_group g
+        INNER JOIN subjects m ON g.id_subjects = m.id
+        WHERE g.id_grupo = ?
+    ");
+    $stmtGrupo->execute([$grupo]);
+    $infoGrupo = $stmtGrupo->fetch(PDO::FETCH_ASSOC);
+
+    // Obtener alumnos del grupo
+    $stmt = $pdo->prepare("
+        SELECT s.control_number, s.first_name, s.last_name 
+        FROM students s 
+        WHERE s.id_grupo = ?
+    ");
+    $stmt->execute([$grupo]);
+    $alumnos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } else {
-    $mensajeError = "No se especificó ningún grupo.";
+    $mensajeError = "El grupo especificado no existe.";
+}
 }
 
 // Obtener la pestaña activa desde la URL
@@ -53,7 +61,13 @@ $tab_activa = $_GET['tab'] ?? 'calificaciones';
 </head>
 
 <body>
-   <?php include('components/header.php') ?>
+    <div class="logos-container">
+    <div class="logos">
+      <img class="rounded" src="../../assets/img/cnbm.png" alt="CNBM Logo">
+      <img class="rounded" src="../../assets/img/CRBH3.png" alt="CRBH Logo">
+      <img class="rounded" src="../../assets/img/stbm.png" alt="STBM Logo">
+    </div>
+  </div>
 
   <main>
 <!-- CARD DE REGRESO AL MÓDULO DE INICIO -->
@@ -68,6 +82,15 @@ $tab_activa = $_GET['tab'] ?? 'calificaciones';
     
   </div>
 </section>
+<?php if (!empty($infoGrupo)): ?>
+<section class="container my-4">
+  <div class="text-center">
+    <h2 class="text-primary"><?= htmlspecialchars($infoGrupo['name_subject']) ?></h2>
+    <p class="text-muted">Grupo: <?= htmlspecialchars($infoGrupo['id_grupo']) ?></p>
+  </div>
+</section>
+<?php endif; ?>
+
 
 
     <section class="my-4 mx-2">

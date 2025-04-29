@@ -1,11 +1,11 @@
 <!-- Logos Container -->
-<div class="logos-container">
-  <div class="logos">
-    <img class="rounded" src="../assets/img/cnbm.png" alt="CNBM Logo" style="width: 300px;">
-    <img class="rounded" src="../assets/img/CRBH2.png" alt="CRBH Logo" style="width: 100px;">
-    <img class="rounded" src="../assets/img/stbm.png" alt="STBM Logo" style="width: 300px;">
+ <div class="logos-container">
+    <div class="logos">
+      <img class="rounded" src="/assets/img/cnbm.png" alt="CNBM Logo">
+      <img class="rounded" src="/assets/img/CRBH3.png" alt="CRBH Logo">
+      <img class="rounded" src="/assets/img/stbm.png" alt="STBM Logo">
+    </div>
   </div>
-</div>
 
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: rgba(11, 1, 70, 1);">
