@@ -7,57 +7,62 @@ if (!isset($_SESSION['users']) || $_SESSION['users']['id_perfil'] != 1) {
 include_once "../Core/constantes.php";
 include_once "../Core/estructura_bd.php";
 $MYSQLI = _DB_HDND();
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_id'])) {
-  $id = (int) $_POST['eliminar_id'];
-  $MYSQLI->query("DELETE FROM teacher_subjects WHERE id = $id");
-  echo "<div class='alert alert-success text-center mt-3'>Asignación eliminada correctamente.</div>";
+
+// INSERTAR NUEVO GRUPO
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crear_grupo'])) {
+  $id_subject = (int) $_POST['id_subject'];
+  $id_modality_level = (int) $_POST['id_modality_level'];
+  $id_grupo = _clean($_POST['id_grupo'], $MYSQLI);
+  $horario = _clean($_POST['horario'], $MYSQLI);
+  $id_docente = (int) $_POST['id_docente'];
+
+  $MYSQLI->query("INSERT INTO subject_group (id_subjects, id_modality_level, id_grupo, horario)
+                  VALUES ($id_subject, $id_modality_level, '$id_grupo', '$horario')");
+
+  if ($id_docente) {
+    $MYSQLI->query("INSERT INTO teacher_subjects (id_user, id_subject, id_modality, id_level)
+                    SELECT $id_docente, $id_subject, ml.id_modality, ml.id_level
+                    FROM modality_level ml WHERE ml.id = $id_modality_level");
+  }
+
+  echo "<div class='alert alert-success text-center mt-3'>Grupo creado correctamente.</div>";
 }
 
-$modalidades_result = $MYSQLI->query("SELECT DISTINCT id, name_modality FROM modalities ORDER BY name_modality");
-$modalidades = [];
-while ($row = $modalidades_result->fetch_assoc()) {
-  $modalidades[] = $row;
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_grupo'])) {
+  $id = (int) $_POST['eliminar_grupo'];
+  $MYSQLI->query("DELETE FROM subject_group WHERE id = $id");
+  echo "<div class='alert alert-warning text-center mt-3'>Grupo eliminado correctamente.</div>";
 }
 
-$niveles_result = $MYSQLI->query("SELECT DISTINCT id, name_level FROM education_levels ORDER BY name_level");
-$niveles = [];
-while ($row = $niveles_result->fetch_assoc()) {
-  $niveles[] = $row;
+$modniv_query = $MYSQLI->query("SELECT ml.id AS id_modality_level, sm.id_subject, s.name_subject, m.name_modality, e.name_level
+  FROM subject_modality_level sm
+  JOIN subjects s ON sm.id_subject = s.id
+  JOIN modality_level ml ON sm.id_modality = ml.id_modality AND sm.id_level = ml.id_level
+  JOIN modalities m ON ml.id_modality = m.id
+  JOIN education_levels e ON ml.id_level = e.id
+  ORDER BY s.name_subject");
+
+$modniv_combos = [];
+while ($row = $modniv_query->fetch_assoc()) {
+  $modniv_combos[] = $row;
 }
 
-$selected_modality = $_GET['modality'] ?? '';
-$selected_semester = $_GET['semester'] ?? '';
-$selected_level = $_GET['level'] ?? '';
-
-$where = "WHERE u.id_perfil = 2";
-if ($selected_modality !== '') {
-  $mod = (int)$selected_modality;
-  $where .= " AND ts.id_modality = $mod";
-}
-if ($selected_semester !== '') {
-  $sem = (int)$selected_semester;
-  $where .= " AND s.semester = $sem";
-}
-if ($selected_level !== '') {
-  $lvl = (int)$selected_level;
-  $where .= " AND ts.id_level = $lvl";
+$docentes_result = $MYSQLI->query("SELECT id, CONCAT(first_name, ' ', last_name) AS nombre FROM users WHERE id_perfil = 2 ORDER BY first_name");
+$docentes = [];
+while ($row = $docentes_result->fetch_assoc()) {
+  $docentes[] = $row;
 }
 
-$grupos = $MYSQLI->query("SELECT 
-    ts.id,
-    m.name_modality AS modalidad,
-    el.name_level AS nivel,
-    s.semester,
-    s.name_subject AS materia,
-    s.code AS codigo,
-    CONCAT(u.first_name, ' ', u.last_name) AS docente
-  FROM teacher_subjects ts
-  JOIN users u ON ts.id_user = u.id
-  JOIN subjects s ON ts.id_subject = s.id
-  JOIN modalities m ON ts.id_modality = m.id
-  JOIN education_levels el ON ts.id_level = el.id
-  $where
-  ORDER BY el.name_level, m.name_modality, s.semester, s.name_subject");
+$grupos_result = $MYSQLI->query("SELECT sg.id, s.name_subject, m.name_modality, e.name_level, sg.id_grupo, sg.horario,
+  CONCAT(u.first_name, ' ', u.last_name) AS docente
+  FROM subject_group sg
+  JOIN subjects s ON sg.id_subjects = s.id
+  JOIN modality_level ml ON sg.id_modality_level = ml.id
+  JOIN modalities m ON ml.id_modality = m.id
+  JOIN education_levels e ON ml.id_level = e.id
+  LEFT JOIN teacher_subjects ts ON ts.id_subject = s.id AND ts.id_modality = m.id AND ts.id_level = e.id
+  LEFT JOIN users u ON u.id = ts.id_user
+  ORDER BY s.name_subject");
 ?>
 
 <!DOCTYPE html>
@@ -78,97 +83,170 @@ $grupos = $MYSQLI->query("SELECT
     }
     .btn-success {
       background-color: #f4a701 !important;
+      border-color: #f4a701;
     }
     .table-dark {
       --bs-table-bg: #0b0146;
     }
+    .form-section {
+      padding: 30px;
+      background-color: #fff;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.07);
+      margin-bottom: 40px;
+    }
+    .form-section h4 {
+      font-weight: 600;
+      color: #0b0146;
+      margin-bottom: 25px;
+    }
+
+.container-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 15px;
+}
+
+.card-hero {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.hero-box {
+  padding: 20px;
+}
+
+.card-body form .form-label {
+  font-weight: 600;
+}
+
+.card {
+  margin-bottom: 40px;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.table td, .table th {
+  vertical-align: middle;
+  padding: 0.75rem;
+}
+
   </style>
 </head>
 <body class="bg-light">
 <div class="logos-container">
   <div class="logos">
     <img src="../assets/img/cnbm.png" alt="CNBM" class="logo-img">
-    <img src="../assets/img/CRBH3.png" alt="CRBH" class="logo-img">
+    <img src="../pages/Stbh-docentes/assets/img/CRBH3.png" alt="CRBH" class="logo-img">
     <img src="../assets/img/stbm.png" alt="STBM" class="logo-img">
-    <img src="../assets/img/logo2.png" alt="Marca" class="logo-img">
-  </div>
-</div>
-<section class="card-hero">
-  <div class="hero-box">
-    <h3 class="text-center mb-4">Grupos Académicos</h3>
-    <div class="btn-group">
-      <a href="admin.php" class="btn-stbh btn-lg">Regresar al Menú Principal</a>
-    </div>
-  </div>
-</section>
-<div class="container mt-4">
-  <form class="row mb-4" method="get">
-    <div class="col-md-4">
-      <label class="form-label">Filtrar por modalidad:</label>
-      <select class="form-select" name="modality" onchange="this.form.submit()">
-        <option value="">Todas</option>
-        <?php foreach ($modalidades as $mod): ?>
-          <option value="<?= $mod['id'] ?>" <?= $selected_modality == $mod['id'] ? 'selected' : '' ?>>
-            <?= $mod['name_modality'] ?>
-          </option>
-        <?php endforeach; ?>
-      </select>
-    </div>
-    <div class="col-md-4">
-      <label class="form-label">Filtrar por semestre:</label>
-      <select class="form-select" name="semester" onchange="this.form.submit()">
-        <option value="">Todos</option>
-        <?php for ($i = 1; $i <= 6; $i++): ?>
-          <option value="<?= $i ?>" <?= $selected_semester == $i ? 'selected' : '' ?>><?= $i ?></option>
-        <?php endfor; ?>
-      </select>
-    </div>
-    <div class="col-md-4">
-      <label class="form-label">Filtrar por nivel educativo:</label>
-      <select class="form-select" name="level" onchange="this.form.submit()">
-        <option value="">Todos</option>
-        <?php foreach ($niveles as $lvl): ?>
-          <option value="<?= $lvl['id'] ?>" <?= $selected_level == $lvl['id'] ? 'selected' : '' ?>>
-            <?= $lvl['name_level'] ?>
-          </option>
-        <?php endforeach; ?>
-      </select>
-    </div>
-  </form>
-
-  <div class="table-responsive">
-    <table class="table table-bordered text-center bg-white">
-      <thead class="table-dark">
-        <tr>
-          <th>Modalidad</th>
-          <th>Semestre</th>
-          <th>Materia</th>
-          <th>Código</th>
-          <th>Docente Asignado</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-      <?php while ($row = $grupos->fetch_assoc()): ?>
-        <tr>
-          <td><?= $row['modalidad'] ?></td>
-          <td><?= $row['semester'] ?></td>
-          <td><?= $row['materia'] ?></td>
-          <td><?= $row['codigo'] ?></td>
-          <td><?= $row['docente'] ?></td>
-          <td>
-            <form method="post" onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta asignación?');">
-              <input type="hidden" name="eliminar_id" value="<?= $row['id'] ?>">
-              <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
-            </form>
-          </td>
-        </tr>
-      <?php endwhile; ?>
-    </tbody>
-    </table>
+    <img src="../assets/img/logo2.png" alt="STBH" class="logo-img">
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <div class="container-main">
+    <section class="card-hero">
+      <div class="hero-box">
+        <a href="admin.php" class="btn-stbh btn-lg">Regresar al Menú Principal</a>
+      </div>
+    </section>
+
+    <!-- Formulario para crear grupo -->
+    <div class="card shadow-sm border-0">
+      <div class="card-body">
+        <h4 class="mb-4 text-center">Crear Nuevo Grupo</h4>
+        <form method="post" class="row g-4">
+          <input type="hidden" name="crear_grupo" value="1">
+
+          <div class="col-md-6">
+            <label class="form-label">Materia (con modalidad y nivel):</label>
+            <select class="form-select" name="id_subject" required>
+              <option value="">Seleccione una materia</option>
+              <?php foreach ($modniv_combos as $combo): ?>
+                <option value="<?= $combo['id_subject'] ?>" data-ml="<?= $combo['id_modality_level'] ?>">
+                  <?= $combo['name_subject'] ?> (<?= $combo['name_modality'] ?> / <?= $combo['name_level'] ?>)
+                </option>
+              <?php endforeach; ?>
+            </select>
+            <input type="hidden" name="id_modality_level" id="modality_level_input">
+          </div>
+
+          <div class="col-md-3">
+            <label class="form-label">Grupo (ID):</label>
+            <input type="text" class="form-control" name="id_grupo" required>
+          </div>
+
+          <div class="col-md-3">
+            <label class="form-label">Horario:</label>
+            <input type="text" class="form-control" name="horario" placeholder="Ej: Lun y Mie 10-12" required>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Asignar Docente:</label>
+            <select class="form-select" name="id_docente">
+              <option value="">-- Opcional --</option>
+              <?php foreach ($docentes as $docente): ?>
+                <option value="<?= $docente['id'] ?>"><?= $docente['nombre'] ?></option>
+              <?php endforeach; ?>
+            </select>
+          </div>
+
+          <div class="col-12 text-end">
+            <button type="submit" class="btn btn-success px-4">Crear Grupo</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Tabla de grupos asignados -->
+    <div class="card shadow-sm border-0">
+      <div class="card-body">
+        <h4 class="mb-4 text-center">Grupos Asignados</h4>
+        <div class="table-responsive">
+          <table class="table table-bordered text-center">
+            <thead class="table-dark">
+              <tr>
+                <th>Materia</th>
+                <th>Modalidad</th>
+                <th>Nivel</th>
+                <th>Grupo</th>
+                <th>Horario</th>
+                <th>Docente Asignado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php while ($grupo = $grupos_result->fetch_assoc()): ?>
+                <tr>
+                  <td><?= $grupo['name_subject'] ?></td>
+                  <td><?= $grupo['name_modality'] ?></td>
+                  <td><?= $grupo['name_level'] ?></td>
+                  <td><?= $grupo['id_grupo'] ?></td>
+                  <td><?= $grupo['horario'] ?></td>
+                  <td><?= $grupo['docente'] ?? '<span class="text-muted">No asignado</span>' ?></td>
+                  <td>
+                    <form method="post" onsubmit="return confirm('¿Eliminar este grupo?');">
+                      <input type="hidden" name="eliminar_grupo" value="<?= $grupo['id'] ?>">
+                      <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                    </form>
+                  </td>
+                </tr>
+              <?php endwhile; ?>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const subjectSelect = document.querySelector('select[name="id_subject"]');
+    const mlInput = document.getElementById('modality_level_input');
+    subjectSelect.addEventListener('change', function () {
+      const selectedOption = subjectSelect.options[subjectSelect.selectedIndex];
+      const modalityLevelId = selectedOption.getAttribute('data-ml');
+      mlInput.value = modalityLevelId;
+    });
+  </script>
 </body>
+
 </html>
