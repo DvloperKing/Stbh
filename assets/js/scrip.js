@@ -11,7 +11,7 @@ function login_formulario() {
 
  async function upload(formData){
     try {
-        const response = await fetch("../Core/API/login.php", {
+        const response = await fetch("../Core/API/login2.php", {
             method: 'POST',
             body: formData
             
@@ -21,7 +21,9 @@ function login_formulario() {
         if (result.code==1){
             window.location.href="../pages/admin.php";
         }else if(result.code==2){
-            window.location.href="../pages/alumnos-prueba.php";
+            window.location.href="../pages/docentes.php";
+        }else if(result.code==3){
+            window.location.href="../pages/alumnos.php";
         }
         else {
             alert("Su correo institucional o contraseña son incorrectos");

@@ -84,6 +84,7 @@
                     <label>Password</label>
                     <div class="mb-3">
                       <input type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="password-addon" required>
+                      <input type="hidden" name="tipo" value="2">
                     </div>
                     <div class="form-check form-switch">
                       <input class="form-check-input" type="checkbox" id="rememberMe" checked="">
@@ -112,6 +113,7 @@
     </div>
   </footer>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/js/scrip.js"></script>
 </body>
 
 </html>
