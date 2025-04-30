@@ -146,6 +146,17 @@ dates date,
 is_school_day tinyint(1) default 1,
 description varchar(255)
 );
+-- tabla materias por grupos
+CREATE TABLE subject_group (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  id_subjects INT NOT NULL,
+  id_modality_level INT NOT NULL,
+  id_grupo VARCHAR(20) NOT NULL,
+  horario VARCHAR(100),
+  FOREIGN KEY (id_subjects) REFERENCES subjects(id),
+  FOREIGN KEY (id_modality_level) REFERENCES modality_level(id)
+);
+
 
 -- insert perfiles
 insert into perfil (name_perfil) values ('administrador');
@@ -255,6 +266,15 @@ select * from users;
 select * from perfil;
 SELECT * FROM student_subjects;
 select * from attendance;
+
+
+INSERT INTO subject_group (id_subjects, id_modality_level, id_grupo, horario) VALUES (1, 2, 'G1', 'Lunes y Miércoles 10:00-11:30');
+INSERT INTO subject_group (id_subjects, id_modality_level, id_grupo, horario) VALUES (2, 2, 'G1', 'Martes y Jueves 9:00-10:30');
+select *from subject_group;
+
+
+
+
 
 
 -- CONSULTA PARA MODULO ALUMNO
