@@ -1,16 +1,16 @@
 <?php 
 session_start();
 require './modulo-docente/conexion.php';
-include_once '../core/Constantes.php';
-include_once '../core/Consulta.php';
-include_once '../core/estructura_bd.php';
-$MYSQLI = _DB_HDND();
+// include_once '../core/Constantes.php';
+// include_once '../core/Consulta.php';
+// include_once '../core/estructura_bd.php';
+// $MYSQLI = _DB_HDND();
 
 
-if (!isset($_SESSION['users']) || $_SESSION['users']['id_perfil'] != 2) {
-  header("Location: ../pages/loginDoc.php");
-  exit;
-}
+// if (!isset($_SESSION['users']) || $_SESSION['users']['id_perfil'] != 2) {
+//   header("Location: ../pages/loginDoc.php");
+//   exit;
+// }
 
 try {
     $sql = "
