@@ -17,14 +17,49 @@
   <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
   <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
   <link id="pagestyle" href="../assets/css/soft-ui-dashboard.css?v=1.0.8" rel="stylesheet" />
-  <link href="../assets/css/responsive.css" rel="stylesheet" />
+  <style>
+    .move-up {
+      margin-top: 20px; /* Ajustado para mejor ubicación */
+    }
+    .image-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .oblique-image {
+      max-width: 100%;
+      height: auto;
+    }
+    .logos-container {
+      background-color: #fff;
+      padding: 12px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+    }
+    .logos img.rounded {
+      width: auto;
+      height: 80px;
+    }
+    @media (max-width: 768px) {
+      .logos img.rounded {
+        height: 60px;
+      }
+      .move-up {
+        margin-top: 10px;
+      }
+    }
+  </style>
 </head>
 
 <body>
   <div class="logos-container">
     <div class="logos">
       <img class="rounded" src="../assets/img/cnbm.png" alt="CNBM Logo">
-      <img class="rounded" src="../assets/img/CRBH3.png" alt="CRBH Logo">
+      <img class="rounded" src="../assets/img/CRBH2.png" alt="CRBH Logo">
       <img class="rounded" src="../assets/img/stbm.png" alt="STBM Logo">
     </div>
   </div>
@@ -41,24 +76,24 @@
                   <p class="mb-0">Ingresa tu correo Institucional</p>
                 </div>
                 <div class="card-body">
-                  <form action= "" class="formulario__login" onsubmit="return false;"   role="form">
-                    <label>Email</label>
-                    <div class="mb-3">
-                      <input type="email" id="email" name="email" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="email-addon" required>
-                    </div>
-                    <label>Password</label>
-                    <div class="mb-3">
-                      <input type="password" id="pass" name="pass" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="password-addon" required>
-                      <input type="hidden" name="tipo" value="2">
-                    </div>
-                    <div class="form-check form-switch">
-                      <input class="form-check-input" type="checkbox" id="rememberMe" checked="">
-                      <label class="form-check-label" for="rememberMe">Remember me</label>
-                    </div>
-                    <div class="text-center">
-                      <button type="button" class="btn bg-gradient-info w-100 mt-4 mb-0" onclick="login_formulario();">Sign in</button>
-                    </div>
-                  </form>
+                <form role="form" class="formulario__login">
+                  <label>Email</label>
+                  <div class="mb-3">
+                    <input type="email" id="email" name="email" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="email-addon" required>
+                  </div>
+                  <label>Password</label>
+                  <div class="mb-3">
+                    <input type="password" id="pass" name="pass" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="password-addon" required>
+                    <input type="hidden" name="tipo" value="2">
+                  </div>
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="rememberMe" checked>
+                    <label class="form-check-label" for="rememberMe">Remember me</label>
+                  </div>
+                  <div class="text-center">
+                    <button type="button" class="btn bg-gradient-info w-100 mt-4 mb-0" onclick="login_formulario();">Sign in</button>
+                  </div>
+                </form>
                 </div>
               </div>
             </div>

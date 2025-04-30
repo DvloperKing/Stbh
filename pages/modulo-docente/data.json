@@ -1,0 +1,44 @@
+{
+    "materias": [
+        {
+            "id": 1,
+            "nombre": "Matemáticas",
+            "grupos": [
+                {
+                    "id": 1,
+                    "nombre": "Grupo 1"
+                },
+                {
+                    "id": 2,
+                    "nombre": "Grupo 2"
+                },
+                {
+                    "id": 3,
+                    "nombre": "Grupo 3"
+                },
+                {
+                    "id": 4,
+                    "nombre": "Grupo 4"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "nombre": "Literatura",
+            "grupos": [
+                {
+                    "id": 1,
+                    "nombre": "Grupo A"
+                },
+                {
+                    "id": 2,
+                    "nombre": "Grupo B"
+                },
+                {
+                    "id": 3,
+                    "nombre": "Grupo C"
+                }
+            ]
+        }
+    ]
+}

@@ -25,14 +25,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crear_grupo'])) {
                     FROM modality_level ml WHERE ml.id = $id_modality_level");
   }
 
-  echo "<div class='alert alert-success text-center mt-3'>Grupo creado correctamente.</div>";
+  header("Location: ".$_SERVER['PHP_SELF']."?grupo_creado=1");
+exit;
+
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_grupo'])) {
   $id = (int) $_POST['eliminar_grupo'];
   $MYSQLI->query("DELETE FROM subject_group WHERE id = $id");
-  echo "<div class='alert alert-warning text-center mt-3'>Grupo eliminado correctamente.</div>";
-}
+  header("Location: ".$_SERVER['PHP_SELF']."?grupo_eliminado=1");
+  exit;
+  }
 
 $modniv_query = $MYSQLI->query("SELECT ml.id AS id_modality_level, sm.id_subject, s.name_subject, m.name_modality, e.name_level
   FROM subject_modality_level sm
@@ -149,6 +152,12 @@ $grupos_result = $MYSQLI->query("SELECT sg.id, s.name_subject, m.name_modality, 
         <a href="admin.php" class="btn-stbh btn-lg">Regresar al Menú Principal</a>
       </div>
     </section>
+    <?php if (isset($_GET['grupo_creado'])): ?>
+  <div class='alert alert-success text-center mt-3'>Grupo creado correctamente.</div>
+<?php endif; ?>
+<?php if (isset($_GET['grupo_eliminado'])): ?>
+  <div class='alert alert-warning text-center mt-3'>Grupo eliminado correctamente.</div>
+<?php endif; ?>
 
     <!-- Formulario para crear grupo -->
     <div class="card shadow-sm border-0">
