@@ -244,6 +244,19 @@ insert into school_calendar (dates, is_school_day, description) values ('2025-04
 insert into school_calendar (dates, is_school_day, description) values ('2025-05-01', 0, 'Día del Trabajo (no hay clases)');
 insert into school_calendar (dates, is_school_day, description) values ('2025-05-05', 1, 'Clase regular');
 
+insert into teaching (id_user, highest_degree, phone_number) values (2, 'Licenciatura en Teología', '8461029084');
+
+SELECT u.id, u.email, u.pass, u.id_perfil, t.id_user
+FROM users u
+JOIN teaching t ON u.id = t.id_user
+WHERE u.email = 'd2507001@stbh.com';
+
+select * from users;
+select * from perfil;
+SELECT * FROM student_subjects;
+select * from attendance;
+
+
 -- CONSULTA PARA MODULO ALUMNO
 
 INSERT INTO student_subjects (id_user, id_subject)
