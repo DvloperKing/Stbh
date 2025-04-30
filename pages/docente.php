@@ -8,7 +8,7 @@ $MYSQLI = _DB_HDND();
 
 
 if (!isset($_SESSION['users']) || $_SESSION['users']['id_perfil'] != 2) {
-  header("Location: ../pages/loginPersonal.php");
+  header("Location: ../pages/loginDoc.php");
   exit;
 }
 
