@@ -6,10 +6,9 @@ require './modulo-docente/conexion.php';
 // include_once '../core/estructura_bd.php';
 // $MYSQLI = _DB_HDND();
 
-
 // if (!isset($_SESSION['users']) || $_SESSION['users']['id_perfil'] != 2) {
-//   header("Location: ../pages/loginDoc.php");
-//   exit;
+// header("Location: ../pages/loginDoc.php");
+// exit;
 // }
 
 try {
@@ -156,6 +155,11 @@ if ($grupo) {
   <div class="hero-box">
     <h2>Panel de Grupos</h2>
     <p>Seleccione un grupo para gestionar sus alumnos</p>
+    <div class="d-flex justify-content-center mx-auto mt-3">
+      <a href="../logout.php" class="btn menu-btn text-white w-100" style="background-color: #8b0000;">
+        <i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesión
+      </a>
+    </div>
   </div>
 </section>
 
