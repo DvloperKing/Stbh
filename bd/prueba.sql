@@ -245,11 +245,12 @@ insert into subject_modality_level (id_subject, id_modality, id_level) values (1
 insert into subject_modality_level (id_subject, id_modality, id_level) values (12, 1, 2), (12, 2, 2), (12, 3, 2);
 insert into subject_modality_level (id_subject, id_modality, id_level) values (13, 1, 2), (13, 2, 2), (13, 3, 2);
 insert into subject_modality_level (id_subject, id_modality, id_level) values (14, 1, 2), (14, 2, 2), (14, 3, 2);
--- insert grupos
+-- inserta los grupos como nuevo grupo
 INSERT INTO grupos (name, id_modality_level) VALUES ('Grupo A - Internado Bachillerato', 1),
 ('Grupo B - Internado Básico', 2),
 ('Grupo C - Sabatino Básico', 3),
 ('Grupo D - Online Básico', 4);
+-- inserta la relacion que hay entre el grupo, materia y docente
 -- Suponiendo:
 -- Grupo A (id = 1), Grupo B (id = 2), Grupo C (id = 3), Grupo D (id = 4)
 -- Materias: id = 1 a 4 (por ejemplo)
@@ -262,7 +263,7 @@ INSERT INTO group_subject_assignment (id_group, id_subject, id_teacher) VALUES (
 
 -- Suponiendo que los ID de group_subject_assignment son 1 a 5
 -- Puedes adaptarlos luego según los ID generados
-
+-- inserta los horarios en los grupos ya creados
 INSERT INTO schedules (id_assignment, day_of_week, start_time, end_time) VALUES (1, 'Lunes', '06:00:00', '07:00:00'),
 -- Grupo A (Internado) – Lunes a Viernes
 (1, 'Martes', '06:00:00', '07:00:00'),
@@ -333,6 +334,21 @@ JOIN users u ON e.id_user = u.id
 JOIN subjects s ON e.id_subject = s.id
 WHERE u.id = 3 AND e.enrollment_year = 2025 AND e.enrollment_period = 'Enero-Junio';
 
+SELECT 
+  g.name AS grupo,
+  m.name_modality,
+  e.name_level,
+  s.name_subject,
+  u.first_name,
+  u.last_name
+FROM group_subject_assignment ga
+JOIN grupos g ON ga.id_group = g.id
+JOIN modality_level ml ON g.id_modality_level = ml.id
+JOIN modalities m ON ml.id_modality = m.id
+JOIN education_levels e ON ml.id_level = e.id
+JOIN subjects s ON ga.id_subject = s.id
+JOIN users u ON ga.id_teacher = u.id
+ORDER BY g.name;
 
 
 
