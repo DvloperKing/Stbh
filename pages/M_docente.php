@@ -1,31 +1,23 @@
-<?php 
+<?php
 session_start();
 require './modulo-docente/conexion.php';
-// include_once '../core/Constantes.php';
-// include_once '../core/Consulta.php';
-// include_once '../core/estructura_bd.php';
-// $MYSQLI = _DB_HDND();
-
-// if (!isset($_SESSION['users']) || $_SESSION['users']['id_perfil'] != 2) {
-// header("Location: ../pages/loginDoc.php");
-// exit;
-// }
 
 try {
     $sql = "
         SELECT 
             s.id AS subject_id,
             s.name_subject,
-            g.id_grupo,
+            g.name AS id_grupo,
             m.name_modality,
             e.name_level,
-            g.horario
-        FROM subject_group g
-        JOIN subjects s ON g.id_subjects = s.id
+            '' AS horario
+        FROM group_subject_assignment ga
+        JOIN grupos g ON ga.id_group = g.id
         JOIN modality_level ml ON g.id_modality_level = ml.id
         JOIN modalities m ON ml.id_modality = m.id
         JOIN education_levels e ON ml.id_level = e.id
-        ORDER BY s.id, g.id_grupo
+        JOIN subjects s ON ga.id_subject = s.id
+        ORDER BY s.id, g.name
     ";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
@@ -48,7 +40,7 @@ try {
             'id_grupo' => $fila['id_grupo'],
             'modalidad' => $fila['name_modality'],
             'nivel' => $fila['name_level'],
-            'horario' => $fila['horario']
+            'horario' => $fila['horario'] ?? 'No asignado'
         ];
     }
 } catch (PDOException $e) {
@@ -58,12 +50,10 @@ try {
 $grupo = $_GET['grupo'] ?? null;
 
 if ($grupo) {
-    // Ejemplo: obtener alumnos de ese grupo
     $stmt = $pdo->prepare("SELECT * FROM students WHERE id_grupo = ?");
     $stmt->execute([$grupo]);
     $alumnos = $stmt->fetchAll();
 }
-
 ?>
 
 <!DOCTYPE html>
