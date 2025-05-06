@@ -76,24 +76,24 @@
                   <p class="mb-0">Ingresa tu correo Institucional</p>
                 </div>
                 <div class="card-body">
-                  <form role="form">
-                    <label>Email</label>
-                    <div class="mb-3">
-                      <input type="email" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="email-addon" required>
-                    </div>
-                    <label>Password</label>
-                    <div class="mb-3">
-                      <input type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="password-addon" required>
-                      <input type="hidden" name="tipo" value="2">
-                    </div>
-                    <div class="form-check form-switch">
-                      <input class="form-check-input" type="checkbox" id="rememberMe" checked="">
-                      <label class="form-check-label" for="rememberMe">Remember me</label>
-                    </div>
-                    <div class="text-center">
-                      <button type="button" class="btn bg-gradient-info w-100 mt-4 mb-0" onclick="login_formulario();">Sign in</button>
-                    </div>
-                  </form>
+                <form role="form" class="formulario__login">
+                  <label>Email</label>
+                  <div class="mb-3">
+                    <input type="email" id="email" name="email" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="email-addon" required>
+                  </div>
+                  <label>Password</label>
+                  <div class="mb-3">
+                    <input type="password" id="pass" name="pass" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="password-addon" required>
+                    <input type="hidden" name="tipo" value="2">
+                  </div>
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="rememberMe" checked>
+                    <label class="form-check-label" for="rememberMe">Remember me</label>
+                  </div>
+                  <div class="text-center">
+                    <button type="button" class="btn bg-gradient-info w-100 mt-4 mb-0" onclick="login_formulario();">Sign in</button>
+                  </div>
+                </form>
                 </div>
               </div>
             </div>

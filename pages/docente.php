@@ -1,10 +1,15 @@
 <?php 
 session_start();
 require './modulo-docente/conexion.php';
-include_once '../core/Constantes.php';
+
 include_once '../core/Consulta.php';
-include_once '../core/estructura_bd.php';
+echo "Consulta.php cargado<br>";
+
+
 $MYSQLI = _DB_HDND();
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 
 if (!isset($_SESSION['users']) || $_SESSION['users']['id_perfil'] != 2) {
