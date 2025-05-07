@@ -106,18 +106,20 @@ while ($row = $modniv_query->fetch_assoc()) {
 <div class="logos-container">
   <div class="logos">
     <img src="../assets/img/cnbm.png" alt="CNBM" class="logo-img">
-    <img src="../pages/Stbh-docentes/assets/img/CRBH3.png" alt="CRBH" class="logo-img">
+    <img src="../assets/img/CRBH3.png" alt="CRBH" class="logo-img">
     <img src="../assets/img/stbm.png" alt="STBM" class="logo-img">
     <img src="../assets/img/logo2.png" alt="STBH" class="logo-img">
   </div>
 </div>
 
 <div class="container-main">
-  <section class="card-hero">
-    <div class="hero-box">
-      <a href="admin.php" class="btn-stbh btn-lg">Regresar al Menú Principal</a>
-    </div>
-  </section>
+<div class="card shadow-sm border-0 mb-4">
+  <div class="card-body text-center">
+    <a href="admin.php" class="btn btn-primary btn-lg px-5">
+      ← Regresar al Menú Principal
+    </a>
+  </div>
+</div>
 
   <?php if (isset($_GET['grupo_creado'])): ?>
     <div class='alert alert-success text-center mt-3'>Grupo creado correctamente.</div>
