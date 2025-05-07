@@ -1,6 +1,6 @@
 <?php
 // Obtener días escolares
-$consulta = $pdo->query("SELECT date FROM school_calendar WHERE is_school_day = 1 ORDER BY date");
+$consulta = $pdo->query("SELECT dates FROM school_calendar WHERE is_school_day = 1 ORDER BY dates");
 $diasEscolares = $consulta->fetchAll(PDO::FETCH_COLUMN);
 
 $grupo = $_GET['grupo'] ?? $_POST['grupo'] ?? null;

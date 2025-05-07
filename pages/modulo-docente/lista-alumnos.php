@@ -27,9 +27,12 @@ if ($existeGrupo) {
 
     // Obtener alumnos del grupo
     $stmt = $pdo->prepare("
-        SELECT s.control_number, s.first_name, s.last_name 
-        FROM students s 
-        WHERE s.id_grupo = ?
+        SELECT s.control_number, u.first_name, u.last_name
+        FROM students s
+        JOIN users u ON s.id_user = u.id
+        JOIN student_subjects ss ON ss.id_user = u.id
+        JOIN subject_group sg ON sg.id = ?
+        WHERE ss.id_subject = sg.id_subjects
     ");
     $stmt->execute([$grupo]);
     $alumnos = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -75,7 +78,7 @@ $tab_activa = $_GET['tab'] ?? 'calificaciones';
   <div class=" border border-[#0b0146]-8 p-4 rounded-2 d-flex flex-column justify-conent-center">
     <h2>Regresar a la página principal.</h2>
     <div class="d-flex flex-column align-items-center align-content-center">
-      <p><a href="../docente.php" class="btn btn-outline-[#0b0146]">
+      <p><a href="../M_docente.php" class="btn btn-outline-[#0b0146]">
       <i class="bi bi-arrow-left-circle"></i> Volver al módulo de inicio
     </a></p>
     </div>

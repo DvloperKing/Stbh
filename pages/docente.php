@@ -1,211 +1,151 @@
-<?php 
+<?php
 session_start();
-require './modulo-docente/conexion.php';
-
-include_once '../core/Consulta.php';
-echo "Consulta.php cargado<br>";
-
-
-$MYSQLI = _DB_HDND();
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-
-if (!isset($_SESSION['users']) || $_SESSION['users']['id_perfil'] != 2) {
+if (!isset($_SESSION['users']) || $_SESSION['users']['id_perfil'] != 1) {
   header("Location: ../pages/loginPersonal.php");
   exit;
 }
+include_once "../Core/constantes.php";
+include_once "../Core/estructura_bd.php";
+$MYSQLI = _DB_HDND();
+// insertar datos de docente
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_user'], $_POST['degree'], $_POST['phone'])) {
+  $id_user = (int) $_POST['id_user'];
+  $degree = $MYSQLI->real_escape_string($_POST['degree']);
+  $phone = $MYSQLI->real_escape_string($_POST['phone']);
 
-try {
-    $sql = "
-        SELECT 
-            s.id AS subject_id,
-            s.name_subject,
-            g.id_grupo,
-            m.name_modality,
-            e.name_level,
-            g.horario
-        FROM subject_group g
-        JOIN subjects s ON g.id_subjects = s.id
-        JOIN modality_level ml ON g.id_modality_level = ml.id
-        JOIN modalities m ON ml.id_modality = m.id
-        JOIN education_levels e ON ml.id_level = e.id
-        ORDER BY s.id, g.id_grupo
-    ";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
-    $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+  $stmt_check = $MYSQLI->prepare("SELECT id FROM teaching WHERE id_user = ?");
+  $stmt_check->bind_param("i", $id_user);
+  $stmt_check->execute();
+  $result_check = $stmt_check->get_result();
 
-    $data = [];
-
-    foreach ($resultados as $fila) {
-        $idMateria = $fila['subject_id'];
-        $nombreMateria = $fila['name_subject'];
-
-        if (!isset($data[$idMateria])) {
-            $data[$idMateria] = [
-                'nombre' => $nombreMateria,
-                'grupos' => []
-            ];
-        }
-
-        $data[$idMateria]['grupos'][] = [
-            'id_grupo' => $fila['id_grupo'],
-            'modalidad' => $fila['name_modality'],
-            'nivel' => $fila['name_level'],
-            'horario' => $fila['horario']
-        ];
-    }
-} catch (PDOException $e) {
-    echo "Error al obtener grupos: " . $e->getMessage();
+  if ($result_check && $result_check->num_rows === 0) {
+    $stmt_insert = $MYSQLI->prepare("INSERT INTO teaching (id_user, highest_degree, phone_number) VALUES (?, ?, ?)");
+    $stmt_insert->bind_param("iss", $id_user, $degree, $phone);
+    $stmt_insert->execute();
+    header("Location: docente.php?success=1");
+    exit;
+  }
 }
 
-$grupo = $_GET['grupo'] ?? null;
-
-if ($grupo) {
-    // Ejemplo: obtener alumnos de ese grupo
-    $stmt = $pdo->prepare("SELECT * FROM students WHERE id_grupo = ?");
-    $stmt->execute([$grupo]);
-    $alumnos = $stmt->fetchAll();
-}
-
+// obtener usuarios con perfil docente
+$SQL = "
+  SELECT u.id, u.email, u.first_name, u.last_name, t.highest_degree, t.phone_number
+  FROM users u
+  LEFT JOIN teaching t ON u.id = t.id_user
+  WHERE u.id_perfil = 2
+  ORDER BY u.first_name, u.last_name
+";
+$RESULT = $MYSQLI->query($SQL);
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>STBH | Procóro García Hernández</title>
+  <title>STBH | Docentes</title>
   <link rel="icon" type="image/png" href="../assets/img/icon_stbh.png">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
   <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
   <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
   <link href="../assets/css/soft-ui-dashboard.css?v=1.0.8" rel="stylesheet" />
-  <link href="../styles/global.css" rel="stylesheet" />
-
-  <style>
-    .logos-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: #fff;
-      padding: 12px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      gap: 30px;
-    }
-    .logo-img {
-      height: 90px;
-      width: auto;
-    }
-    .card-hero {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin: 30px 15px 0;
-    }
-    .hero-box {
-      background: #ffffff;
-      padding: 25px 35px;
-      border-radius: 15px;
-      border: 1px solid #eee;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.07);
-      text-align: center;
-      max-width: 500px;
-      width: 100%;
-    }
-    .hero-box h2 {
-      font-size: 1.6rem;
-      font-weight: 700;
-      color: #0b0146;
-      margin-bottom: 10px;
-    }
-    .btn-stbh {
-      background-color: #0b0146;
-      color: white;
-      border: none;
-      padding: 10px 16px;
-      border-radius: 5px;
-      transition: background-color 0.3s, transform 0.2s;
-      font-weight: 500;
-      text-decoration: none;
-      display: inline-block;
-    }
-    .btn-stbh:hover {
-      background-color: #12025a;
-      transform: translateY(-2px);
-    }
-    .card h4 {
-      color: #0b0146;
-    }
-  </style>
+  <link href="../assets/css/usuarios.css" rel="stylesheet" />
 </head>
-
 <body>
-
-<!-- LOGOS -->
 <div class="logos-container">
-  <img src="../assets/img/cnbm.png" alt="CNBM" class="logo-img">
-  <img src="../assets/img/CRBH2.png" alt="CRBH" class="logo-img">
-  <img src="../assets/img/stbm.png" alt="STBM" class="logo-img">
-  <img src="../assets/img/logo2.png" alt="Marca" class="logo-img">
+  <div class="logos">
+    <img src="../assets/img/cnbm.png" alt="CNBM" class="logo-img">
+    <img src="../pages/Stbh-docentes/assets/img/CRBH3.png" alt="CRBH" class="logo-img">
+    <img src="../assets/img/stbm.png" alt="STBM" class="logo-img">
+    <img src="../assets/img/logo2.png" alt="STBH" class="logo-img">
+  </div>
 </div>
 
-<!-- CARD DE BIENVENIDA -->
 <section class="card-hero">
   <div class="hero-box">
-    <h2>Panel de Grupos</h2>
-    <p>Seleccione un grupo para gestionar sus alumnos</p>
-  </div>
-</section>
-
-<!-- MATERIAS Y GRUPOS -->
-<section class="container my-4">
-  <?php foreach ($data as $materia): ?>
-  <div class="mb-5">
-    <h2 class="text-primary"><?= htmlspecialchars($materia['nombre']) ?></h2>
-    <div class="row">
-      <?php foreach ($materia['grupos'] as $grupo): ?>
-      <div class="col-12 col-md-6 col-lg-3 mb-4">
-        <div class="card h-100 p-3 shadow-sm border-2 d-flex flex-column justify-content-between">
-          <div class="mb-3 text-center">
-            <h5><?= htmlspecialchars($grupo['id_grupo']) ?></h5>
-            <p class="text-muted mb-1"><?= htmlspecialchars($grupo['modalidad']) ?></p>
-            <p class="text-muted mb-1"><?= htmlspecialchars($grupo['nivel']) ?></p>
-            <p class="text-muted"><?= htmlspecialchars($grupo['horario']) ?></p>
-          </div>
-          <a href="./modulo-docente/lista-alumnos.php?grupo=<?= $grupo['id_grupo'] ?>" class="btn-stbh text-center">
-            Ir <i class="bi bi-arrow-right-circle ms-2"></i>
-            </a>
-
-        </div>
-      </div>
-      <?php endforeach; ?>
+    <h2>Sección Docentes</h2>
+    <div class="btn-group">
+      <a href="admin.php" class="btn-stbh btn-lg">Regresar al Menú Principal</a>
     </div>
   </div>
-  <?php endforeach; ?>
 </section>
 
+<?php if (isset($_GET['success'])): ?>
+  <div class="alert alert-success text-center alert-auto-close">Información del docente guardada correctamente.</div>
+<?php endif; ?>
 
+<section class="users p-4">
+  <div class="container">
+    <div class="table-responsive">
+      <table class="table table-bordered text-center table-stbh">
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Nombre</th>
+            <th>Grado Académico</th>
+            <th>Teléfono</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php while ($row = $RESULT->fetch_assoc()): ?>
+          <tr>
+            <td><?= $row['email'] ?></td>
+            <td><?= $row['first_name'] . ' ' . $row['last_name'] ?></td>
+            <td><?= $row['highest_degree'] ?? '-' ?></td>
+            <td><?= $row['phone_number'] ?? '-' ?></td>
+            <td>
+              <?php if (!$row['highest_degree']): ?>
+              <button class="btn-stbh btn-sm btn_Completar" data-id="<?= $row['id'] ?>">Completar</button>
+              <?php else: ?> - <?php endif; ?>
+            </td>
+          </tr>
+          <?php endwhile; ?>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
 
-<!-- FOOTER -->
-<footer class="footer py-4 text-center text-secondary">
-  STBH © <?= date("Y") ?> | Todos los derechos reservados
-</footer>
+<!-- FORMULARIO PARA COMPLETAR DATOS DE DOCENTE -->
+<section id="fondo">
+  <div id="form_alta">
+    <span class="cerrar">&times;</span>
+    <form method="POST" action="docente.php">
+      <h2>Completar Información</h2>
+      <input type="hidden" name="id_user" id="id_user_input">
+      <div class="mb-3">
+        <label>Grado Académico</label>
+        <input class="form-control" type="text" name="degree" required>
+      </div>
+      <div class="mb-3">
+        <label>Teléfono</label>
+        <input class="form-control" type="text" name="phone" required>
+      </div>
+      <button type="submit" class="btn-stbh">Guardar</button>
+    </form>
+  </div>
+</section>
 
-<!-- SCRIPTS -->
-<script src="../assets/js/core/popper.min.js"></script>
-<script src="../assets/js/core/bootstrap.min.js"></script>
-<script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
-<script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
 <script>
-  var win = navigator.platform.indexOf('Win') > -1;
-  if (win && document.querySelector('#sidenav-scrollbar')) {
-    Scrollbar.init(document.querySelector('#sidenav-scrollbar'), { damping: '0.5' });
+document.addEventListener('DOMContentLoaded', () => {
+  const fondo = document.getElementById('fondo');
+  const cerrar = document.querySelector('.cerrar');
+  const idInput = document.getElementById('id_user_input');
+
+  document.querySelectorAll('.btn_Completar').forEach(btn => {
+    btn.addEventListener('click', () => {
+      idInput.value = btn.getAttribute('data-id');
+      fondo.style.display = 'block';
+    });
+  });
+
+  cerrar.addEventListener('click', () => fondo.style.display = 'none');
+
+  const alerta = document.querySelector('.alert-auto-close');
+  if (alerta) {
+    setTimeout(() => alerta.style.display = 'none', 4000);
   }
+});
 </script>
-<script src="../assets/js/soft-ui-dashboard.min.js?v=1.0.7"></script>
 </body>
 </html>

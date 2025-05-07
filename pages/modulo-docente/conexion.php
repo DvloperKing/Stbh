@@ -1,18 +1,17 @@
 <?php
-function _DB_HDND() {
-    $host = 'localhost:3307';
-    $db = 'stbh';
-    $user = 'root';
-    $pass = '';
-    $charset = 'utf8mb4';
+$host = 'localhost';
+$port = 3307;
+$db = 'stbh';
+$user = 'root';
+$pass = '12345';
+$charset = 'utf8mb4';
 
-    try {
-        $pdo = new PDO("mysql:host=$host;dbname=$db;charset=$charset", $user, $pass);
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        return $pdo;
-    } catch (\PDOException $e) {
-        echo "Error de conexión: " . $e->getMessage();
-        exit;
-    }
+try {
+    $dsn = "mysql:host=$host;port=$port;dbname=$db;charset=$charset";
+    $pdo = new PDO($dsn, $user, $pass);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (\PDOException $e) {
+    echo "Error de conexión: " . $e->getMessage();
+    exit;
 }
 ?>
