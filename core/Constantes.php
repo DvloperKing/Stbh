@@ -5,7 +5,7 @@ define('HDND_HOST', 'localhost');
 define('HDND_USER', 'root');
 define('HDND_PASS', '12345');
 define('HDND_DB_NAME', 'stbh');
-define("MYSQL_PORT", 3306); 
+define("MYSQL_PORT", 3307); 
 session_start();
 if(!isset($_SESSION['token'])){
     $u= uniqid(rand());

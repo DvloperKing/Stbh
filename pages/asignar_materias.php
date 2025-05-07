@@ -8,67 +8,119 @@ include_once "../Core/constantes.php";
 include_once "../Core/estructura_bd.php";
 $MYSQLI = _DB_HDND();
 
-// Guardar asignación de materias a docente sin duplicados y con modalidad y nivel
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_user'], $_POST['materias'], $_POST['id_modality'], $_POST['semester'], $_POST['id_level'])) {
-  $id_user = (int) $_POST['id_user'];
-  $id_modality = (int) $_POST['id_modality'];
-  $id_level = (int) $_POST['id_level'];
-  $materias = $_POST['materias'];
+// Insertar nueva asignación
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['asignar_materia'])) {
+  $id_group = (int) $_POST['id_group'];
+  $id_subject = (int) $_POST['id_subject'];
+  $id_teacher = (int) $_POST['id_teacher'];
 
-  foreach ($materias as $id_materia) {
-    $id_materia = (int)$id_materia;
-    $MYSQLI->query("INSERT INTO teacher_subjects (id_user, id_subject, id_modality, id_level)
-      SELECT * FROM (SELECT $id_user AS id_user, $id_materia AS id_subject, $id_modality AS id_modality, $id_level AS id_level) AS tmp
-      WHERE NOT EXISTS (
-        SELECT 1 FROM teacher_subjects 
-        WHERE id_user = $id_user AND id_subject = $id_materia AND id_modality = $id_modality AND id_level = $id_level
-      ) LIMIT 1");
-  }
+  $MYSQLI->query("INSERT INTO group_subject_assignment (id_group, id_subject, id_teacher)
+                  VALUES ($id_group, $id_subject, $id_teacher)");
 
-  echo "<div class='alert alert-success text-center mt-3'>Materias asignadas correctamente al docente.</div>";
+  header("Location: " . $_SERVER['PHP_SELF'] . "?asignado=1");
+  exit;
 }
 
-$niveles = $MYSQLI->query("SELECT id, name_level FROM education_levels");
+// Obtener grupos y su modalidad/nivel
+$grupos_result = $MYSQLI->query("
+  SELECT g.id, g.name, m.name_modality, e.name_level, ml.id AS id_modality_level
+  FROM grupos g
+  JOIN modality_level ml ON g.id_modality_level = ml.id
+  JOIN modalities m ON ml.id_modality = m.id
+  JOIN education_levels e ON ml.id_level = e.id
+  ORDER BY g.name
+");
 
-$modalidades = [];
-if (isset($_POST['id_level'])) {
-  $id_level = (int) $_POST['id_level'];
-  if ($id_level === 1) {
-    $modalidades[] = ['id' => 1, 'name_modality' => 'internado'];
-  } else {
-    $res_mod = $MYSQLI->query("SELECT id, name_modality FROM modalities WHERE id IN (SELECT id_modality FROM modality_level WHERE id_level = $id_level)");
-    while ($row = $res_mod->fetch_assoc()) {
-      $modalidades[] = $row;
-    }
-  }
+$grupos = [];
+while ($row = $grupos_result->fetch_assoc()) {
+  $grupos[] = $row;
 }
 
+// Obtener materias por modalidad/nivel
+$materias_result = $MYSQLI->query("
+  SELECT sm.id_subject, s.name_subject, ml.id AS id_modality_level
+  FROM subject_modality_level sm
+  JOIN subjects s ON sm.id_subject = s.id
+  JOIN modality_level ml ON sm.id_modality = ml.id_modality AND sm.id_level = ml.id_level
+  ORDER BY s.name_subject
+");
+
+$materias_por_ml = [];
+while ($row = $materias_result->fetch_assoc()) {
+  $materias_por_ml[$row['id_modality_level']][] = $row;
+}
+
+// Obtener docentes
+$docentes_result = $MYSQLI->query("SELECT id, CONCAT(first_name, ' ', last_name) AS nombre FROM users WHERE id_perfil = 2 ORDER BY first_name");
 $docentes = [];
-if (isset($_POST['id_level'], $_POST['id_modality'])) {
-  $res_doc = $MYSQLI->query("SELECT u.id, CONCAT(u.first_name, ' ', u.last_name) AS nombre FROM users u WHERE u.id_perfil = 2");
-  while ($row = $res_doc->fetch_assoc()) {
-    $docentes[] = $row;
-  }
+while ($row = $docentes_result->fetch_assoc()) {
+  $docentes[] = $row;
+}
+?>
+
+<?php
+session_start();
+if (!isset($_SESSION['users']) || $_SESSION['users']['id_perfil'] != 1) {
+  header("Location: ../pages/loginPersonal.php");
+  exit;
+}
+include_once "../Core/constantes.php";
+include_once "../Core/estructura_bd.php";
+$MYSQLI = _DB_HDND();
+
+// Insertar nueva asignación
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['asignar_materia'])) {
+  $id_group = (int) $_POST['id_group'];
+  $id_subject = (int) $_POST['id_subject'];
+  $id_teacher = (int) $_POST['id_teacher'];
+
+  $MYSQLI->query("INSERT INTO group_subject_assignment (id_group, id_subject, id_teacher)
+                  VALUES ($id_group, $id_subject, $id_teacher)");
+
+  header("Location: " . $_SERVER['PHP_SELF'] . "?asignado=1");
+  exit;
 }
 
-$materias = [];
-if (isset($_POST['id_modality'], $_POST['semester'], $_POST['id_level'])) {
-  $id_modality = (int) $_POST['id_modality'];
-  $semester = (int) $_POST['semester'];
-  $id_level = (int) $_POST['id_level'];
-  $materias_result = $MYSQLI->query("SELECT sub.id, sub.name_subject, sub.code FROM subject_modality_level sml JOIN subjects sub ON sub.id = sml.id_subject WHERE sml.id_modality = $id_modality AND sml.id_level = $id_level AND sub.semester = $semester");
-  while ($row = $materias_result->fetch_assoc()) {
-    $materias[] = $row;
-  }
+$grupos_result = $MYSQLI->query("
+  SELECT g.id, g.name, m.name_modality, e.name_level, ml.id AS id_modality_level
+  FROM grupos g
+  JOIN modality_level ml ON g.id_modality_level = ml.id
+  JOIN modalities m ON ml.id_modality = m.id
+  JOIN education_levels e ON ml.id_level = e.id
+  ORDER BY g.name
+");
+
+$grupos = [];
+while ($row = $grupos_result->fetch_assoc()) {
+  $grupos[] = $row;
+}
+
+$materias_result = $MYSQLI->query("
+  SELECT sm.id_subject, s.name_subject, ml.id AS id_modality_level
+  FROM subject_modality_level sm
+  JOIN subjects s ON sm.id_subject = s.id
+  JOIN modality_level ml ON sm.id_modality = ml.id_modality AND sm.id_level = ml.id_level
+  ORDER BY s.name_subject
+");
+
+$materias_por_ml = [];
+while ($row = $materias_result->fetch_assoc()) {
+  $materias_por_ml[$row['id_modality_level']][] = $row;
+}
+
+$docentes_result = $MYSQLI->query("SELECT id, CONCAT(first_name, ' ', last_name) AS nombre FROM users WHERE id_perfil = 2 ORDER BY first_name");
+$docentes = [];
+while ($row = $docentes_result->fetch_assoc()) {
+  $docentes[] = $row;
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8">
+  <title>Asignar Materias a Grupos</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>STBH | Asignar Materias</title>
   <link rel="icon" type="image/png" href="../assets/img/icon_stbh.png">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
   <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
@@ -76,110 +128,99 @@ if (isset($_POST['id_modality'], $_POST['semester'], $_POST['id_level'])) {
   <link href="../assets/css/soft-ui-dashboard.css?v=1.0.8" rel="stylesheet" />
   <link href="../assets/css/usuarios.css" rel="stylesheet" />
   <style>
-    body { background-color: #f8f9fa; }
-    h2 { color: #0b0146; }
-    .btn-primary { background-color: #0b0146; border: none; }
-    .form-check-label { font-weight: 500; }
-    .logos-container {
-      background: #fff;
-      padding: 10px;
-      text-align: center;
-      border-bottom: 1px solid #ccc;
-    }
-    .btn-success { background-color: #f4a701 !important; }
+    .btn-primary { background-color: #0b0146 !important; }
+    .btn-success { background-color: #f4a701 !important; border-color: #f4a701; }
     .table-dark { --bs-table-bg: #0b0146; }
+    .container-main { max-width: 1200px; margin: 0 auto; padding: 20px 15px; }
+    .card { border-radius: 15px; overflow: hidden; margin-bottom: 40px; }
+    .card-body form .form-label { font-weight: 600; }
+    .table td, .table th { vertical-align: middle; padding: 0.75rem; }
+    .card-hero { margin-bottom: 30px; text-align: center; }
+    .hero-box { padding: 20px; }
   </style>
 </head>
-<body>
-  <div class="logos-container">
+<body class="bg-light">
+<div class="logos-container">
+  <div class="logos">
     <img src="../assets/img/cnbm.png" alt="CNBM" class="logo-img">
-    <img src="../assets/img/CRBH3.png" alt="CRBH" class="logo-img">
+    <img src="../pages/Stbh-docentes/assets/img/CRBH3.png" alt="CRBH" class="logo-img">
     <img src="../assets/img/stbm.png" alt="STBM" class="logo-img">
-    <img src="../assets/img/logo2.png" alt="Marca" class="logo-img">
+    <img src="../assets/img/logo2.png" alt="STBH" class="logo-img">
   </div>
+</div>
 
+<div class="container-main">
   <section class="card-hero">
     <div class="hero-box">
-      <h2 class="mb-4">Asignar Materias a Docentes</h2>
-      <div class="btn-group">
-        <a href="admin.php" class="btn-stbh btn-lg">Regresar al Menú Principal</a>
-      </div>
+      <a href="grupos.php" class="btn-stbh btn-lg">← Regresar a Grupos</a>
     </div>
   </section>
 
-  <div class="container mt-5">
-    <form method="post">
-      <div class="mb-3">
-        <label for="id_level" class="form-label">Selecciona nivel educativo:</label>
-        <select class="form-select" name="id_level" id="id_level" required onchange="this.form.submit()">
-          <option value="">-- Elegir --</option>
-          <?php while ($lvl = $niveles->fetch_assoc()): ?>
-            <option value="<?= $lvl['id'] ?>" <?= isset($_POST['id_level']) && $_POST['id_level'] == $lvl['id'] ? 'selected' : '' ?>>
-              <?= $lvl['name_level'] ?>
-            </option>
-          <?php endwhile; ?>
-        </select>
-      </div>
+  <?php if (isset($_GET['asignado'])): ?>
+    <div class="alert alert-success text-center">Asignación registrada correctamente.</div>
+  <?php endif; ?>
 
-      <?php if (!empty($modalidades)): ?>
-      <div class="mb-3">
-        <label for="id_modality" class="form-label">Selecciona modalidad:</label>
-        <select class="form-select" name="id_modality" id="id_modality" required onchange="this.form.submit()">
-          <option value="">-- Elegir --</option>
-          <?php foreach ($modalidades as $mod): ?>
-            <option value="<?= $mod['id'] ?>" <?= isset($_POST['id_modality']) && $_POST['id_modality'] == $mod['id'] ? 'selected' : '' ?>>
-              <?= $mod['name_modality'] ?>
-            </option>
-          <?php endforeach; ?>
-        </select>
-      </div>
-      <?php endif; ?>
+  <div class="card shadow-sm border-0">
+    <div class="card-body">
+      <h4 class="mb-4 text-center">Asignar Materia y Docente a un Grupo</h4>
+      <form method="post" class="row g-4">
+        <input type="hidden" name="asignar_materia" value="1">
 
-      <?php if (!empty($docentes)): ?>
-      <div class="mb-3">
-        <label for="id_user" class="form-label">Selecciona un docente:</label>
-        <select class="form-select" name="id_user" id="id_user" required>
-          <option value="">-- Elegir --</option>
-          <?php foreach ($docentes as $doc): ?>
-            <option value="<?= $doc['id'] ?>" <?= isset($_POST['id_user']) && $_POST['id_user'] == $doc['id'] ? 'selected' : '' ?>>
-              <?= $doc['nombre'] ?>
-            </option>
-          <?php endforeach; ?>
-        </select>
-      </div>
-      <?php endif; ?>
-
-      <div class="mb-3">
-        <label for="semester" class="form-label">Selecciona semestre:</label>
-        <?php if (isset($_POST['id_level']) && $_POST['id_level'] == 2): ?>
-          <select class="form-select" name="semester" id="semester" required onchange="this.form.submit()">
-            <option value="">-- Elegir semestre --</option>
-            <?php for ($i = 1; $i <= 6; $i++): ?>
-              <option value="<?= $i ?>" <?= isset($_POST['semester']) && $_POST['semester'] == $i ? 'selected' : '' ?>>
-                <?= $i ?>
+        <div class="col-md-6">
+          <label class="form-label">Grupo:</label>
+          <select class="form-select" name="id_group" id="grupo_select" required>
+            <option value="">Seleccione un grupo</option>
+            <?php foreach ($grupos as $grupo): ?>
+              <option value="<?= $grupo['id'] ?>" data-ml="<?= $grupo['id_modality_level'] ?>">
+                <?= $grupo['name'] ?> (<?= $grupo['name_modality'] ?> / <?= $grupo['name_level'] ?>)
               </option>
-            <?php endfor; ?>
+            <?php endforeach; ?>
           </select>
-        <?php else: ?>
-          <input type="number" class="form-control" name="semester" id="semester" value="<?= isset($_POST['semester']) ? $_POST['semester'] : '' ?>" min="1" max="10" required onchange="this.form.submit()">
-        <?php endif; ?>
-      </div>
+        </div>
 
-      <?php if (!empty($materias)): ?>
-        <h5>Materias disponibles:</h5>
-        <?php foreach ($materias as $m): ?>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="materias[]" value="<?= $m['id'] ?>" id="materia<?= $m['id'] ?>">
-            <label class="form-check-label" for="materia<?= $m['id'] ?>">
-              <?= $m['name_subject'] ?> (<?= $m['code'] ?>)
-            </label>
-          </div>
-        <?php endforeach; ?>
-        <button type="submit" class="btn btn-primary mt-3">Asignar al Docente</button>
-      <?php elseif (isset($_POST['id_modality'], $_POST['semester'], $_POST['id_level'])): ?>
-        <p class="text-warning">No hay materias disponibles para esta modalidad, nivel y semestre.</p>
-      <?php endif; ?>
-    </form>
+        <div class="col-md-6">
+          <label class="form-label">Materia:</label>
+          <select class="form-select" name="id_subject" id="materia_select" required>
+            <option value="">Seleccione un grupo primero</option>
+          </select>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">Docente:</label>
+          <select class="form-select" name="id_teacher" required>
+            <option value="">Seleccione un docente</option>
+            <?php foreach ($docentes as $doc): ?>
+              <option value="<?= $doc['id'] ?>"><?= $doc['nombre'] ?></option>
+            <?php endforeach; ?>
+          </select>
+        </div>
+
+        <div class="col-12 text-end">
+          <button type="submit" class="btn btn-success px-4">Asignar</button>
+        </div>
+      </form>
+    </div>
   </div>
+</div>
+
+<script>
+  const materiasPorML = <?= json_encode($materias_por_ml) ?>;
+  const grupoSelect = document.getElementById('grupo_select');
+  const materiaSelect = document.getElementById('materia_select');
+
+  grupoSelect.addEventListener('change', function () {
+    const mlId = this.selectedOptions[0].getAttribute('data-ml');
+    materiaSelect.innerHTML = '<option value="">Seleccione una materia</option>';
+
+    if (materiasPorML[mlId]) {
+      materiasPorML[mlId].forEach(m => {
+        const opt = document.createElement('option');
+        opt.value = m.id_subject;
+        opt.textContent = m.name_subject;
+        materiaSelect.appendChild(opt);
+      });
+    }
+  });
+</script>
 </body>
 </html>
