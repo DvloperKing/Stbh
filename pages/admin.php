@@ -100,9 +100,9 @@ if (!isset($_SESSION['users']) || $_SESSION['users']['id_perfil'] != 1) {
             </a>
         </div>
         <div class="col-6 col-md-4 col-lg-3">
-          <a href="../pages/asignar_materias.php" class="btn menu-btn text-white w-100"
+          <a href="../pages/horarios.php" class="btn menu-btn text-white w-100"
             style="background-color: rgba(11, 1, 70, 1);">
-          <i class="bi bi-link-45deg me-2"></i>Asignar Materias
+            <i class="bi bi bi-clock me-2"></i>Horarios
           </a>
         </div>
         <div class="col-6 col-md-4 col-lg-3">
@@ -121,12 +121,6 @@ if (!isset($_SESSION['users']) || $_SESSION['users']['id_perfil'] != 1) {
           <a href="../pages/alumno.php" class="btn menu-btn text-white w-100"
             style="background-color: rgba(11, 1, 70, 1);">
             <i class="bi bi-person-lines-fill me-2"></i>Alumnos
-          </a>
-        </div>
-        <div class="col-6 col-md-4 col-lg-3">
-          <a href="../pages/horarios.php" class="btn menu-btn text-white w-100"
-            style="background-color: rgba(11, 1, 70, 1);">
-            <i class="bi bi bi-clock me-2"></i>Horarios
           </a>
         </div>
         <div class="col-12 col-md-6 col-lg-3">
