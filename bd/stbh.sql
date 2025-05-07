@@ -1,31 +1,16 @@
-<<<<<<< HEAD
 -- Elimia la bd si existe
-=======
--- eliminar y crear la base de datos
-
->>>>>>> e864ce84f829a7a5741940fb7618c89c105f5b5d
 drop database if exists stbh;
 -- Crea la bd si no existe
 create database if not exists stbh ;
 use stbh;
-<<<<<<< HEAD
 -- Creacion de perfiles o roles de usuario (administrador, docente, alumno)
 -- Constraints: PRIMARY KEY
-=======
-
--- tablas principales
-
->>>>>>> e864ce84f829a7a5741940fb7618c89c105f5b5d
 create table perfil (
   id int auto_increment primary key,
   name_perfil varchar(20)
 );
-<<<<<<< HEAD
 -- Creacion de usuarios del sistema
 -- Constraints: PRIMARY KEY, FOREIGN KEY (relación con perfil)
-=======
-
->>>>>>> e864ce84f829a7a5741940fb7618c89c105f5b5d
 create table users (
   id int auto_increment primary key,
   email varchar(45),
@@ -35,54 +20,34 @@ create table users (
   id_perfil int,
   foreign key (id_perfil) references perfil(id)
 );
-<<<<<<< HEAD
 -- Definición de permisos de usuarios
 -- Constraints: PRIMARY KEY
-=======
-
->>>>>>> e864ce84f829a7a5741940fb7618c89c105f5b5d
 create table permissions (
   id decimal(3,1) primary key,
   name_permissions varchar(50)
 );
-<<<<<<< HEAD
 -- Relacion de los perfiles con sus permisos
 -- Constraints: FOREIGN KEY (a perfil y permissions)
-=======
-
->>>>>>> e864ce84f829a7a5741940fb7618c89c105f5b5d
 create table permissionsxprofile (
   id_perfil int,
   id_permissions decimal(3,1),
   foreign key (id_perfil) references perfil(id),
   foreign key (id_permissions) references permissions(id)
 );
-<<<<<<< HEAD
 -- Creacion de los niveles educativos (básico, bachillerato)
 -- Constraints: PRIMARY KEY, UNIQUE (name_level)
-=======
-
->>>>>>> e864ce84f829a7a5741940fb7618c89c105f5b5d
 create table education_levels (
   id int auto_increment primary key,
   name_level varchar(30) unique
 );
-<<<<<<< HEAD
 -- Creacion de las modalidades de estudio (sabatino, internado, online)
 -- Constraints: PRIMARY KEY, UNIQUE (name_modality)
-=======
-
->>>>>>> e864ce84f829a7a5741940fb7618c89c105f5b5d
 create table modalities (
   id int auto_increment primary key,
   name_modality varchar(20) unique
 );
-<<<<<<< HEAD
 -- Relacion entre la tabla modalidades con niveles educativos
 -- Constraints: PRIMARY KEY, FOREIGN KEY (a modalities y education_levels)
-=======
-
->>>>>>> e864ce84f829a7a5741940fb7618c89c105f5b5d
 create table modality_level (
   id int auto_increment primary key,
   id_modality int,
@@ -90,7 +55,6 @@ create table modality_level (
   foreign key (id_modality) references modalities(id),
   foreign key (id_level) references education_levels(id)
 );
-<<<<<<< HEAD
 -- tabla grupos
 create table grupos (
     id int auto_increment primary key,
@@ -108,17 +72,6 @@ create table subjects (
 );
 -- Relacion de la tablas, materias con nivel y la modalidad
 -- Constraints: PRIMARY KEY, FOREIGN KEY (a subjects, modalities y education_levels)
-=======
-
-create table subjects (
-  id int auto_increment primary key,
-  name_subject varchar(20),
-  code varchar(20) unique,
-  semester int
-);
-
--- nueva tabla corregida para registrar la relación nivel + modalidad + materia
->>>>>>> e864ce84f829a7a5741940fb7618c89c105f5b5d
 create table subject_modality_level (
   id int auto_increment primary key,
   id_subject int,
@@ -128,12 +81,8 @@ create table subject_modality_level (
   foreign key (id_modality) references modalities(id),
   foreign key (id_level) references education_levels(id)
 );
-<<<<<<< HEAD
 -- Tabla con datos adicionales de docentes registrados (vía users)
 -- Constraints: PRIMARY KEY, FOREIGN KEY (a users)
-=======
-
->>>>>>> e864ce84f829a7a5741940fb7618c89c105f5b5d
 create table teaching (
   id int auto_increment primary key,
   id_user int,
@@ -141,12 +90,8 @@ create table teaching (
   phone_number varchar(20),
   foreign key (id_user) references users(id)
 );
-<<<<<<< HEAD
 -- Tabla con información de los estudiantes (vincula a users)
 -- Constraints: PRIMARY KEY, UNIQUE (control_number), FOREIGN KEY (a users y modalities)
-=======
-
->>>>>>> e864ce84f829a7a5741940fb7618c89c105f5b5d
 create table students (
   id int auto_increment primary key,
   control_number int unique,
@@ -156,12 +101,8 @@ create table students (
   foreign key (id_user) references users(id),
   foreign key (id_modality) references modalities(id)
 );
-<<<<<<< HEAD
 -- Tabla que indica las materias que esta inscrito un alumno
 -- Constraints: PRIMARY KEY, FOREIGN KEY (a users y subjects)
-=======
-
->>>>>>> e864ce84f829a7a5741940fb7618c89c105f5b5d
 create table student_subjects (
   id int auto_increment primary key,
   id_user int,
@@ -169,7 +110,6 @@ create table student_subjects (
   foreign key (id_user) references users(id),
   foreign key (id_subject) references subjects(id)
 );
-<<<<<<< HEAD
 -- Tabla que indica las materias que imparte un docente
 -- Constraints: PRIMARY KEY, FOREIGN KEY (a users y subjects)
 create table teacher_subjects (
@@ -182,15 +122,6 @@ create table teacher_subjects (
   foreign key (id_subject) references subjects(id),
   foreign key (id_modality) references modalities(id),
   foreign key (id_level) references education_levels(id)
-);
-
--- Tabla que registra la asistencia de un estudiante en una materia específica en un día determinado
-create table attendance(
-id int auto_increment primary key,
-id_enrollment int,
-attendance_date date,
-present tinyint(1) not null default 0,
-foreign key (id_enrollment) references student_subject_enrollment(id)
 );
 
 -- tabla que registra qué materias cursa cada estudiante, en qué modalidad, en qué semestre y en qué periodo del año.
@@ -206,6 +137,15 @@ CREATE TABLE student_subject_enrollment (
   foreign key (id_subject) references subjects(id),
   foreign key (id_modality) references modalities(id)
 );
+-- Tabla que registra la asistencia de un estudiante en una materia específica en un día determinado
+create table attendance(
+id int auto_increment primary key,
+id_enrollment int,
+attendance_date date,
+present tinyint(1) not null default 0,
+foreign key (id_enrollment) references student_subject_enrollment(id)
+);
+
 -- Tabla que registra las calificaciones por unidad de cada materia que cursa un alumno.
 create table grades_per_unit (
   id int auto_increment primary key,
@@ -252,32 +192,15 @@ create table schedules (
 );
 
 -- insert perfiles
-=======
-
-create table teacher_subjects (
-  id int auto_increment primary key,
-  id_user int,
-  id_subject int,
-  foreign key (id_user) references users(id),
-  foreign key (id_subject) references subjects(id)
-);
-
--- inserts de catálogos
-
->>>>>>> e864ce84f829a7a5741940fb7618c89c105f5b5d
 insert into perfil (name_perfil) values ('administrador');
 insert into perfil (name_perfil) values ('docente');
 insert into perfil (name_perfil) values ('alumno');
 
-<<<<<<< HEAD
 -- insert permisos 
-=======
->>>>>>> e864ce84f829a7a5741940fb7618c89c105f5b5d
 insert into permissions (id, name_permissions) values (1.0, 'ver usuarios');
 insert into permissions (id, name_permissions) values (5.0, 'ver materias');
 insert into permissions (id, name_permissions) values (5.1, 'añadir materia');
 
-<<<<<<< HEAD
 -- insert permisos por perfil
 insert into permissionsxprofile (id_perfil, id_permissions) select 1, id from permissions;
 
@@ -470,84 +393,8 @@ JOIN users u ON e.id_user = u.id
 JOIN subjects s ON e.id_subject = s.id
 JOIN modalities m ON e.id_modality = m.id
 ORDER BY u.last_name, u.first_name, e.enrollment_year, e.enrollment_period;
-=======
-insert into permissionsxprofile (id_perfil, id_permissions) select 1, id from permissions;
 
-insert into users (email, pass, first_name, last_name, id_perfil) values
-('admin@stbh.com', 'admin123', 'admin', 'sistema', 1),
-('alumno@stbh.com', '12345', 'juan', 'pérez garcía', 3),
-('docente@stbh.com', 'clave', 'maría', 'lópez', 2);
 
-insert into education_levels (name_level) values ('bachillerato');
-insert into education_levels (name_level) values ('básico');
 
-insert into modalities (name_modality) values ('sabatino');
-insert into modalities (name_modality) values ('internado');
-insert into modalities (name_modality) values ('online');
-
-insert into modality_level (id_modality, id_level) values (1, 2); -- sabatino → básico
-insert into modality_level (id_modality, id_level) values (2, 1); -- internado → bachillerato
-insert into modality_level (id_modality, id_level) values (2, 2); -- internado → básico
-insert into modality_level (id_modality, id_level) values (3, 2); -- online → básico
-
--- materias
-insert into subjects (name_subject, code, semester) values
-('matemáticas i', 'mat101', 1),
-('programación i', 'pro101', 1),
-('química', 'qui101', 1),
-('álgebra', 'alg101', 1),
-('doctrina cristiana i', 'dc01', 1);
-
--- relación exacta materia - modalidad - nivel
-insert into subject_modality_level (id_subject, id_modality, id_level) values
-(1, 1, 2), -- matemáticas i → sabatino, básico
-(1, 2, 2), -- matemáticas i → internado, básico
-(1, 3, 2), -- matemáticas i → online, básico
-(2, 1, 2), -- programación i → sabatino, básico
-(2, 2, 2),
-(2, 3, 2),
-(3, 2, 2), -- química → internado, básico
-(4, 2, 1), -- álgebra → internado, bachillerato
-(5, 2, 2); -- doctrina cristiana i → internado, básico
-
-insert into teaching (id_user, highest_degree, phone_number)
-values (3, 'maestría en educación', '8341234567');
-
-insert into students (control_number, id_user, id_modality, semester)
-values (20250001, 2, 1, 2);
 
 select * from students;
-
--- consulta materias completas
-select 
-  s.name_subject, 
-  s.code, 
-  s.semester, 
-  m.name_modality, 
-  el.name_level
-from subject_modality_level sml
-join subjects s on s.id = sml.id_subject
-join modalities m on m.id = sml.id_modality
-join education_levels el on el.id = sml.id_level
-order by el.name_level, m.name_modality, s.semester, s.name_subject;
-
-SELECT ts.id, u.first_name, u.last_name, s.name_subject
-  FROM teacher_subjects ts
-  JOIN users u ON ts.id_user = u.id
-  JOIN subjects s ON ts.id_subject = s.id
-  ORDER BY u.first_name, s.name_subject;
-  
-SELECT  m.name_modality,
-  sml.id_level,
-  sub.semester,
-  sub.name_subject,
-  sub.code,
-  CONCAT(u.first_name, ' ', u.last_name) AS docente
-FROM teacher_subjects ts
-JOIN users u ON u.id = ts.id_user
-JOIN subjects sub ON sub.id = ts.id_subject
-JOIN subject_modality_level sml ON sml.id_subject = sub.id
-JOIN modalities m ON m.id = sml.id_modality
-WHERE u.id_perfil = 2
-ORDER BY m.name_modality, sub.semester, sub.name_subject;
->>>>>>> e864ce84f829a7a5741940fb7618c89c105f5b5d
