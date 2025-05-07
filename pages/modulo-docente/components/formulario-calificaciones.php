@@ -1,75 +1,98 @@
 <?php
+// formulario-calificaciones.php
 if (!isset($_GET['grupo'])) {
     echo "<p class='text-danger'>No se especificó un grupo.</p>";
     return;
 }
+$grupoId = (int)$_GET['grupo'];
 
-$grupoId = $_GET['grupo'];
+// 1) Obtener la asignación materia↔grupo (tomamos la primera si hubiera varias)
+$sqlGsa = "
+  SELECT 
+    gsa.id            AS gsa_id,
+    gsa.id_subject    AS subject_id,
+    g.id_modality_level,
+    sub.semester
+  FROM group_subject_assignment gsa
+  JOIN grupos g  ON gsa.id_group = g.id
+  JOIN subjects sub ON sub.id = gsa.id_subject
+  WHERE g.id = ?
+  LIMIT 1
+";
+$stmt = $pdo->prepare($sqlGsa);
+$stmt->execute([$grupoId]);
+$asig = $stmt->fetch(PDO::FETCH_ASSOC);
 
-// Obtener unidades de la materia 'Matemáticas de prueba'
-$sqlUnidades = "SELECT s.id AS subject_id, su.total_units
-                FROM subjects s
-                JOIN subject_units su ON s.id = su.id_subject
-                WHERE s.name_subject LIKE '%Matemáticas%'";
-$unidadMat = $pdo->query($sqlUnidades)->fetch(PDO::FETCH_ASSOC);
-
-if (!$unidadMat) {
-    echo "<p>No se encontró la materia 'Matemáticas' o no tiene unidades asignadas.</p>";
+if (!$asig) {
+    echo "<p class='text-danger'>Este grupo no tiene asignada ninguna materia.</p>";
     return;
 }
 
-$subjectId = $unidadMat['subject_id'];
-$totalUnits = (int)$unidadMat['total_units'];
+$gsaId     = (int)$asig['gsa_id'];
+$subjectId = (int)$asig['subject_id'];
+$semester  = (int)$asig['semester'];
 
-// Obtener estudiantes asignados a esta materia Y pertenecientes al grupo actual
-$sqlAsignaciones = "SELECT ss.id AS student_subject_id, ss.id_user, st.first_name, st.last_name
-                    FROM student_subjects ss
-                    JOIN students st ON ss.id_user = st.id_user
-                    WHERE ss.id_subject = ? AND st.id_grupo = ?";
-$stmt = $pdo->prepare($sqlAsignaciones);
-$stmt->execute([$subjectId, $grupoId]);
-$asignaciones = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// 2) Obtener total_units de subject_units_by_semester
+$sqlUnits = "
+  SELECT total_units
+    FROM subject_units_by_semester
+   WHERE id_subject = ? 
+     AND semester   = ?
+   LIMIT 1
+";
+$stmt = $pdo->prepare($sqlUnits);
+$stmt->execute([$subjectId, $semester]);
+$row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-// Eliminar duplicados por id_user
-$asignacionesUnicas = [];
-$idsVistos = [];
-
-foreach ($asignaciones as $a) {
-    if (!in_array($a['id_user'], $idsVistos)) {
-        $asignacionesUnicas[] = $a;
-        $idsVistos[] = $a['id_user'];
-    }
+if (!$row) {
+    echo "<p class='text-danger'>No se definieron unidades para esta materia/semestre.</p>";
+    return;
 }
 
-// Obtener calificaciones
-$sqlCalificaciones = "SELECT id_student_subject, unit_number, grade FROM grades";
-$calificaciones = $pdo->query($sqlCalificaciones)->fetchAll(PDO::FETCH_ASSOC);
+$totalUnits = (int)$row['total_units'];
 
-// Indexar calificaciones
-$califIndexadas = [];
-foreach ($calificaciones as $c) {
-    $califIndexadas[$c['id_student_subject']][$c['unit_number']] = $c['grade'];
+// 3) Obtener alumnos inscritos en este grupo
+$sqlAlumnos = "
+  SELECT 
+    sga.id               AS student_subject_id,
+    u.id                 AS user_id,
+    u.first_name,
+    u.last_name
+  FROM student_group_assignment sga
+  JOIN student_subjects           ss ON ss.id = sga.student_subject_id
+  JOIN users                      u  ON u.id  = ss.id_user
+  WHERE sga.group_subject_assignment_id = ?
+";
+$stmt = $pdo->prepare($sqlAlumnos);
+$stmt->execute([$gsaId]);
+$alumnos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// 4) Indexar calificaciones existentes
+$sqlGrades = "SELECT id_enrollment, unit_number, grade FROM grades_per_unit";
+$allGrades = $pdo->query($sqlGrades)->fetchAll(PDO::FETCH_ASSOC);
+
+$califIdx = [];
+foreach ($allGrades as $g) {
+    // aquí asumimos id_enrollment === student_subject_id
+    $califIdx[$g['id_enrollment']][$g['unit_number']] = $g['grade'];
 }
 
-// Activar o desactivar modo edición
+// 5) Modo edición
 if (isset($_POST['editar'])) {
     $_SESSION['modo_edicion'] = true;
-} elseif (isset($_POST['cancelar']) || isset($_POST['guardar'])) {
+} elseif (isset($_POST['guardar']) || isset($_POST['cancelar'])) {
     unset($_SESSION['modo_edicion']);
 }
-
-$modo_edicion = isset($_SESSION['modo_edicion']);
+$modo_edicion = !empty($_SESSION['modo_edicion']);
 ?>
 
 <form method="POST" action="">
-       <?php if (isset($_GET['grupo'])): ?>
-        <input type="hidden" name="grupo" value="<?= htmlspecialchars($_GET['grupo']) ?>">
-    <?php endif; ?>
+    <input type="hidden" name="grupo" value="<?= $grupoId ?>">
     <div class="table-responsive">
         <table class="table table-bordered table-hover align-middle">
             <thead class="table-dark">
                 <tr>
-                    <th>Nombre</th>
+                    <th>Estudiante</th>
                     <?php for ($i = 1; $i <= $totalUnits; $i++): ?>
                         <th>Unidad <?= $i ?></th>
                     <?php endfor; ?>
@@ -78,51 +101,48 @@ $modo_edicion = isset($_SESSION['modo_edicion']);
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($asignacionesUnicas as $a): ?>
-                    <tr>
-                        <td><?= htmlspecialchars($a['first_name'] . ' ' . $a['last_name']) ?></td>
-                        <?php
-                        $suma = 0;
-                        $contador = 0;
-                        $studentSubjectId = $a['student_subject_id'];
-                        for ($i = 1; $i <= $totalUnits; $i++):
-                            $valor = $califIndexadas[$studentSubjectId][$i] ?? '';
-                            $suma += is_numeric($valor) ? floatval($valor) : 0;
-                            $contador += is_numeric($valor) ? 1 : 0;
-                        ?>
-                            <td>
-                                <?php if ($modo_edicion): ?>
-                                    <input type="number"
-                                        name="grades[<?= $studentSubjectId ?>][<?= $i ?>]"
-                                        value="<?= htmlspecialchars($valor) ?>"
-                                        class="form-control form-control-sm"
-                                        min="0" max="100" step="0.1">
-                                <?php else: ?>
-                                    <?= is_numeric($valor) ? htmlspecialchars($valor) : '-' ?>
-                                <?php endif; ?>
-                            </td>
-                        <?php endfor; ?>
-
-                        <td class="text-center fw-bold">
-                            <?= $contador ? number_format($suma / $contador, 1) : '-' ?>
+            <?php foreach ($alumnos as $al): ?>
+                <?php 
+                    $idSS = $al['student_subject_id'];
+                    $suma = 0; $cnt = 0;
+                ?>
+                <tr>
+                    <td><?= htmlspecialchars($al['first_name'].' '.$al['last_name']) ?></td>
+                    <?php for ($u = 1; $u <= $totalUnits; $u++):
+                        $val = $califIdx[$idSS][$u] ?? '';
+                        if (is_numeric($val)) { $suma += $val; $cnt++; }
+                    ?>
+                        <td>
+                        <?php if ($modo_edicion): ?>
+                            <input type="number"
+                                   name="grades[<?= $idSS ?>][<?= $u ?>]"
+                                   value="<?= htmlspecialchars($val) ?>"
+                                   class="form-control form-control-sm"
+                                   min="0" max="100" step="0.1">
+                        <?php else: ?>
+                            <?= is_numeric($val) ? htmlspecialchars($val) : '-' ?>
+                        <?php endif; ?>
                         </td>
-
-                        <td class="text-center">
-                            <?php if ($modo_edicion): ?>
-                                <button type="submit" name="guardar" formaction="components/guardar-calificaciones.php" class="btn btn-success btn-sm">
-                                    <i class="bi bi-save"></i>
-                                </button>
-                                <button type="submit" name="cancelar" class="btn btn-secondary btn-sm">
-                                    <i class="bi bi-x-lg"></i>
-                                </button>
-                            <?php else: ?>
-                                <button type="submit" name="editar" class="btn btn-warning btn-sm">
-                                    <i class="bi bi-pencil"></i> Editar
-                                </button>
-                            <?php endif; ?>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
+                    <?php endfor; ?>
+                    <td class="text-center fw-bold">
+                        <?= $cnt ? number_format($suma/$cnt,1) : '-' ?>
+                    </td>
+                    <td class="text-center">
+                        <?php if ($modo_edicion): ?>
+                            <button name="guardar" class="btn btn-success btn-sm">
+                                <i class="bi bi-save"></i>
+                            </button>
+                            <button name="cancelar" class="btn btn-secondary btn-sm">
+                                <i class="bi bi-x-lg"></i>
+                            </button>
+                        <?php else: ?>
+                            <button name="editar" class="btn btn-warning btn-sm">
+                                <i class="bi bi-pencil"></i> Editar
+                            </button>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
             </tbody>
         </table>
     </div>
