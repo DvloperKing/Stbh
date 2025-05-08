@@ -128,7 +128,7 @@ $horarios_result = $MYSQLI->query($query_horarios);
   <!-- Formulario para asignar horario -->
   <div class="card shadow-sm border-0">
     <div class="card-body">
-      <h4 class="mb-4 text-center ">Asignar Horario a una Materia de Grupo</h4>
+      <h4 class="mb-4 text-center">Asignar Horario a una Materia de Grupo</h4>
       <form method="post" class="row g-4">
         <input type="hidden" name="asignar_horario" value="1">
         <div class="col-md-5">
