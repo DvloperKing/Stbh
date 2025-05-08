@@ -49,6 +49,7 @@ $PerfilesData = _Q($SQLPerfiles, $MYSQLI, 2);
   <title>STBH | Usuarios</title>
   <link rel="icon" type="image/png" href="../assets/img/icon_stbh.png">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
   <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
   <link href="../assets/css/soft-ui-dashboard.css?v=1.0.8" rel="stylesheet" />
@@ -72,8 +73,8 @@ $PerfilesData = _Q($SQLPerfiles, $MYSQLI, 2);
   <div class="hero-box">
     <h2>Sección Usuarios</h2>
     <div class="btn-group">
-      <a href="admin.php" class="btn-stbh btn-lg">Regresar al Menú Principal</a>
-      <button class="btn-stbh btn-lg btn_Alta">Nuevo Usuario</button>
+      <a href="admin.php" class="btn-stbh btn-lg bi bi-arrow-left-circle">Regresar al Menú Principal</a>
+      <button class="btn-stbh btn-lg btn_Alta ">Nuevo Usuario</button>
     </div>
   </div>
 </section>

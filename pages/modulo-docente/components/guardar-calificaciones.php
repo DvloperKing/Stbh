@@ -7,7 +7,7 @@ if (!isset($_POST['grades']) || !is_array($_POST['grades'])) {
     return;
 }
 
-// Obtener grupo desde POST (no GET)
+// Obtener grupo desde POST
 if (!isset($_POST['grupo'])) {
     echo "<p class='text-danger'>No se ha especificado el grupo al guardar.</p>";
     return;
@@ -19,20 +19,21 @@ $grades = $_POST['grades'];
 $pdo->beginTransaction();
 
 try {
-    foreach ($grades as $studentSubjectId => $unidades) {
+    foreach ($grades as $id_enrollment => $unidades) {
         foreach ($unidades as $unitNumber => $grade) {
             if ($grade === '') continue;
 
-            $stmt = $pdo->prepare("SELECT COUNT(*) FROM grades WHERE id_student_subject = ? AND unit_number = ?");
-            $stmt->execute([$studentSubjectId, $unitNumber]);
+            // Verificar si ya existe la calificación
+            $stmt = $pdo->prepare("SELECT COUNT(*) FROM grades_per_unit WHERE id_enrollment = ? AND unit_number = ?");
+            $stmt->execute([$id_enrollment, $unitNumber]);
             $exists = $stmt->fetchColumn() > 0;
 
             if ($exists) {
-                $update = $pdo->prepare("UPDATE grades SET grade = ? WHERE id_student_subject = ? AND unit_number = ?");
-                $update->execute([$grade, $studentSubjectId, $unitNumber]);
+                $update = $pdo->prepare("UPDATE grades_per_unit SET grade = ? WHERE id_enrollment = ? AND unit_number = ?");
+                $update->execute([$grade, $id_enrollment, $unitNumber]);
             } else {
-                $insert = $pdo->prepare("INSERT INTO grades (id_student_subject, unit_number, grade) VALUES (?, ?, ?)");
-                $insert->execute([$studentSubjectId, $unitNumber, $grade]);
+                $insert = $pdo->prepare("INSERT INTO grades_per_unit (id_enrollment, unit_number, grade) VALUES (?, ?, ?)");
+                $insert->execute([$id_enrollment, $unitNumber, $grade]);
             }
         }
     }
@@ -40,7 +41,7 @@ try {
     $pdo->commit();
     unset($_SESSION['modo_edicion']);
 
-    // Redirigir con POST → GET (ya que ahora tenemos el grupo)
+    // Redirigir al listado nuevamente
     header("Location: ../lista-alumnos.php?grupo=" . urlencode($grupo));
     exit;
 

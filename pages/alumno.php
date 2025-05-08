@@ -50,6 +50,7 @@ $MODALIDADES = $MYSQLI->query("SELECT * FROM modalities ORDER BY name_modality")
   <title>STBH | Usuarios</title>
   <link rel="icon" type="image/png" href="../assets/img/icon_stbh.png">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
   <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
   <link href="../assets/css/soft-ui-dashboard.css?v=1.0.8" rel="stylesheet" />
@@ -69,8 +70,10 @@ $MODALIDADES = $MYSQLI->query("SELECT * FROM modalities ORDER BY name_modality")
   <div class="hero-box">
     <h2>Sección Alumnos</h2>
     <div class="btn-group">
-      <a href="admin.php" class="btn-stbh btn-lg">Regresar al Menú Principal</a>
-    </div>
+    <a href="admin.php" class="btn-stbh btn-lg btn btn-primary btn-lg px-5">
+      <i class="bi bi-arrow-left-circle me-2 "></i> Regresar al Menú Principal
+    </a>    
+</div>
   </div>
 </section>
 

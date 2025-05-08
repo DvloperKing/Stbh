@@ -45,6 +45,7 @@ $RESULT = $MYSQLI->query($SQL);
   <title>STBH | Docentes</title>
   <link rel="icon" type="image/png" href="../assets/img/icon_stbh.png">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
   <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
   <link href="../assets/css/soft-ui-dashboard.css?v=1.0.8" rel="stylesheet" />
@@ -54,7 +55,7 @@ $RESULT = $MYSQLI->query($SQL);
 <div class="logos-container">
   <div class="logos">
     <img src="../assets/img/cnbm.png" alt="CNBM" class="logo-img">
-    <img src="../pages/Stbh-docentes/assets/img/CRBH3.png" alt="CRBH" class="logo-img">
+    <img src="../assets/img/CRBH3.png" alt="CRBH" class="logo-img">
     <img src="../assets/img/stbm.png" alt="STBM" class="logo-img">
     <img src="../assets/img/logo2.png" alt="STBH" class="logo-img">
   </div>
@@ -64,7 +65,9 @@ $RESULT = $MYSQLI->query($SQL);
   <div class="hero-box">
     <h2>Sección Docentes</h2>
     <div class="btn-group">
-      <a href="admin.php" class="btn-stbh btn-lg">Regresar al Menú Principal</a>
+      <a href="admin.php" class="btn-stbh btn-lg btn btn-primary btn-lg px-5">
+        <i class="bi bi-arrow-left-circle me-2 "></i> Regresar al Menú Principal
+      </a> 
     </div>
   </div>
 </section>

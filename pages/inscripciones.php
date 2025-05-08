@@ -74,9 +74,10 @@ if (isset($_POST['id_modality'], $_POST['semester'], $_POST['id_level'])) {
   <title>STBH | Inscripciones</title>
   <link rel="icon" type="image/png" href="../assets/img/icon_stbh.png">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
   <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
-  <link href="../assets/css/soft-ui-dashboard.css?v=1.0.8" rel="stylesheet" />
+  <link href="../assets/css/soft-ui-dashboard.css?v=1.1.1" rel="stylesheet" />
   <link href="../assets/css/usuarios.css" rel="stylesheet" />
   <style>
     body { background-color: #f8f9fa; }
@@ -115,11 +116,22 @@ if (isset($_POST['id_modality'], $_POST['semester'], $_POST['id_level'])) {
 
 <div class="container-main">
 
-<div class="card shadow-sm border-0 mb-4">
+<!-- <div class="card shadow-sm border-0 mb-4">
     <div class="card-body text-center">
-      <a href="admin.php" class="btn btn-primary btn-lg px-5">← Regresar al Menú Principal</a>
+      <a href="admin.php" class="btn-stbh btn-lg btn btn-primary btn-lg px-5">
+        <i class="bi bi-arrow-left-circle me-2 "></i> Regresar al Menú Principal
+      </a>    
     </div>
+  </div> -->
+  <section class="card-hero d-flex justify-content-center mt-4">
+  <div class="d-flex flex-column align-items-center align-content-center">
+    <p>
+      <a href="admin.php" class="btn btn-lg bg-white custom-btn px25 px-4 fs-4">
+        <i class="bi bi-arrow-left-circle me-2" style="font-size: 25px;"></i> Regresar al Menú Principal
+      </a>
+    </p>
   </div>
+</section>
 
   <div class="card shadow-sm border-0">
     <div class="card-body">
@@ -188,7 +200,7 @@ if (isset($_POST['id_modality'], $_POST['semester'], $_POST['id_level'])) {
         <div class="row mt-3">
           <div class="col-md-6">
             <label class="form-label">Año escolar:</label>
-            <input type="number" name="enrollment_year" class="form-control" min="<?= date('Y') ?>" value="<?= date('Y') ?>" required>
+            <input type="number" name="enrollment_year" class="form-control" min="<?= date('Y') ?>" max="<?= date('Y') ?>" value="<?= date('Y') ?>" required>
           </div>
           <div class="col-md-6">
             <label class="form-label">Periodo escolar:</label>

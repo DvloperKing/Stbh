@@ -5,40 +5,41 @@ require_once 'conexion.php';
 // Obtener el grupo desde la URL
 $grupo = $_GET['grupo'] ?? null;
 $alumnos = [];
-
-
+$infoGrupo = [];
 
 if ($grupo) {
     // Verificar que el grupo exista
-    $checkGrupo = $pdo->prepare("SELECT COUNT(*) FROM subject_group WHERE id_grupo = ?");
+    $checkGrupo = $pdo->prepare("SELECT COUNT(*) FROM group_subject_assignment WHERE id_group = ?");
     $checkGrupo->execute([$grupo]);
     $existeGrupo = $checkGrupo->fetchColumn();
 
-if ($existeGrupo) {
-    // Obtener nombre de la materia y grupo
-    $stmtGrupo = $pdo->prepare("
-        SELECT g.id_grupo, m.name_subject
-        FROM subject_group g
-        INNER JOIN subjects m ON g.id_subjects = m.id
-        WHERE g.id_grupo = ?
-    ");
-    $stmtGrupo->execute([$grupo]);
-    $infoGrupo = $stmtGrupo->fetch(PDO::FETCH_ASSOC);
+    if ($existeGrupo) {
+        // Obtener nombre de la materia (una de ellas) y grupo
+        $stmtGrupo = $pdo->prepare("
+            SELECT gsa.id_group, g.name AS group_name, s.name_subject
+            FROM group_subject_assignment gsa
+            JOIN subjects s ON gsa.id_subject = s.id
+            JOIN grupos g ON g.id = gsa.id_group
+            WHERE gsa.id_group = ?
 
-    // Obtener alumnos del grupo
-    $stmt = $pdo->prepare("
-        SELECT s.control_number, u.first_name, u.last_name
-        FROM students s
-        JOIN users u ON s.id_user = u.id
-        JOIN student_subjects ss ON ss.id_user = u.id
-        JOIN subject_group sg ON sg.id = ?
-        WHERE ss.id_subject = sg.id_subjects
-    ");
-    $stmt->execute([$grupo]);
-    $alumnos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} else {
-    $mensajeError = "El grupo especificado no existe.";
-}
+        ");
+        $stmtGrupo->execute([$grupo]);
+        $infoGrupo = $stmtGrupo->fetch(PDO::FETCH_ASSOC);
+
+        // Obtener alumnos del grupo (inscritos en alguna materia del grupo)
+        $stmt = $pdo->prepare("
+            SELECT DISTINCT stu.control_number, u.first_name, u.last_name
+            FROM student_subject_enrollment e
+            JOIN students stu ON e.id_user = stu.id_user
+            JOIN users u ON u.id = stu.id_user
+            JOIN group_subject_assignment gsa ON gsa.id_group = ?
+            WHERE e.id_subject = gsa.id_subject
+        ");
+        $stmt->execute([$grupo]);
+        $alumnos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } else {
+        $mensajeError = "El grupo especificado no existe.";
+    }
 }
 
 // Obtener la pestaña activa desde la URL
@@ -47,7 +48,6 @@ $tab_activa = $_GET['tab'] ?? 'calificaciones';
 
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -60,41 +60,95 @@ $tab_activa = $_GET['tab'] ?? 'calificaciones';
   <link href="../../assets/css/nucleo-icons.css" rel="stylesheet" />
   <link href="../../assets/css/nucleo-svg.css" rel="stylesheet" />
   <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
-  <link id="pagestyle" href="../../assets/css/soft-ui-dashboard.css?v=1.0.8" rel="stylesheet" />
+  <link id="pagestyle" href="../../assets/css/soft-ui-dashboard.css?v=1.1.0" rel="stylesheet" />
+  <style>
+    .logos-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #fff;
+      padding: 12px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      gap: 30px;
+    }
+    .logo-img {
+      height: 90px;
+      width: auto;
+    }
+    .card-hero {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 30px 15px 0;
+    }
+    .hero-box {
+      background: #ffffff;
+      padding: 25px 35px;
+      border-radius: 15px;
+      border: 1px solid #eee;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.07);
+      text-align: center;
+      max-width: 500px;
+      width: 100%;
+    }
+    .hero-box h2 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #0b0146;
+      margin-bottom: 10px;
+    }
+    .btn-stbh {
+      background-color: #0b0146;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 5px;
+      transition: background-color 0.3s, transform 0.2s;
+      font-weight: 500;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-stbh:hover {
+      background-color: #12025a;
+      transform: translateY(-2px);
+    }
+    .card h4 {
+      color: #0b0146;
+    }
+    /* .text-primary {
+      color: #0b0146 !important;
+    } */
+
+  </style>
 </head>
 
 <body>
-    <div class="logos-container">
-    <div class="logos">
-      <img class="rounded" src="../../assets/img/cnbm.png" alt="CNBM Logo">
-      <img class="rounded" src="../../assets/img/CRBH3.png" alt="CRBH Logo">
-      <img class="rounded" src="../../assets/img/stbm.png" alt="STBM Logo">
-    </div>
+  <div class="logos-container">
+    <img src="../../assets/img/cnbm.png" alt="CNBM" class="logo-img">
+    <img src="../../assets/img/CRBH3.png" alt="CRBH" class="logo-img">
+    <img src="../../assets/img/stbm.png" alt="STBM" class="logo-img">
+    <img src="../../assets/img/logo2.png" alt="Marca" class="logo-img">
   </div>
 
   <main>
-<!-- CARD DE REGRESO AL MÓDULO DE INICIO -->
-<section class="card-hero d-flex justify-content-center mt-4">
-  <div class=" border border-[#0b0146]-8 p-4 rounded-2 d-flex flex-column justify-conent-center">
-    <h2>Regresar a la página principal.</h2>
+    <!-- CARD DE REGRESO AL MÓDULO DE INICIO -->
+    <section class="card-hero d-flex justify-content-center mt-4">
     <div class="d-flex flex-column align-items-center align-content-center">
-      <p><a href="../M_docente.php" class="btn btn-outline-[#0b0146]">
-      <i class="bi bi-arrow-left-circle"></i> Volver al módulo de inicio
-    </a></p>
-    </div>
+          <p><a href="../M_docente.php" class="btn btn-outline-[#0b0146]">
+            <i class="bi bi-arrow-left-circle"></i> Volver al módulo de inicio
+          </a></p>
+        </div>
+    </section>
     
-  </div>
-</section>
-<?php if (!empty($infoGrupo)): ?>
-<section class="container my-4">
-  <div class="text-center">
-    <h2 class="text-primary"><?= htmlspecialchars($infoGrupo['name_subject']) ?></h2>
-    <p class="text-muted">Grupo: <?= htmlspecialchars($infoGrupo['id_grupo']) ?></p>
-  </div>
-</section>
-<?php endif; ?>
+    <?php if (!empty($infoGrupo)): ?>
+    <section class="container my-4">
+      <div class="text-center">
+        <h2 class="text-primary"><?= htmlspecialchars($infoGrupo['name_subject']) ?></h2>
+        <p class="text-muted">Grupo: <?= htmlspecialchars($infoGrupo['group_name']) ?></p>
 
-
+      </div>
+    </section>
+    <?php endif; ?>
 
     <section class="my-4 mx-2">
       <!-- Pestañas como enlaces -->
@@ -120,8 +174,6 @@ $tab_activa = $_GET['tab'] ?? 'calificaciones';
         <?php endif; ?>
       </div>
 
-
-
       <!-- Contenido de las pestañas -->
       <div class="tab-content mt-4">
         <!-- Pestaña de calificaciones -->
@@ -136,10 +188,10 @@ $tab_activa = $_GET['tab'] ?? 'calificaciones';
         <!-- Pestaña de asistencia -->
         <div class="tab-pane fade <?= $tab_activa === 'asistencia' ? 'show active' : '' ?>" role="tabpanel">
           <?php 
-         if ($tab_activa === 'asistencia' && isset($_GET['grupo'])) {
-          $grupoId = $_GET['grupo']; // Esto es CLAVE
-          include 'components/formulario-asistencia.php';
-            }
+          if ($tab_activa === 'asistencia' && isset($_GET['grupo'])) {
+            $grupoId = $_GET['grupo'];
+            include 'components/formulario-asistencia.php';
+          }
           ?>
         </div>
       </div>
@@ -159,5 +211,4 @@ $tab_activa = $_GET['tab'] ?? 'calificaciones';
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <script src="../../assets/js/soft-ui-dashboard.min.js?v=1.0.7"></script>
 </body>
-
 </html>

@@ -7,7 +7,8 @@ try {
         SELECT 
             s.id AS subject_id,
             s.name_subject,
-            g.name AS id_grupo,
+            g.id AS grupo_id,
+            g.name AS grupo_name,
             m.name_modality,
             e.name_level,
             '' AS horario
@@ -37,7 +38,8 @@ try {
         }
 
         $data[$idMateria]['grupos'][] = [
-            'id_grupo' => $fila['id_grupo'],
+            'grupo_id' => $fila['grupo_id'],
+            'grupo_name' => $fila['grupo_name'],
             'modalidad' => $fila['name_modality'],
             'nivel' => $fila['name_level'],
             'horario' => $fila['horario'] ?? 'No asignado'
@@ -45,14 +47,6 @@ try {
     }
 } catch (PDOException $e) {
     echo "Error al obtener grupos: " . $e->getMessage();
-}
-
-$grupo = $_GET['grupo'] ?? null;
-
-if ($grupo) {
-    $stmt = $pdo->prepare("SELECT * FROM students WHERE id_grupo = ?");
-    $stmt->execute([$grupo]);
-    $alumnos = $stmt->fetchAll();
 }
 ?>
 
@@ -125,8 +119,8 @@ if ($grupo) {
       color: #0b0146;
     }
     .text-primary {
-    color: #0b0146 !important;
-}
+      color: #0b0146 !important;
+    }
   </style>
 </head>
 
@@ -163,15 +157,14 @@ if ($grupo) {
       <div class="col-12 col-md-6 col-lg-3 mb-4">
         <div class="card h-100 p-3 shadow-sm border-2 d-flex flex-column justify-content-between">
           <div class="mb-3 text-center">
-            <h5><?= htmlspecialchars($grupo['id_grupo']) ?></h5>
+            <h5><?= htmlspecialchars($grupo['grupo_name']) ?></h5>
             <p class="text-muted mb-1"><?= htmlspecialchars($grupo['modalidad']) ?></p>
             <p class="text-muted mb-1"><?= htmlspecialchars($grupo['nivel']) ?></p>
             <p class="text-muted"><?= htmlspecialchars($grupo['horario']) ?></p>
           </div>
-          <a href="./modulo-docente/lista-alumnos.php?grupo=<?= $grupo['id_grupo'] ?>" class="btn-stbh text-center">
+          <a href="./modulo-docente/lista-alumnos.php?grupo=<?= $grupo['grupo_id'] ?>" class="btn-stbh text-center">
             Ir <i class="bi bi-arrow-right-circle ms-2"></i>
-            </a>
-
+          </a>
         </div>
       </div>
       <?php endforeach; ?>
@@ -179,8 +172,6 @@ if ($grupo) {
   </div>
   <?php endforeach; ?>
 </section>
-
-
 
 <!-- FOOTER -->
 <footer class="footer py-4 text-center text-secondary">

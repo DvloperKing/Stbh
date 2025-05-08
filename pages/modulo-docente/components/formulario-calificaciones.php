@@ -6,49 +6,77 @@ if (!isset($_GET['grupo'])) {
 
 $grupoId = $_GET['grupo'];
 
-// Obtener unidades de la materia 'Matemáticas de prueba'
-$sqlUnidades = "SELECT s.id AS subject_id, su.total_units
-                FROM subjects s
-                JOIN subject_units su ON s.id = su.id_subject
-                WHERE s.name_subject LIKE '%Matemáticas%'";
-$unidadMat = $pdo->query($sqlUnidades)->fetch(PDO::FETCH_ASSOC);
+// Obtener información del grupo, materia, modalidad y semestre
+$sqlInfo = "
+    SELECT 
+        gsa.id AS group_assignment_id,
+        s.id AS subject_id,
+        s.name_subject,
+        s.semester,
+        ml.id_modality
+    FROM group_subject_assignment gsa
+    JOIN subjects s ON gsa.id_subject = s.id
+    JOIN grupos g ON g.id = gsa.id_group
+    JOIN modality_level ml ON g.id_modality_level = ml.id
+    WHERE gsa.id_group = ?
+    LIMIT 1
+";
+$stmtInfo = $pdo->prepare($sqlInfo);
+$stmtInfo->execute([$grupoId]);
+$info = $stmtInfo->fetch(PDO::FETCH_ASSOC);
 
-if (!$unidadMat) {
-    echo "<p>No se encontró la materia 'Matemáticas' o no tiene unidades asignadas.</p>";
+if (!$info) {
+    echo "<p class='text-danger'>No se encontró información del grupo o la materia.</p>";
     return;
 }
 
-$subjectId = $unidadMat['subject_id'];
-$totalUnits = (int)$unidadMat['total_units'];
+$subjectId = $info['subject_id'];
+$modalityId = $info['id_modality'];
+$semester = $info['semester'];
 
-// Obtener estudiantes asignados a esta materia Y pertenecientes al grupo actual
-$sqlAsignaciones = "SELECT ss.id AS student_subject_id, ss.id_user, st.first_name, st.last_name
-                    FROM student_subjects ss
-                    JOIN students st ON ss.id_user = st.id_user
-                    WHERE ss.id_subject = ? AND st.id_grupo = ?";
-$stmt = $pdo->prepare($sqlAsignaciones);
-$stmt->execute([$subjectId, $grupoId]);
-$asignaciones = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Obtener total de unidades de la materia según modalidad y semestre
+$sqlUnidades = "
+    SELECT total_units
+    FROM subject_units_by_semester
+    WHERE id_subject = ? AND id_modality = ? AND semester = ?
+";
+$stmtUnidades = $pdo->prepare($sqlUnidades);
+$stmtUnidades->execute([$subjectId, $modalityId, $semester]);
+$unidadMat = $stmtUnidades->fetch(PDO::FETCH_ASSOC);
 
-// Eliminar duplicados por id_user
-$asignacionesUnicas = [];
-$idsVistos = [];
-
-foreach ($asignaciones as $a) {
-    if (!in_array($a['id_user'], $idsVistos)) {
-        $asignacionesUnicas[] = $a;
-        $idsVistos[] = $a['id_user'];
-    }
+if (!$unidadMat) {
+    echo "<p>No se encontraron unidades registradas para esta materia.</p>";
+    return;
 }
 
-// Obtener calificaciones
-$sqlCalificaciones = "SELECT id_student_subject, unit_number, grade FROM grades";
+$totalUnits = (int)$unidadMat['total_units'];
+
+// Obtener estudiantes inscritos en esta materia
+$sqlAsignaciones = "
+    SELECT 
+        e.id AS enrollment_id,
+        u.id AS id_user,
+        u.first_name,
+        u.last_name
+    FROM student_subject_enrollment e
+    JOIN users u ON e.id_user = u.id
+    WHERE e.id_subject = ? AND e.id_modality = ? AND e.semester = ?
+";
+$stmt = $pdo->prepare($sqlAsignaciones);
+$stmt->execute([$subjectId, $modalityId, $semester]);
+$asignaciones = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Obtener calificaciones por unidad
+$sqlCalificaciones = "
+    SELECT id_enrollment, unit_number, grade 
+    FROM grades_per_unit
+";
 $calificaciones = $pdo->query($sqlCalificaciones)->fetchAll(PDO::FETCH_ASSOC);
 
 // Indexar calificaciones
 $califIndexadas = [];
 foreach ($calificaciones as $c) {
-    $califIndexadas[$c['id_student_subject']][$c['unit_number']] = $c['grade'];
+    $califIndexadas[$c['id_enrollment']][$c['unit_number']] = $c['grade'];
 }
 
 // Activar o desactivar modo edición
@@ -62,9 +90,7 @@ $modo_edicion = isset($_SESSION['modo_edicion']);
 ?>
 
 <form method="POST" action="">
-       <?php if (isset($_GET['grupo'])): ?>
-        <input type="hidden" name="grupo" value="<?= htmlspecialchars($_GET['grupo']) ?>">
-    <?php endif; ?>
+    <input type="hidden" name="grupo" value="<?= htmlspecialchars($grupoId) ?>">
     <div class="table-responsive">
         <table class="table table-bordered table-hover align-middle">
             <thead class="table-dark">
@@ -78,22 +104,22 @@ $modo_edicion = isset($_SESSION['modo_edicion']);
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($asignacionesUnicas as $a): ?>
+                <?php foreach ($asignaciones as $a): ?>
                     <tr>
                         <td><?= htmlspecialchars($a['first_name'] . ' ' . $a['last_name']) ?></td>
                         <?php
                         $suma = 0;
                         $contador = 0;
-                        $studentSubjectId = $a['student_subject_id'];
+                        $enrollmentId = $a['enrollment_id'];
                         for ($i = 1; $i <= $totalUnits; $i++):
-                            $valor = $califIndexadas[$studentSubjectId][$i] ?? '';
+                            $valor = $califIndexadas[$enrollmentId][$i] ?? '';
                             $suma += is_numeric($valor) ? floatval($valor) : 0;
                             $contador += is_numeric($valor) ? 1 : 0;
                         ?>
                             <td>
                                 <?php if ($modo_edicion): ?>
                                     <input type="number"
-                                        name="grades[<?= $studentSubjectId ?>][<?= $i ?>]"
+                                        name="grades[<?= $enrollmentId ?>][<?= $i ?>]"
                                         value="<?= htmlspecialchars($valor) ?>"
                                         class="form-control form-control-sm"
                                         min="0" max="100" step="0.1">

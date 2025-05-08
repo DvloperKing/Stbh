@@ -1,0 +1,7 @@
+.table-dark { --bs-table-bg: #0b0146; }
+    .container-main { max-width: 1200px; margin: 0 auto; padding: 20px 15px; }
+    .card { border-radius: 15px; overflow: hidden; margin-bottom: 40px; }
+    .card-body form .form-label { font-weight: 600; }
+    .table td, .table th { vertical-align: middle; padding: 0.75rem; }
+    .card-hero { margin-bottom: 30px; text-align: center; }
+    .hero-box { padding: 20px; }

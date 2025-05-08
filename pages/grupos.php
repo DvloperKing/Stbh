@@ -102,20 +102,11 @@ while ($row = $modniv_query->fetch_assoc()) {
   <link rel="icon" type="image/png" href="../assets/img/icon_stbh.png">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
   <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
-  <link href="../assets/css/soft-ui-dashboard.css?v=1.0.8" rel="stylesheet" />
+  <link href="../assets/css/soft-ui-dashboard.css?v=1.1.2" rel="stylesheet" />
   <link href="../assets/css/usuarios.css" rel="stylesheet" />
-  <style>
-    .btn-primary { background-color: #0b0146 !important; }
-    .btn-success { background-color: #f4a701 !important; border-color: #f4a701; }
-    .table-dark { --bs-table-bg: #0b0146; }
-    .container-main { max-width: 1200px; margin: 0 auto; padding: 20px 15px; }
-    .card { border-radius: 15px; overflow: hidden; margin-bottom: 40px; }
-    .card-body form .form-label { font-weight: 600; }
-    .table td, .table th { vertical-align: middle; padding: 0.75rem; }
-    .card-hero { margin-bottom: 30px; text-align: center; }
-    .hero-box { padding: 20px; }
-  </style>
+  <link href="../assets/css/cards.css" rel="stylesheet" />
 </head>
 <body class="bg-light">
 <div class="logos-container">
@@ -128,13 +119,15 @@ while ($row = $modniv_query->fetch_assoc()) {
 </div>
 
 <div class="container-main">
-<div class="card shadow-sm border-0 mb-4">
-  <div class="card-body text-center">
-    <a href="admin.php" class="btn btn-primary btn-lg px-5">
-      ← Regresar al Menú Principal
-    </a>
+<section class="card-hero d-flex justify-content-center mt-4">
+  <div class="d-flex flex-column align-items-center align-content-center">
+    <p>
+      <a href="admin.php" class="btn btn-lg bg-white custom-btn px25 px-4 fs-4">
+        <i class="bi bi-arrow-left-circle me-2" style="font-size: 25px;"></i> Regresar al Menú Principal
+      </a>
+    </p>
   </div>
-</div>
+</section>
 
   <?php if (isset($_GET['grupo_creado'])): ?>
     <div class='alert alert-success text-center mt-3'>Grupo creado correctamente.</div>

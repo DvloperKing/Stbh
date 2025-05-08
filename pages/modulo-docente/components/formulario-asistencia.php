@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['insertar_fechas'])) {
 
         foreach ($rango as $fecha) {
             $formato = $fecha->format('Y-m-d');
-            $stmt = $pdo->prepare("INSERT IGNORE INTO school_calendar (date, is_school_day) VALUES (?, 1)");
+            $stmt = $pdo->prepare("INSERT IGNORE INTO school_calendar (dates, is_school_day) VALUES (?, 1)");
             $stmt->execute([$formato]);
         }
 
@@ -51,13 +51,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['insertar_fechas'])) {
 
 // Guardar asistencia
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar_asistencia'])) {
-    foreach ($_POST['asistencia'] as $idSS => $dias) {
+    foreach ($_POST['asistencia'] as $idEnrollment => $dias) {
         foreach ($dias as $fecha => $valor) {
             $presente = ($valor === '1') ? 1 : 0;
-            $stmt = $pdo->prepare("INSERT INTO attendance (id_student_subject, date, present)
+            $stmt = $pdo->prepare("INSERT INTO attendance (id_enrollment, attendance_date, present)
                                    VALUES (?, ?, ?)
                                    ON DUPLICATE KEY UPDATE present = VALUES(present)");
-            $stmt->execute([$idSS, $fecha, $presente]);
+            $stmt->execute([$idEnrollment, $fecha, $presente]);
         }
     }
 
@@ -81,14 +81,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar_asistencia'])
             <label for="fecha_fin" class="form-label fw-bold">Fecha de fin:</label>
             <input type="date" id="fecha_fin" name="fecha_fin" class="form-control" required>
         </div>
-        <div class="col-md-4 d-grid gap-2 mt-6">
+        <div class="col-md-4 d-grid gap-2 mt-4">
             <button type="submit" name="insertar_fechas" class="btn btn-success">
                 <i class="bi bi-calendar-plus"></i> Agregar rango
             </button>
         </div>
     </div>
 </form>
-
 
 <!-- Selector de semana -->
 <form method="GET" action="lista-alumnos.php" class="mb-3">
@@ -127,11 +126,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar_asistencia'])
             </thead>
             <tbody>
                 <?php
-                $stmt = $pdo->prepare("SELECT ss.id AS id_ss, s.first_name, s.last_name 
-                                       FROM student_subjects ss
-                                       JOIN students s ON ss.id = s.id
-                                       WHERE s.id_grupo = ?");
-                $stmt->execute([$grupo]);
+                $stmt = $pdo->prepare("
+                    SELECT e.id AS id_enrollment, u.first_name, u.last_name
+                    FROM student_subject_enrollment e
+                    JOIN users u ON e.id_user = u.id
+                    WHERE e.id_subject = (
+                        SELECT id_subject FROM group_subject_assignment WHERE id_group = ? LIMIT 1
+                    )
+                    AND e.id_modality = (
+                        SELECT ml.id_modality FROM grupos g
+                        JOIN modality_level ml ON g.id_modality_level = ml.id
+                        WHERE g.id = ? LIMIT 1
+                    )
+                    AND e.semester = (
+                        SELECT s.semester FROM group_subject_assignment ga
+                        JOIN subjects s ON ga.id_subject = s.id
+                        WHERE ga.id_group = ? LIMIT 1
+                    )
+                ");
+                $stmt->execute([$grupo, $grupo, $grupo]);
                 $estudiantes = $stmt->fetchAll();
 
                 foreach ($estudiantes as $est):
@@ -139,13 +152,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar_asistencia'])
                     <tr>
                         <td class="fw-bold"><?= htmlspecialchars($est['first_name'] . ' ' . $est['last_name']) ?></td>
                         <?php foreach ($diasSemana as $fecha):
-                            $query = $pdo->prepare("SELECT present FROM attendance WHERE id_student_subject = ? AND date = ?");
-                            $query->execute([$est['id_ss'], $fecha]);
+                            $query = $pdo->prepare("SELECT present FROM attendance WHERE id_enrollment = ? AND attendance_date = ?");
+                            $query->execute([$est['id_enrollment'], $fecha]);
                             $presente = $query->fetchColumn();
                             $checked = ($presente == 1) ? 'checked' : '';
                         ?>
                             <td>
-                                <input type="checkbox" name="asistencia[<?= $est['id_ss'] ?>][<?= $fecha ?>]" value="1" <?= $checked ?> class="form-check-input">
+                                <input type="checkbox" name="asistencia[<?= $est['id_enrollment'] ?>][<?= $fecha ?>]" value="1" <?= $checked ?> class="form-check-input">
                             </td>
                         <?php endforeach; ?>
                     </tr>
@@ -197,15 +210,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (header) {
         header.scrollIntoView({ behavior: 'smooth', inline: 'center' });
     }
-});
 
-//validación del selector de fechas
-document.addEventListener('DOMContentLoaded', () => {
     const fechaInicio = document.getElementById('fecha_inicio');
     const fechaFin = document.getElementById('fecha_fin');
     const formFechas = document.getElementById('formulario-fechas');
 
-    // Actualizar límites al seleccionar fecha de inicio
     fechaInicio.addEventListener('change', () => {
         const inicio = new Date(fechaInicio.value);
         if (!isNaN(inicio.getTime())) {
@@ -218,18 +227,16 @@ document.addEventListener('DOMContentLoaded', () => {
             fechaFin.min = minFinStr;
             fechaFin.max = maxFinStr;
 
-            // Si fecha_fin actual está fuera de rango, la limpia
             if (fechaFin.value && (fechaFin.value < minFinStr || fechaFin.value > maxFinStr)) {
                 fechaFin.value = '';
             }
         }
     });
 
-    // Validación al enviar formulario
     formFechas.addEventListener('submit', (e) => {
         const inicio = new Date(fechaInicio.value);
         const fin = new Date(fechaFin.value);
-        const diff = (fin - inicio) / (1000 * 60 * 60 * 24); // días
+        const diff = (fin - inicio) / (1000 * 60 * 60 * 24);
 
         if (isNaN(inicio) || isNaN(fin)) return;
 
