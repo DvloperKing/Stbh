@@ -52,11 +52,11 @@ $PerfilesData = _Q($SQLPerfiles, $MYSQLI, 2);
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
   <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
-  <link href="../assets/css/soft-ui-dashboard.css?v=1.0.8" rel="stylesheet" />
-  <link href="../assets/css/usuarios.css" rel="stylesheet" />
+  <link href="../assets/css/soft-ui-dashboard.css?v=1.2.2" rel="stylesheet" />
+  <link href="../assets/css/usuarios.css?v=1.0.0" rel="stylesheet" />
+  <link href="../assets/css/container.css" rel="stylesheet" />
 </head>
-
-<body>
+<body class="bg-light">
 
 <!-- LOGOS -->
 <div class="logos-container">
@@ -68,14 +68,15 @@ $PerfilesData = _Q($SQLPerfiles, $MYSQLI, 2);
   </div>
 </div>
 
-<!-- CARD DE MENÚ -->
-<section class="card-hero">
-  <div class="hero-box">
-    <h2>Sección Usuarios</h2>
-    <div class="btn-group">
-      <a href="admin.php" class="btn-stbh btn-lg bi bi-arrow-left-circle">Regresar al Menú Principal</a>
-      <button class="btn-stbh btn-lg btn_Alta ">Nuevo Usuario</button>
-    </div>
+<section class="card-hero d-flex justify-content-center mt-4">
+  <div class="d-flex flex-column align-items-center gap-0">
+    <a href="admin.php" class="btn btn-lg bg-white custom-btn px25 px-4 fs-4">
+      <i class="bi bi-arrow-left-circle me-2" style="font-size: 25px;"></i> Regresar al Menú Principal
+    </a>
+
+    <button class="btn btn-lg bg-white custom-btn px25 px-4 fs-4 btn_Alta">
+      <i class="bi bi-plus-circle me-2" style="font-size: 25px;"></i> Nuevo Usuario
+    </button>
   </div>
 </section>
 
@@ -105,37 +106,40 @@ $PerfilesData = _Q($SQLPerfiles, $MYSQLI, 2);
   </div>
 </div>
 <!-- TABLA DE USUARIOS -->
-<section class="users p-4">
-  <div class="container">
-    <div class="table-responsive">
-      <table class="table table-bordered text-center table-stbh">
-        <thead>
-          <tr>
-            <th>Email</th>
-            <th>Nombre completo</th>
-            <th>Perfil</th>
-            <th>Contraseña</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php foreach ($RESULT as $value): ?>
-          <tr>
-            <td><?= $value['email'] ?></td>
-            <td><?= $value['first_name'] . ' ' . $value['last_name'] ?></td>
-            <td><?= $value['perfil'] ?></td>
-            <td>
-              <button class="btn-stbh btn-sm btn_CambiarPass" data-id="<?= $value['id'] ?>">
-                Cambiar contraseña
-              </button>
-            </td>
-          </tr>
-          <?php endforeach; ?>
-        </tbody>
-      </table>
-    </div>
+<div class="card-container">
+  <div class="card shadow-sm border-0">
+    <section class="users p-4">
+      <div class="container">
+        <div class="table-responsive">
+          <table class="table table-bordered text-center table-stbh">
+            <thead>
+              <tr>
+                <th>Email</th>
+                <th>Nombre completo</th>
+                <th>Perfil</th>
+                <th>Contraseña</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php foreach ($RESULT as $value): ?>
+              <tr>
+                <td><?= $value['email'] ?></td>
+                <td><?= $value['first_name'] . ' ' . $value['last_name'] ?></td>
+                <td><?= $value['perfil'] ?></td>
+                <td>
+                  <button class="btn-stbh btn-sm btn_CambiarPass" data-id="<?= $value['id'] ?>">
+                    Cambiar contraseña
+                  </button>
+                </td>
+              </tr>
+              <?php endforeach; ?>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
   </div>
-</section>
-
+</div>
 <!-- FORM NUEVO USUARIO -->
 <section id="fondo">
   <div id="form_alta">

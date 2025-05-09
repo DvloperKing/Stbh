@@ -52,7 +52,6 @@ $MOD_LEVEL = _Q("select ml.id_modality, ml.id_level, m.name_modality, el.name_le
 $MOD_NAMES = _Q("select distinct name_modality from modalities order by name_modality", $MYSQLI, 2);
 $LEVELS = _Q("select distinct name_level from education_levels order by name_level", $MYSQLI, 2);
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -61,151 +60,170 @@ $LEVELS = _Q("select distinct name_level from education_levels order by name_lev
   <title>STBH | Materias</title>
   <link rel="icon" type="image/png" href="../assets/img/icon_stbh.png">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
   <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
-  <link href="../assets/css/soft-ui-dashboard.css?v=1.0.8" rel="stylesheet" />
+  <link href="../assets/css/soft-ui-dashboard.css?v=1.2.1" rel="stylesheet" />
   <link href="../assets/css/usuarios.css" rel="stylesheet" />
+  <link href="../assets/css/container.css" rel="stylesheet" />
 </head>
-<body>
-<div class="logos-container">
-  <div class="logos">
-    <img src="../assets/img/cnbm.png" alt="CNBM" class="logo-img">
-    <img src="../assets/img/CRBH3.png" alt="CRBH" class="logo-img">
-    <img src="../assets/img/stbm.png" alt="STBM" class="logo-img">
-    <img src="../assets/img/logo2.png" alt="Marca" class="logo-img">
-  </div>
-</div>
-<section class="card-hero">
-  <div class="hero-box">
-    <h2>Sección Materias</h2>
-    <div class="btn-group">
-      <a href="admin.php" class="btn-stbh btn-lg">Regresar al Menú Principal</a>
-      <button class="btn-stbh btn-lg btn_Alta">Nueva Materia</button>
+<body class="bg-light">
+
+  <div class="logos-container">
+    <div class="logos">
+      <img src="../assets/img/cnbm.png" alt="CNBM" class="logo-img">
+      <img src="../assets/img/CRBH3.png" alt="CRBH" class="logo-img">
+      <img src="../assets/img/stbm.png" alt="STBM" class="logo-img">
+      <img src="../assets/img/logo2.png" alt="Marca" class="logo-img">
     </div>
   </div>
-</section>
-<?php if (isset($_GET['success'])): ?>
-  <div class="alert alert-success text-center">Materia agregada correctamente.</div>
-<?php endif; ?>
-<div class="container mb-3 text-center">
-  <div class="row justify-content-center g-3 align-items-center">
-    <div class="col-md-4">
-      <label>Filtrar por modalidad:</label>
-      <select id="filtroModalidad" class="form-select">
-        <option value="">Todas</option>
-        <?php foreach ($MOD_NAMES as $mod) echo "<option value=\"{$mod['name_modality']}\">{$mod['name_modality']}</option>"; ?>
-      </select>
+
+  <section class="card-hero d-flex justify-content-center mt-4">
+    <div class="d-flex flex-column align-items-center gap-0">
+      <a href="admin.php" class="btn btn-lg bg-white custom-btn px25 px-4 fs-4">
+        <i class="bi bi-arrow-left-circle me-2" style="font-size: 25px;"></i> Regresar al Menú Principal
+      </a>
+      <button class="btn btn-lg bg-white custom-btn px25 px-4 fs-4 btn_Alta">
+        <i class="bi bi-plus-circle me-2" style="font-size: 25px;"></i> AÑADIR MATERIA
+      </button>
     </div>
-    <div class="col-md-4">
-      <label>Filtrar por nivel:</label>
-      <select id="filtroNivel" class="form-select">
-        <option value="">Todos</option>
-        <?php foreach ($LEVELS as $niv) echo "<option value=\"{$niv['name_level']}\">{$niv['name_level']}</option>"; ?>
-      </select>
-    </div>
+  </section>
+
+  <div class="container mt-4">
+    <?php if (isset($_GET['success'])): ?>
+      <div class="alert alert-success text-center">Materia agregada correctamente.</div>
+    <?php endif; ?>
   </div>
-</div>
-<section class="users p-4">
-  <div class="container">
-    <div class="table-responsive">
-      <table class="table table-bordered text-center table-stbh" id="tablaMaterias">
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Código</th>
-            <th>Semestre</th>
-            <th>Modalidad</th>
-            <th>Nivel</th>
-          </tr>
-        </thead>
-        <tbody>
-        <?php foreach ($RESULT as $row): ?>
-          <tr>
-            <td><?= $row['name_subject'] ?></td>
-            <td><?= $row['code'] ?></td>
-            <td><?= $row['semester'] ?></td>
-            <td><?= $row['name_modality'] ?></td>
-            <td><?= $row['name_level'] ?></td>
-          </tr>
-        <?php endforeach; ?>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</section>
-<section id="fondo">
-  <div id="form_alta">
-    <span class="cerrar">&times;</span>
-    <form method="POST" action="materias.php">
-      <h2>NUEVA MATERIA</h2>
-      <div class="mb-3">
-        <label>Nombre de la materia</label>
-        <input class="form-control" type="text" name="name_subject" required>
-      </div>
-      <div class="mb-3">
-        <label>Código</label>
-        <input class="form-control" type="text" name="code" required>
-      </div>
-      <div class="mb-3">
-        <label>Semestre</label>
-        <input class="form-control" type="number" name="semester" min="1" max="12" required>
-      </div>
-      <div class="mb-3">
-        <label>Modalidad + Nivel</label>
-        <select class="form-control" name="modality_level[]" multiple required>
-          <?php foreach ($MOD_LEVEL as $item): ?>
-            <option value="<?= $item['id_modality'] ?>-<?= $item['id_level'] ?>">
-              <?= $item['name_modality'] ?> - <?= $item['name_level'] ?>
-            </option>
-          <?php endforeach; ?>
+
+  <div class="container mb-3 text-center">
+    <div class="row justify-content-center g-3 align-items-center">
+      <div class="col-md-4">
+        <label>Filtrar por modalidad:</label>
+        <select id="filtroModalidad" class="form-select">
+          <option value="">Todas</option>
+          <?php foreach ($MOD_NAMES as $mod) echo "<option value=\"{$mod['name_modality']}\">{$mod['name_modality']}</option>"; ?>
         </select>
-        <small class="text-muted">Usa Ctrl (Windows) o Cmd (Mac) para seleccionar varias</small>
       </div>
-      <button type="submit" class="btn-stbh">Guardar</button>
-    </form>
+      <div class="col-md-4">
+        <label>Filtrar por nivel:</label>
+        <select id="filtroNivel" class="form-select">
+          <option value="">Todos</option>
+          <?php foreach ($LEVELS as $niv) echo "<option value=\"{$niv['name_level']}\">{$niv['name_level']}</option>"; ?>
+        </select>
+      </div>
+    </div>
   </div>
-</section>
-<footer class="footer py-4 text-center text-secondary">
-  STBH © <script>document.write(new Date().getFullYear())</script> | Todos los derechos reservados
-</footer>
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const fondo = document.getElementById('fondo');
-  const cerrar = document.querySelector('.cerrar');
-  const btnAlta = document.querySelector('.btn_Alta');
-  btnAlta.addEventListener('click', () => fondo.style.display = 'block');
-  cerrar.addEventListener('click', () => fondo.style.display = 'none');
 
-  const filtroModalidad = document.getElementById('filtroModalidad');
-  const filtroNivel = document.getElementById('filtroNivel');
-  const tabla = document.querySelector('#tablaMaterias tbody');
+  <div class="card-container">
+    <div class="card shadow-sm border-0">
+      <section class="users p-4">
+        <div class="table-responsive">
+          <table class="table table-bordered text-center table-stbh" id="tablaMaterias">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Código</th>
+                <th>Semestre</th>
+                <th>Modalidad</th>
+                <th>Nivel</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php foreach ($RESULT as $row): ?>
+                <tr>
+                  <td><?= $row['name_subject'] ?></td>
+                  <td><?= $row['code'] ?></td>
+                  <td><?= $row['semester'] ?></td>
+                  <td><?= $row['name_modality'] ?></td>
+                  <td><?= $row['name_level'] ?></td>
+                </tr>
+              <?php endforeach; ?>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </div>
 
-  function aplicarFiltros() {
-    const modalidad = filtroModalidad.value.toLowerCase();
-    const nivel = filtroNivel.value.toLowerCase();
-    [...tabla.rows].forEach(row => {
-      const textoModalidad = row.cells[3].textContent.toLowerCase();
-      const textoNivel = row.cells[4].textContent.toLowerCase();
-      const coincideModalidad = !modalidad || textoModalidad.includes(modalidad);
-      const coincideNivel = !nivel || textoNivel.includes(nivel);
-      row.style.display = (coincideModalidad && coincideNivel) ? '' : 'none';
+  <section id="fondo">
+    <div id="form_alta">
+      <span class="cerrar">&times;</span>
+      <form method="POST" action="materias.php">
+        <h2>NUEVA MATERIA</h2>
+        <div class="mb-3">
+          <label>Nombre de la materia</label>
+          <input class="form-control" type="text" name="name_subject" required>
+        </div>
+        <div class="mb-3">
+          <label>Código</label>
+          <input class="form-control" type="text" name="code" required>
+        </div>
+        <div class="mb-3">
+          <label>Semestre</label>
+          <input class="form-control" type="number" name="semester" min="1" max="12" required>
+        </div>
+        <div class="mb-3">
+          <label>Modalidad + Nivel</label>
+          <select class="form-control" name="modality_level[]" multiple required>
+            <?php foreach ($MOD_LEVEL as $item): ?>
+              <option value="<?= $item['id_modality'] ?>-<?= $item['id_level'] ?>">
+                <?= $item['name_modality'] ?> - <?= $item['name_level'] ?>
+              </option>
+            <?php endforeach; ?>
+          </select>
+          <small class="text-muted">Usa Ctrl (Windows) o Cmd (Mac) para seleccionar varias</small>
+        </div>
+        <button type="submit" class="btn-stbh">Guardar</button>
+      </form>
+    </div>
+  </section>
+
+  <footer class="footer py-4 text-center text-secondary">
+    STBH © <script>document.write(new Date().getFullYear())</script> | Todos los derechos reservados
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const fondo = document.getElementById('fondo');
+      const cerrar = document.querySelector('.cerrar');
+      const btnAlta = document.querySelector('.btn_Alta');
+
+      btnAlta.addEventListener('click', () => fondo.style.display = 'block');
+      cerrar.addEventListener('click', () => fondo.style.display = 'none');
+
+      const filtroModalidad = document.getElementById('filtroModalidad');
+      const filtroNivel = document.getElementById('filtroNivel');
+      const tabla = document.querySelector('#tablaMaterias tbody');
+
+      function aplicarFiltros() {
+        const modalidad = filtroModalidad.value.toLowerCase();
+        const nivel = filtroNivel.value.toLowerCase();
+
+        [...tabla.rows].forEach(row => {
+          const textoModalidad = row.cells[3].textContent.toLowerCase();
+          const textoNivel = row.cells[4].textContent.toLowerCase();
+          const coincideModalidad = !modalidad || textoModalidad.includes(modalidad);
+          const coincideNivel = !nivel || textoNivel.includes(nivel);
+          row.style.display = (coincideModalidad && coincideNivel) ? '' : 'none';
+        });
+      }
+
+      filtroModalidad.addEventListener('change', aplicarFiltros);
+      filtroNivel.addEventListener('change', aplicarFiltros);
     });
-  }
-  filtroModalidad.addEventListener('change', aplicarFiltros);
-  filtroNivel.addEventListener('change', aplicarFiltros);
-});
-</script>
-<script>
-  // Ocultar automáticamente la alerta de éxito
-  document.addEventListener('DOMContentLoaded', () => {
-    const alerta = document.querySelector('.alert-success');
-    if (alerta) {
-      setTimeout(() => {
-        alerta.style.display = 'none';
-      }, 4000); // 4 segundos
-    }
-  });
-</script>
+  </script>
+
+  <script>
+    // Ocultar automáticamente la alerta de éxito
+    document.addEventListener('DOMContentLoaded', () => {
+      const alerta = document.querySelector('.alert-success');
+      if (alerta) {
+        setTimeout(() => {
+          alerta.style.display = 'none';
+        }, 4000);
+      }
+    });
+  </script>
 
 </body>
 </html>

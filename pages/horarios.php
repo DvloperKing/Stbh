@@ -92,7 +92,7 @@ $horarios_result = $MYSQLI->query($query_horarios);
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
   <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
   <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
-  <link href="../assets/css/soft-ui-dashboard.css?v=1.1.1" rel="stylesheet" />
+  <link href="../assets/css/soft-ui-dashboard.css?v=1.2.3" rel="stylesheet" />
   <link href="../assets/css/usuarios.css" rel="stylesheet" />
   <link href="../assets/css/horarios.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -120,15 +120,16 @@ $horarios_result = $MYSQLI->query($query_horarios);
 </section>
 
   <?php if (isset($_GET['horario_asignado'])): ?>
-    <div class="alert alert-success text-center">Horario asignado correctamente.</div>
-  <?php endif; ?>
-  <?php if (isset($_GET['horario_actualizado'])): ?>
-    <div class="alert alert-warning text-center">Horario actualizado correctamente.</div>
-  <?php endif; ?>
+  <div class="alert alert-success text-center alert-auto-close">Horario asignado correctamente.</div>
+<?php endif; ?>
+<?php if (isset($_GET['horario_actualizado'])): ?>
+  <div class="alert alert-warning text-center alert-auto-close">Horario actualizado correctamente.</div>
+<?php endif; ?>
+
   <!-- Formulario para asignar horario -->
   <div class="card shadow-sm border-0">
     <div class="card-body">
-      <h4 class="mb-4 text-center">Asignar Horario a una Materia de Grupo</h4>
+      <h3 class="mb-4 text-center ">Asignar Horario a una Materia de Grupo</h3>
       <form method="post" class="row g-4">
         <input type="hidden" name="asignar_horario" value="1">
         <div class="col-md-5">
@@ -168,9 +169,10 @@ $horarios_result = $MYSQLI->query($query_horarios);
   </div>
 
   <!-- Filtro de modalidad -->
-  <div class="card shadow-sm border-0 mb-4">
-    <div class="card-body">
-      <form method="get" class="row g-3">
+  <div class="container mb-3">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <form method="get" class="row g-3 justify-content-center align-items-center text-center">
         <div class="col-md-6">
           <label class="form-label">Filtrar por modalidad:</label>
           <select name="modalidad" class="form-select" onchange="this.form.submit()">
@@ -183,7 +185,7 @@ $horarios_result = $MYSQLI->query($query_horarios);
           </select>
         </div>
           <!-- Botón para habilitar edición -->
-        <div class="text-end mb-3">
+        <div class="text-center mb-3">
         <button id="btn-habilitar-edicion" class="btn btn-warning">Actualizar Horarios</button>
         </div>
       </form>
@@ -192,7 +194,7 @@ $horarios_result = $MYSQLI->query($query_horarios);
     <!-- Tabla de horarios registrados con formularios de actualización -->
 <div class="card shadow-sm border-0">
   <div class="card-body">
-    <h4 class="mb-4 text-center">Horarios Registrados<?= $filtro_modalidad ? ' - ' . htmlspecialchars($filtro_modalidad) : '' ?></h4>
+    <h3 class="mb-4 text-center">Horarios Registrados<?= $filtro_modalidad ? ' - ' . htmlspecialchars($filtro_modalidad) : '' ?></h3>
     <div class="table-responsive">
       <table class="table table-bordered text-center">
         <thead style="background-color: #0b0146; color: white;">
@@ -237,7 +239,18 @@ $horarios_result = $MYSQLI->query($query_horarios);
     </div>
   </div>
 </div>
-
+ <!-- FOOTER -->
+  <footer class="footer py-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-10 mx-auto text-center">
+          <p class="mb-0 text-secondary">
+            STBH © <script>document.write(new Date().getFullYear())</script> | Todos los derechos Reservados
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
 <script>
   const btnEditar = document.getElementById('btn-habilitar-edicion');
   btnEditar.addEventListener('click', () => {
@@ -246,6 +259,15 @@ $horarios_result = $MYSQLI->query($query_horarios);
     });
     btnEditar.disabled = true;
   });
+  const alertas = document.querySelectorAll('.alert-auto-close');
+alertas.forEach(alerta => {
+  setTimeout(() => {
+    alerta.style.opacity = '0';
+    setTimeout(() => alerta.remove(), 500); // Da tiempo para el fade
+  }, 5000);
+});
+
 </script>
+
 </body>
 </html>

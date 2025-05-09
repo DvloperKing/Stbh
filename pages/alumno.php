@@ -53,10 +53,14 @@ $MODALIDADES = $MYSQLI->query("SELECT * FROM modalities ORDER BY name_modality")
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
   <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
-  <link href="../assets/css/soft-ui-dashboard.css?v=1.0.8" rel="stylesheet" />
+  <link href="../assets/css/soft-ui-dashboard.css?v=1.2.1" rel="stylesheet" />
   <link href="../assets/css/usuarios.css" rel="stylesheet" />
+  <style>
+  .card-container { padding: 20px;}
+  .card shadow-sm border-0 { max-width: 1200px; margin: 0 auto; }
+  </style>
 </head>
-<body>
+<body style="background-color: #e9ecef">
 <div class="logos-container">
   <div class="logos">
     <img src="../assets/img/cnbm.png" alt="CNBM" class="logo-img">
@@ -66,55 +70,57 @@ $MODALIDADES = $MYSQLI->query("SELECT * FROM modalities ORDER BY name_modality")
   </div>
 </div>
 
-<section class="card-hero">
-  <div class="hero-box">
-    <h2>Sección Alumnos</h2>
-    <div class="btn-group">
-    <a href="admin.php" class="btn-stbh btn-lg btn btn-primary btn-lg px-5">
-      <i class="bi bi-arrow-left-circle me-2 "></i> Regresar al Menú Principal
-    </a>    
-</div>
+<section class="card-hero d-flex justify-content-center mt-4">
+  <div class="d-flex flex-column align-items-center align-content-center">    <p>
+      <a href="admin.php" class="btn btn-lg bg-white custom-btn px25 px-4 fs-4">
+        <i class="bi bi-arrow-left-circle me-2" style="font-size: 25px;"></i> Regresar al Menú Principal
+      </a>
+    </p>
   </div>
 </section>
-
+<div class="container mt-4">
 <?php if (isset($_GET['success'])): ?>
   <div class="alert alert-success text-center alert-auto-close">Información del alumno guardada correctamente.</div>
 <?php endif; ?>
-
-<section class="users p-4">
-  <div class="container">
-    <div class="table-responsive">
-      <table class="table table-bordered text-center table-stbh">
-        <thead>
-          <tr>
-            <th>Email</th>
-            <th>Nombre</th>
-            <th>N. Control</th>
-            <th>Semestre</th>
-            <th>Modalidad</th>
-            <th>Acción</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php while ($row = $RESULT->fetch_assoc()): ?>
-          <tr>
-            <td><?= $row['email'] ?></td>
-            <td><?= $row['first_name'] . ' ' . $row['last_name'] ?></td>
-            <td><?= $row['control_number'] ?? '-' ?></td>
-            <td><?= $row['semester'] ?? '-' ?></td>
-            <td><?= $row['name_modality'] ?? '-' ?></td>
-            <td>
-              <?php if (!$row['control_number']): ?>
-              <button class="btn-stbh btn-sm btn_Completar" data-id="<?= $row['id'] ?>">Completar</button>
-              <?php else: ?> - <?php endif; ?>
-            </td>
-          </tr>
-          <?php endwhile; ?>
-        </tbody>
-      </table>
-    </div>
+</div>
+<div class="card-container">
+  <div class="card shadow-sm border-0">
+    <section class="users p-4">
+      <div class="container">
+        <div class="table-responsive">
+          <table class="table table-bordered text-center table-stbh">
+            <thead>
+              <tr>
+                <th>Email</th>
+                <th>Nombre</th>
+                <th>N. Control</th>
+                <th>Semestre</th>
+                <th>Modalidad</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php while ($row = $RESULT->fetch_assoc()): ?>
+              <tr>
+                <td><?= $row['email'] ?></td>
+                <td><?= $row['first_name'] . ' ' . $row['last_name'] ?></td>
+                <td><?= $row['control_number'] ?? '-' ?></td>
+                <td><?= $row['semester'] ?? '-' ?></td>
+                <td><?= $row['name_modality'] ?? '-' ?></td>
+                <td>
+                  <?php if (!$row['control_number']): ?>
+                  <button class="btn-stbh btn-sm btn_Completar" data-id="<?= $row['id'] ?>">Completar</button>
+                  <?php else: ?> - <?php endif; ?>
+                </td>
+              </tr>
+              <?php endwhile; ?>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
   </div>
-</section>
+</div>
 
 <!-- FORMULARIO PARA COMPLETAR DATOS DE ALUMNO -->
 <section id="fondo">
@@ -144,7 +150,18 @@ $MODALIDADES = $MYSQLI->query("SELECT * FROM modalities ORDER BY name_modality")
     </form>
   </div>
 </section>
-
+ <!-- FOOTER -->
+  <footer class="footer py-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-10 mx-auto text-center">
+          <p class="mb-0 text-secondary">
+            STBH © <script>document.write(new Date().getFullYear())</script> | Todos los derechos Reservados
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   const fondo = document.getElementById('fondo');
@@ -159,11 +176,13 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   cerrar.addEventListener('click', () => fondo.style.display = 'none');
-
-  const alerta = document.querySelector('.alert-auto-close');
-  if (alerta) {
-    setTimeout(() => alerta.style.display = 'none', 4000);
-  }
+});
+const alertas = document.querySelectorAll('.alert-auto-close');
+alertas.forEach(alerta => {
+  setTimeout(() => {
+    alerta.style.opacity = '0';
+    setTimeout(() => alerta.remove(), 500); // Da tiempo para el fade
+  }, 5000);
 });
 </script>
 </body>

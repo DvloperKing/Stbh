@@ -20,55 +20,14 @@ if (!isset($_SESSION['users']) || $_SESSION['users']['id_perfil'] != 1) {
   <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
   <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
   <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
-  <link id="pagestyle" href="../assets/css/soft-ui-dashboard.css?v=1.0.8" rel="stylesheet" />
-
-  <style>
-    body {
-      background-color: #f8f9fa;
-    }
-
-    .logos-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: #fff;
-      padding: 12px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .logos img.rounded {
-      margin-right: 20px;
-    }
-
-    .menu-card {
-      background: #fff;
-      border-radius: 15px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      padding: 30px;
-    }
-
-    .menu-btn {
-      font-size: 1rem;
-      font-weight: 600;
-      padding: 15px 10px;
-      transition: all 0.2s ease-in-out;
-    }
-
-    .menu-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    }
-
-    footer p {
-      font-size: 0.9rem;
-    }
-  </style>
+  <link id="pagestyle" href="../assets/css/soft-ui-dashboard.css?v=1.2.1" rel="stylesheet" />
+  <link href="../assets/css/container.css" rel="stylesheet" />
 </head>
 
-<body>
+<body class="bg-light">
   <!-- LOGOS -->
   <div class="logos-container">
-  <div class="logos">
+  <div class="logos ">
     <img src="../assets/img/cnbm.png" alt="CNBM" class="logo-img">
     <img src="../assets/img/CRBH3.png" alt="CRBH" class="logo-img">
     <img src="../assets/img/stbm.png" alt="STBM" class="logo-img">

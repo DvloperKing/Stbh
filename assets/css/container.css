@@ -1,0 +1,52 @@
+.card-container {
+      padding: 20px;
+    }
+    .card shadow-sm border-0 {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .form-check-label { font-weight: 500; }
+    .container-main { max-width: 1200px; margin: 0 auto; padding: 20px 15px; }
+    .card { border-radius: 15px; overflow: hidden; margin-bottom: 40px; }
+    .card-body form .form-label { font-weight: 600; }
+    .table td, .table th { vertical-align: middle; padding: 0.75rem; }
+    .card-hero { margin-bottom: 30px; text-align: center; }
+    .hero-box { padding: 20px; }
+  .form-label { font-weight: 600; }
+  .form-select, .form-control { border-radius: 10px; }
+  .form-check-label { font-weight: 500; }
+  .logos-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #fff;
+      padding: 12px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .logos img.rounded {
+      margin-right: 20px;
+    }
+
+    .menu-card {
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+    }
+
+    .menu-btn {
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 15px 10px;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .menu-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    footer p {
+      font-size: 1rem;
+    }

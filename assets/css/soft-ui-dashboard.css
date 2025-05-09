@@ -141,7 +141,7 @@ h6,
   margin-bottom: 0.5rem;
   font-weight: 400;
   line-height: 1.2;
-  color: #344767;
+  color: #0b0146;
 }
 
 h1,
@@ -5783,13 +5783,13 @@ fieldset:disabled .btn {
 }
 
 .alert-success {
-  --bs-alert-color: #345609;
+  --bs-alert-color: #ffffff;
   --bs-alert-bg: #e6f7d0;
   --bs-alert-border-color: #daf3b9;
 }
 
 .alert-success .alert-link {
-  color: #2a4507;
+  color: #ffffff;
 }
 
 .alert-info {
@@ -5803,7 +5803,7 @@ fieldset:disabled .btn {
 }
 
 .alert-warning {
-  --bs-alert-color: #645314;
+  --bs-alert-color: #ffffff;
   --bs-alert-bg: #fef5d6;
   --bs-alert-border-color: #fef1c2;
 }
@@ -20192,15 +20192,15 @@ fieldset:disabled .btn {
 }
 
 .alert-success {
-  background-image: linear-gradient(310deg, #17ad37 0%, #84dc14 100%);
+  background-image: linear-gradient(310deg, #02c32b 0%, #02c32b 100%);
 }
 
 .alert-info {
-  background-image: linear-gradient(310deg, #2152ff 0%, #02c6f3 100%);
+  background-image: linear-gradient(310deg, #02c6f3 0%, #02c6f3 100%);
 }
 
 .alert-warning {
-  background-image: linear-gradient(310deg, #f53939 0%, #fac60b 100%);
+  background-image: linear-gradient(310deg, #fac60b 0%, #fac60b 100%);
 }
 
 .alert-danger {

@@ -77,36 +77,14 @@ if (isset($_POST['id_modality'], $_POST['semester'], $_POST['id_level'])) {
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
   <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
-  <link href="../assets/css/soft-ui-dashboard.css?v=1.1.1" rel="stylesheet" />
+  <link href="../assets/css/soft-ui-dashboard.css?v=1.2.2" rel="stylesheet" />
   <link href="../assets/css/usuarios.css" rel="stylesheet" />
-  <style>
-    body { background-color: #f8f9fa; }
-    h2 { color: #0b0146; }
-    .btn-primary { background-color: #0b0146; border: none; }
-    .btn-success { background-color: #f4a701 !important; }
-    .table-dark { --bs-table-bg: #0b0146; }
-    .form-check-label { font-weight: 500; }
-  
-    .btn-primary { background-color: #0b0146 !important; }
-    .btn-success { background-color: #f4a701 !important; border-color: #f4a701; }
-    .table-dark { --bs-table-bg: #0b0146; }
-    .container-main { max-width: 1200px; margin: 0 auto; padding: 20px 15px; }
-    .card { border-radius: 15px; overflow: hidden; margin-bottom: 40px; }
-    .card-body form .form-label { font-weight: 600; }
-    .table td, .table th { vertical-align: middle; padding: 0.75rem; }
-    .card-hero { margin-bottom: 30px; text-align: center; }
-    .hero-box { padding: 20px; }
-
-  .form-label { font-weight: 600; }
-  .form-select, .form-control { border-radius: 10px; }
-  .form-check-label { font-weight: 500; }
-  .btn-warning:hover { background-color: #d99000 !important; }
-</style>
+  <link href="../assets/css/container.css" rel="stylesheet" />
 </head>
 
 <body class="bg-light">
 <div class="logos-container">
-  <div class="logos text-center my-3">
+  <div class="logos">
     <img src="../assets/img/cnbm.png" alt="CNBM" class="logo-img">
     <img src="../assets/img/CRBH3.png" alt="CRBH" class="logo-img">
     <img src="../assets/img/stbm.png" alt="STBM" class="logo-img">
@@ -116,13 +94,6 @@ if (isset($_POST['id_modality'], $_POST['semester'], $_POST['id_level'])) {
 
 <div class="container-main">
 
-<!-- <div class="card shadow-sm border-0 mb-4">
-    <div class="card-body text-center">
-      <a href="admin.php" class="btn-stbh btn-lg btn btn-primary btn-lg px-5">
-        <i class="bi bi-arrow-left-circle me-2 "></i> Regresar al Menú Principal
-      </a>    
-    </div>
-  </div> -->
   <section class="card-hero d-flex justify-content-center mt-4">
   <div class="d-flex flex-column align-items-center align-content-center">
     <p>
@@ -135,7 +106,7 @@ if (isset($_POST['id_modality'], $_POST['semester'], $_POST['id_level'])) {
 
   <div class="card shadow-sm border-0">
     <div class="card-body">
-      <h4 class="mb-4 text-center">Inscripción de Materias</h4>
+      <h3 class="mb-4 text-center">Inscripción de Materias</h3>
 
   <div class="container mt-5">
     <?php if (isset($mensaje)) echo $mensaje; ?>
@@ -200,7 +171,7 @@ if (isset($_POST['id_modality'], $_POST['semester'], $_POST['id_level'])) {
         <div class="row mt-3">
           <div class="col-md-6">
             <label class="form-label">Año escolar:</label>
-            <input type="number" name="enrollment_year" class="form-control" min="<?= date('Y') ?>" max="<?= date('Y') ?>" value="<?= date('Y') ?>" required>
+            <input type="number" name="enrollment_year" class="form-control" min="<?= date('Y') ?>" max="<?= date('Y') ?>" value="<?= date('Y') ?>" required readonly>
           </div>
           <div class="col-md-6">
             <label class="form-label">Periodo escolar:</label>
@@ -219,5 +190,17 @@ if (isset($_POST['id_modality'], $_POST['semester'], $_POST['id_level'])) {
   </div>
 </div>
 </div>
+ <!-- FOOTER -->
+  <footer class="footer py-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-10 mx-auto text-center">
+          <p class="mb-0 text-secondary">
+            STBH © <script>document.write(new Date().getFullYear())</script> | Todos los derechos Reservados
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>
