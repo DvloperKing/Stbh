@@ -205,9 +205,9 @@ insert into permissions (id, name_permissions) values (5.1, 'añadir materia');
 insert into permissionsxprofile (id_perfil, id_permissions) select 1, id from permissions;
 
 -- insert usuarios de prueba
-insert into users (email, pass, first_name, last_name, id_perfil) values ('admin@stbh.com', 'admin', 'admin', 'sistema', 1);
-insert into users (email, pass, first_name, last_name, id_perfil) values ('d2507001@stbh.com', 'docente', 'Ranulfo', 'Hernandez Rodriguez', 2);
-insert into users (email, pass, first_name, last_name, id_perfil) values ('a2507001@stbh.com', 'alumno', 'Eliezer', 'Hernandez Geronimo', 3);
+insert into users (email, pass, first_name, last_name, id_perfil) values ('admin@stbh.com', '$2y$10$l.4GMzdDaFzA1vE/tbZ9Iu3gzJ/RoltbcQOMuTdT1eB4tcvt4NwH2', 'admin', 'sistema', 1);
+insert into users (email, pass, first_name, last_name, id_perfil) values ('d2507001@stbh.com', '$2y$10$8j90Q3GiXeIP4lOROMo72ex6DAko6oGwWj.G6Rg2SOUa5.evWe89u', 'Ranulfo', 'Hernandez Rodriguez', 2);
+insert into users (email, pass, first_name, last_name, id_perfil) values ('a2507001@stbh.com', '$2y$10$Dbew.GsjDJ2M3i..1poO8.qTqcpF7abIr.ZR7HDXbP6IjzXtRBTOO', 'Eliezer', 'Hernandez Geronimo', 3);
 insert into users (email, pass, first_name, last_name, id_perfil) values ('a2507002@stbh.com', 'alumno', 'Eliel', 'Hernandez Geronimo', 3);
 insert into users (email, pass, first_name, last_name, id_perfil) values ('a2507003@stbh.com', 'alumno', 'Ami', 'Hernandez Geronimo', 3);
 
