@@ -207,3 +207,20 @@ a.btn-stbh:visited {
   gap: 8px;
   font-size: 0.95rem;
 }
+.btn-toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 25%;
+  /* transform: translateY(-50%); */
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  color: #495057;
+  font-size: 18px; /* color similar al texto de Bootstrap */
+}
+
+.btn-toggle-password:hover {
+  color: #0d6efd; /* azul de Bootstrap para hover */
+  cursor: pointer;
+}

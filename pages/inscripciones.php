@@ -182,7 +182,7 @@ if (isset($_POST['id_modality'], $_POST['semester'], $_POST['id_level'])) {
           </div>
         </div>
 
-        <button type="submit" class="btn btn-success mt-4">Inscribir</button>
+        <button type="submit" class="btn btn-success mt-4 .alert-auto-close">Inscribir</button>
       <?php elseif (isset($_POST['semester'])): ?>
         <p class="text-danger">No hay materias disponibles para la combinación elegida.</p>
       <?php endif; ?>
@@ -202,5 +202,14 @@ if (isset($_POST['id_modality'], $_POST['semester'], $_POST['id_level'])) {
       </div>
     </div>
   </footer>
+  <script>
+    const alertas = document.querySelectorAll('.alert-auto-close');
+      alertas.forEach(alerta => {
+        setTimeout(() => {
+          alerta.style.opacity = '0';
+          setTimeout(() => alerta.remove(), 500);
+        }, 5000);
+      });
+  </script>
 </body>
 </html>

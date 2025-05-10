@@ -16,12 +16,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'], $_POST['pass
   $last_name   = _clean($_POST['last_name'], $MYSQLI);
 
   if (!empty($email) && !empty($pass) && !empty($perfil) && !empty($first_name) && !empty($last_name)) {
-      $SQLInsert = "INSERT INTO users (email, pass, first_name, last_name, id_perfil) 
-                    VALUES ('$email', '$pass', '$first_name', '$last_name', '$perfil')";
-      _Q($SQLInsert, $MYSQLI, 1);
-      header("Location: usuarios.php?success=1");
-      exit;
+    // Verificar si el correo ya existe
+    $SQLCheck = "SELECT COUNT(*) AS total FROM users WHERE email = '$email'";
+$checkResult = _Q($SQLCheck, $MYSQLI, 1);
+
+$total = isset($checkResult['total']) ? (int)$checkResult['total'] : 0;
+
+if ($total > 0) {
+    header("Location: usuarios.php?error=email_exists");
+    exit;
+}
+ else {
+        // Insertar nuevo usuario
+        $SQLInsert = "INSERT INTO users (email, pass, first_name, last_name, id_perfil) 
+                      VALUES ('$email', '$pass', '$first_name', '$last_name', '$perfil')";
+        _Q($SQLInsert, $MYSQLI, 1);
+        header("Location: usuarios.php");
+        exit;
+    }
   }
+
 }
 
 // Actualizar contraseña
@@ -53,8 +67,9 @@ $PerfilesData = _Q($SQLPerfiles, $MYSQLI, 2);
   <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
   <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
   <link href="../assets/css/soft-ui-dashboard.css?v=1.2.2" rel="stylesheet" />
-  <link href="../assets/css/usuarios.css?v=1.0.0" rel="stylesheet" />
+  <link href="../assets/css/usuarios.css?v=1.0.1" rel="stylesheet" />
   <link href="../assets/css/container.css" rel="stylesheet" />
+  <script src="../assets/js/validaciones.js"></script>
 </head>
 <body class="bg-light">
 
@@ -84,6 +99,9 @@ $PerfilesData = _Q($SQLPerfiles, $MYSQLI, 2);
 <div class="container mt-4">
   <?php if (isset($_GET['success'])): ?>
     <div class="alert alert-success alert-auto-close text-center">Usuario agregado correctamente.</div>
+  <?php endif; ?>
+  <?php if (isset($_GET['error']) && $_GET['error'] === 'email_exists'): ?>
+  <div class="alert alert-danger alert-auto-close text-center">El correo ya está registrado. Intenta con otro.</div>
   <?php endif; ?>
   <?php if (isset($_GET['pass_updated'])): ?>
     <div class="alert alert-info alert-auto-close text-center">Contraseña actualizada correctamente.</div>
@@ -154,13 +172,27 @@ $PerfilesData = _Q($SQLPerfiles, $MYSQLI, 2);
         <label>Apellidos</label>
         <input class="form-control" type="text" name="last_name" required>
       </div>
+
       <div class="mb-3">
         <label>Email</label>
         <input class="form-control" type="text" name="email" required>
       </div>
+
       <div class="mb-3">
         <label>Contraseña</label>
-        <input class="form-control" type="text" name="pass" required>
+        <div class="position-relative">
+          <input class="form-control pass_input" type="password" name="pass" required id="passwordField">
+          <button type="button" id="togglePassword" class="btn btn-toggle-password">
+            <i class="bi bi-eye" id="toggleIcon"></i>
+          </button>
+        </div>
+        <div class="password-requirements mt-2" id="passHelp">
+          <small id="req-length">❌ Mínimo 8 caracteres</small><br>
+          <small id="req-mayus">❌ Una mayúscula (A-Z)</small><br>
+          <small id="req-minus">❌ Una minúscula (a-z)</small><br>
+          <small id="req-num">❌ Un número (0-9)</small><br>
+          <small id="req-esp">❌ Un carácter especial (@, #, $, %, etc.)</small>
+        </div>
       </div>
       <div class="mb-3">
         <label>Perfil</label>
@@ -257,11 +289,9 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
-
   inputCorreo.addEventListener('input', aplicarFiltros);
   selectPerfil.addEventListener('change', aplicarFiltros);
 });
 </script>
-
 </body>
 </html>
