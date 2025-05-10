@@ -53,7 +53,7 @@ if ($tipo === 1) {
 
     $result = $MYSQLI->query($SQL);
     $docente = $result ? $result->fetch_assoc() : false;
-
+    var_dump($docente);die();
     if ($docente && password_verify($pass, $docente['pass']) && (int)$docente['id_perfil'] === 2) {
         $_SESSION['docentes'] = $docente;
         $response = [
