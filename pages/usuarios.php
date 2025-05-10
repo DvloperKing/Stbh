@@ -4,9 +4,11 @@ if (!isset($_SESSION['users']) || $_SESSION['users']['id_perfil'] != 1) {
   header("Location: ../pages/loginPersonal.php");
   exit;
 }
+
 include_once "../Core/constantes.php";
 include_once "../Core/estructura_bd.php";
 $MYSQLI = _DB_HDND();
+
 // Insertar nuevo usuario
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'], $_POST['pass'], $_POST['perfil'], $_POST['first_name'], $_POST['last_name'])) {
   $email       = _clean($_POST['email'], $MYSQLI);
@@ -15,41 +17,87 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'], $_POST['pass
   $first_name  = _clean($_POST['first_name'], $MYSQLI);
   $last_name   = _clean($_POST['last_name'], $MYSQLI);
 
+  // Verificar que los campos no están vacíos
   if (!empty($email) && !empty($pass) && !empty($perfil) && !empty($first_name) && !empty($last_name)) {
     // Verificar si el correo ya existe
     $SQLCheck = "SELECT COUNT(*) AS total FROM users WHERE email = '$email'";
-$checkResult = _Q($SQLCheck, $MYSQLI, 1);
+    $checkResult = _Q($SQLCheck, $MYSQLI, 1);
+    $total = isset($checkResult['total']) ? (int)$checkResult['total'] : 0;
 
-$total = isset($checkResult['total']) ? (int)$checkResult['total'] : 0;
+    if ($total > 0) {
+      header("Location: usuarios.php?error=email_exists");
+      exit;
+    } else {
+      // Hashear la contraseña antes de insertarla
+      $hashedPass = password_hash($pass, PASSWORD_DEFAULT);
 
-if ($total > 0) {
-    header("Location: usuarios.php?error=email_exists");
-    exit;
-}
- else {
-        // Insertar nuevo usuario
-        $SQLInsert = "INSERT INTO users (email, pass, first_name, last_name, id_perfil) 
-                      VALUES ('$email', '$pass', '$first_name', '$last_name', '$perfil')";
-        _Q($SQLInsert, $MYSQLI, 1);
-        header("Location: usuarios.php");
+      // Depuración: Verifica que el hash se genera correctamente
+      if (!$hashedPass) {
+        error_log('Error al generar el hash de la contraseña');
+        header("Location: usuarios.php?error=hash_error");
         exit;
-    }
-  }
+      }
+      
+      // Insertar el usuario con la contraseña hasheada
+      $SQLInsert = "INSERT INTO users (email, pass, first_name, last_name, id_perfil) 
+                    VALUES ('$email', '$hashedPass', '$first_name', '$last_name', '$perfil')";
 
+      $result = _Q($SQLInsert, $MYSQLI, 1);
+
+      
+      if ($result) {
+        header("Location: usuarios.php?success=1");
+        exit;
+      } else {
+        error_log("Error al insertar el usuario en la base de datos.");
+        header("Location: usuarios.php?error=db_error");
+        exit;
+      }
+    }
+  } else {
+    error_log("Datos incompletos al registrar usuario.");
+    header("Location: usuarios.php?error=incomplete_data");
+    exit;
+  }
 }
 
 // Actualizar contraseña
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nueva_pass'], $_POST['id_usuario'])) {
-    $newPass = _clean($_POST['nueva_pass'], $MYSQLI);
-    $userId = (int) $_POST['id_usuario'];
-    $SQLUpdatePass = "UPDATE users SET pass = '$newPass' WHERE id = $userId";
-    _Q($SQLUpdatePass, $MYSQLI, 1);
-    header("Location: usuarios.php?pass_updated=1");
+  $newPass = _clean($_POST['nueva_pass'], $MYSQLI);
+  $userId = (int) $_POST['id_usuario'];
+
+  if (!empty($newPass)) {
+    // Hashear la nueva contraseña
+    $hashedPass = password_hash($newPass, PASSWORD_DEFAULT);
+
+    // Depuración: Verifica que el hash se genera correctamente
+    if (!$hashedPass) {
+      error_log('Error al generar el hash de la nueva contraseña');
+      header("Location: usuarios.php?error=hash_error");
+      exit;
+    }
+
+    // Actualizar la contraseña
+    $SQLUpdatePass = "UPDATE users SET pass = '$hashedPass' WHERE id = $userId";
+    $result = _Q($SQLUpdatePass, $MYSQLI, 1);
+
+    if ($result) {
+      header("Location: usuarios.php?pass_updated=1");
+      exit;
+    } else {
+      error_log("Error al actualizar la contraseña en la base de datos.");
+      header("Location: usuarios.php?error=db_error");
+      exit;
+    }
+  } else {
+    error_log("La nueva contraseña está vacía.");
+    header("Location: usuarios.php?error=empty_pass");
     exit;
+  }
 }
 
 // Consultas
-$SQL = "SELECT u.*,p.name_perfil as perfil FROM users U INNER JOIN perfil p ON u.id_perfil = p.id;";
+$SQL = "SELECT u.*, p.name_perfil as perfil FROM users u INNER JOIN perfil p ON u.id_perfil = p.id;";
 $RESULT = _Q($SQL, $MYSQLI, 2);
 $SQLPerfiles = "SELECT * FROM perfil;";
 $PerfilesData = _Q($SQLPerfiles, $MYSQLI, 2);
@@ -101,12 +149,13 @@ $PerfilesData = _Q($SQLPerfiles, $MYSQLI, 2);
     <div class="alert alert-success alert-auto-close text-center">Usuario agregado correctamente.</div>
   <?php endif; ?>
   <?php if (isset($_GET['error']) && $_GET['error'] === 'email_exists'): ?>
-  <div class="alert alert-danger alert-auto-close text-center">El correo ya está registrado. Intenta con otro.</div>
+    <div class="alert alert-danger alert-auto-close text-center">El correo ya está registrado. Intenta con otro.</div>
   <?php endif; ?>
   <?php if (isset($_GET['pass_updated'])): ?>
     <div class="alert alert-info alert-auto-close text-center">Contraseña actualizada correctamente.</div>
   <?php endif; ?>
 </div>
+
 <!-- FILTROS -->
 <div class="container mb-3 text-center">
   <div class="row justify-content-center g-3 align-items-center">
@@ -123,6 +172,7 @@ $PerfilesData = _Q($SQLPerfiles, $MYSQLI, 2);
     </div>
   </div>
 </div>
+
 <!-- TABLA DE USUARIOS -->
 <div class="card-container">
   <div class="card shadow-sm border-0">
@@ -140,16 +190,16 @@ $PerfilesData = _Q($SQLPerfiles, $MYSQLI, 2);
             </thead>
             <tbody>
               <?php foreach ($RESULT as $value): ?>
-              <tr>
-                <td><?= $value['email'] ?></td>
-                <td><?= $value['first_name'] . ' ' . $value['last_name'] ?></td>
-                <td><?= $value['perfil'] ?></td>
-                <td>
-                  <button class="btn-stbh btn-sm btn_CambiarPass" data-id="<?= $value['id'] ?>">
-                    Cambiar contraseña
-                  </button>
-                </td>
-              </tr>
+                <tr>
+                  <td><?= $value['email'] ?></td>
+                  <td><?= $value['first_name'] . ' ' . $value['last_name'] ?></td>
+                  <td><?= $value['perfil'] ?></td>
+                  <td>
+                    <button class="btn-stbh btn-sm btn_CambiarPass" data-id="<?= $value['id'] ?>">
+                      Cambiar contraseña
+                    </button>
+                  </td>
+                </tr>
               <?php endforeach; ?>
             </tbody>
           </table>
@@ -158,6 +208,7 @@ $PerfilesData = _Q($SQLPerfiles, $MYSQLI, 2);
     </section>
   </div>
 </div>
+
 <!-- FORM NUEVO USUARIO -->
 <section id="fondo">
   <div id="form_alta">
@@ -175,7 +226,7 @@ $PerfilesData = _Q($SQLPerfiles, $MYSQLI, 2);
 
       <div class="mb-3">
         <label>Email</label>
-        <input class="form-control" type="text" name="email" required>
+        <input class="form-control" type="email" name="email" required>
       </div>
 
       <div class="mb-3">

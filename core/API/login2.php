@@ -7,7 +7,7 @@ include_once "../estructura_bd.php";
 
 $MYSQLI = _DB_HDND();
 $email = _clean($_POST['email'], $MYSQLI);
-$pass  = _clean($_POST['pass'], $MYSQLI);
+$pass  = $_POST['pass']; // No limpiar, puede dañar el hash
 $tipo  = (int)_clean($_POST['tipo'], $MYSQLI);
 
 session_start();
@@ -18,13 +18,13 @@ if ($tipo === 1) {
     $SQL = "SELECT u.*, p.name_perfil as perfil
             FROM users u
             INNER JOIN perfil p ON u.id_perfil = p.id
-            WHERE u.email = '$email' AND u.pass = '$pass'
+            WHERE u.email = '$email'
             LIMIT 1";
     
     $result = $MYSQLI->query($SQL);
     $usuario = $result ? $result->fetch_assoc() : false;
 
-    if ($usuario && (int)$usuario['id_perfil'] === 1) {
+    if ($usuario && password_verify($pass, $usuario['pass']) && (int)$usuario['id_perfil'] === 1) {
         $SQLP = "SELECT id_permissions FROM permissionsxprofile WHERE id_perfil = 1";
         $permisos_result = $MYSQLI->query($SQLP);
         $permisos = [];
@@ -48,13 +48,13 @@ if ($tipo === 1) {
     $SQL = "SELECT u.*, t.*
             FROM users u
             INNER JOIN teaching t ON u.id = t.id_user
-            WHERE u.email = '$email' AND u.pass = '$pass'
+            WHERE u.email = '$email'
             LIMIT 1";
 
     $result = $MYSQLI->query($SQL);
     $docente = $result ? $result->fetch_assoc() : false;
 
-    if ($docente && (int)$docente['id_perfil'] === 2) {
+    if ($docente && password_verify($pass, $docente['pass']) && (int)$docente['id_perfil'] === 2) {
         $_SESSION['docentes'] = $docente;
         $response = [
             "code" => 2,
@@ -66,13 +66,13 @@ if ($tipo === 1) {
     $SQL = "SELECT u.*, s.*
             FROM users u
             INNER JOIN students s ON u.id = s.id_user
-            WHERE u.email = '$email' AND u.pass = '$pass'
+            WHERE u.email = '$email'
             LIMIT 1";
 
     $result = $MYSQLI->query($SQL);
     $alumno = $result ? $result->fetch_assoc() : false;
 
-    if ($alumno && (int)$alumno['id_perfil'] === 3) {
+    if ($alumno && password_verify($pass, $alumno['pass']) && (int)$alumno['id_perfil'] === 3) {
         $_SESSION['alumnos'] = $alumno;
         $response = [
             "code" => 3,
